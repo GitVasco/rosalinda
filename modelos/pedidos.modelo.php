@@ -800,4 +800,55 @@ class ModeloPedidos{
 		$stmt = null;
 	}
 
+	/*
+	* GUARDAR TEMPORAL BKP
+	*/
+	static public function mdlReiniciarPedido(){
+
+
+		$stmt = Conexion::conectar()->prepare("UPDATE 
+										articulojf 
+									SET
+										pedidos = 0");
+		if ($stmt->execute()) {
+
+			return "ok";
+		} else {
+
+			return "error";
+		}
+
+		$stmt->close();
+		$stmt = null;
+	}	
+
+	static public function mdlCantAprobados(){
+
+
+		$stmt = Conexion::conectar()->prepare("UPDATE 
+		articulojf a 
+		LEFT JOIN 
+		  (SELECT 
+			articulo,
+			SUM(cantidad) AS total 
+		  FROM
+			temporaljf t 
+			LEFT JOIN detalle_temporal dt 
+			  ON t.codigo = dt.codigo 
+		  WHERE estado = 'APROBADO' 
+		  GROUP BY articulo) t 
+		  ON a.articulo = t.articulo SET a.pedidos = t.total 
+	  WHERE t.total > 0");
+		if ($stmt->execute()) {
+
+			return "ok";
+		} else {
+
+			return "error";
+		}
+
+		$stmt->close();
+		$stmt = null;
+	}	
+
 }

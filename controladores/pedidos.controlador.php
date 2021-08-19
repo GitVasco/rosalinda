@@ -360,4 +360,57 @@ class ControladorPedidos{
 
     }
 
+    /* 
+    *ANULAR PEDIDO
+    */
+	static public function ctrAnularPedido(){
+
+        if(isset($_GET["codigoP"])){
+
+            $codigo = $_GET["codigoP"];
+            //var_dump("AQUI",$codigo);
+
+            $pedido = ModeloPedidos::mdlMostraPedidosCabecera($codigo);
+            //var_dump($pedido);
+
+
+
+                $respuesta = ModeloFacturacion::mdlActualizarPedido($codigo,"ANULADO",$_SESSION["id"]);
+                var_dump($respuesta);
+
+                $reiniciar = ModeloPedidos::mdlReiniciarPedido();
+                var_dump($reiniciar);
+
+                $contar = ModeloPedidos::mdlCantAprobados();
+                var_dump($contar);
+
+                if($contar == "ok"){
+
+                    echo'<script>
+
+                    swal({
+                        type: "success",
+                        title: "El pedido ha sido anulada correctamente",
+                        showConfirmButton: true,
+                        confirmButtonText: "Cerrar",
+                        closeOnConfirm: false
+                        }).then(function(result){
+                                    if (result.value) {
+
+                                    window.location = "pedidoscv";
+
+                                    }
+                                })
+
+                    </script>';
+
+                }
+
+
+
+        }
+
+
+    }    
+
 }
