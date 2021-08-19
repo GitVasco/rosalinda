@@ -1371,6 +1371,12 @@ class ModeloFacturacion{
           c.tipo_documento AS tip_doc,
           c.documento AS num_doc,
           v.vendedor,
+          (SELECT 
+            CONCAT(t.codigo, '-', t.descripcion) 
+          FROM
+            maestrajf t 
+          WHERE t.tipo_dato = 'TVEND' 
+            AND v.vendedor = t.codigo) AS nom_ven,
           v.fecha,
           cv.descripcion,
           v.doc_destino,
@@ -1411,6 +1417,12 @@ class ModeloFacturacion{
           c.tipo_documento AS tip_doc,
           c.documento AS num_doc,
           v.vendedor,
+          (SELECT 
+            CONCAT(t.codigo, '-', t.descripcion) 
+          FROM
+            maestrajf t 
+          WHERE t.tipo_dato = 'TVEND' 
+            AND v.vendedor = t.codigo) AS nom_ven,          
           v.fecha,
           cv.descripcion,
           v.doc_destino,
@@ -1461,6 +1473,12 @@ class ModeloFacturacion{
             c.tipo_documento AS tip_doc,
             c.documento AS num_doc,
             v.vendedor,
+            (SELECT 
+            CONCAT(t.codigo, '-', t.descripcion) 
+          FROM
+            maestrajf t 
+          WHERE t.tipo_dato = 'TVEND' 
+            AND v.vendedor = t.codigo) AS nom_ven,            
             v.fecha,
             cv.descripcion,
             v.doc_destino,
@@ -1503,6 +1521,12 @@ class ModeloFacturacion{
             c.tipo_documento AS tip_doc,
             c.documento AS num_doc,
             v.vendedor,
+            (SELECT 
+            CONCAT(t.codigo, '-', t.descripcion) 
+          FROM
+            maestrajf t 
+          WHERE t.tipo_dato = 'TVEND' 
+            AND v.vendedor = t.codigo) AS nom_ven,            
             v.fecha,
             cv.descripcion,
             v.doc_destino,
