@@ -97,7 +97,7 @@
                     <div class="input-group">
 
                         <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
-                        <select class="form-control  input-sm selectpicker" name="nuevoTalleres" id="nuevoTalleres" data-live-search="true" required>
+                        <select class="form-control  input-sm selectpicker" name="nuevoTalleres" id="nuevoTalleres" data-live-search="true" >
                         <option value="">SIN TALLER</option>
                         <?php
 
@@ -127,7 +127,7 @@
                     <div class="input-group">
 
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <select class="form-control  input-sm selectpicker" name="nuevoTrabajadores" id="nuevoTrabajadores" data-live-search="true" required>
+                        <select class="form-control  input-sm selectpicker" name="nuevoTrabajadores" id="nuevoTrabajadores" data-live-search="true" >
                         <option value="">Seleccionar un trabajador</option>
                         <?php
 
