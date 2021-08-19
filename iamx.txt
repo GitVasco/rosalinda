@@ -1,0 +1,34 @@
+Hola soy Joel ya tengo la ultima version
+
+                        if($ctacte == "ok"){
+
+                            echo'<script>
+
+                            swal({
+                                    type: "success",
+                                    title: "Se Genero la '.$nombre_tipo.' N° '.$docDestino.'",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Cerrar"
+                            }).then(function(result){
+                                            if (result.value) {
+
+                                            window.location = "guias-remision";
+
+                                            }
+                                        })
+
+                            </script>';
+
+                        }
+
+
+
+GENERAL         BASIC
+
+APROBADO        WARNING
+
+APT             DEFAULT
+
+CONFIRMADO      INFO
+
+FACTURADO       SUCCESS

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
+         <ext:UBLExtensions>
+            <ext:UBLExtension>
+               <ext:ExtensionContent><ds:Signature Id="SignatureSP"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>7AHbGfWo8u+ueTc2afbL6x3Ww0Q=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>t8G3MIMFSeVANEC3LxruqDhIO/t8xNszNjO3LL+Av99dGd7nvi/gtKNQxbd/okqu91ct02+VSeLjuY6qbdSvW61xA7UqmdPqF/galn5Ctdi+szQXg9iqp/7Jxj+gYDo8n7gGaOrPf50CCz/xgJXA67hO3VBNE//0eAdNm7EytzksJYc8CbiwqpVonXlgPrafI8f/ilTGQN3UJX0Mh1wrgGNYgliLVYKFY6T5ZPtsmh3aWg3SkbWPs1S870lbsoVheD6znTm6ArKSGDyXeNcLgydrzgqCVVwlWXL2vTb0Ow4cx1VJOWTSDBLGWIqNhld23n1cS+hLI90YNSjt5K6OKA==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
+            </ext:UBLExtension>
+         </ext:UBLExtensions>
+         <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+         <cbc:CustomizationID>2.0</cbc:CustomizationID>
+         <cbc:ID>B001-00000001</cbc:ID>
+         <cbc:IssueDate>2021-07-26</cbc:IssueDate>
+         <cbc:IssueTime>00:00:01</cbc:IssueTime>
+         <cbc:Note languageLocaleID="1000"><![CDATA[OCHO  CON 74/100 SOLES]]></cbc:Note>
+         <cbc:DocumentCurrencyCode>PEN</cbc:DocumentCurrencyCode>
+         <cac:DiscrepancyResponse>
+            <cbc:ReferenceID>B001-00000001</cbc:ReferenceID>
+            <cbc:ResponseCode>05</cbc:ResponseCode>
+            <cbc:Description>Descuento por item </cbc:Description>
+         </cac:DiscrepancyResponse>
+         <cac:BillingReference>
+            <cac:InvoiceDocumentReference>
+               <cbc:ID>B001-00000001</cbc:ID>
+               <cbc:DocumentTypeCode>03</cbc:DocumentTypeCode>
+            </cac:InvoiceDocumentReference>
+         </cac:BillingReference>
+         <cac:Signature>
+            <cbc:ID>10472810371</cbc:ID>
+            <cbc:Note><![CDATA[JOEL VLADIMIR MEDRANO GÜERE]]></cbc:Note>
+            <cac:SignatoryParty>
+               <cac:PartyIdentification>
+                  <cbc:ID>10472810371</cbc:ID>
+               </cac:PartyIdentification>
+               <cac:PartyName>
+                  <cbc:Name><![CDATA[JOEL VLADIMIR MEDRANO GÜERE]]></cbc:Name>
+               </cac:PartyName>
+            </cac:SignatoryParty>
+            <cac:DigitalSignatureAttachment>
+               <cac:ExternalReference>
+                  <cbc:URI>#SIGN-EMPRESA</cbc:URI>
+               </cac:ExternalReference>
+            </cac:DigitalSignatureAttachment>
+         </cac:Signature>
+         <cac:AccountingSupplierParty>
+            <cac:Party>
+               <cac:PartyIdentification>
+                  <cbc:ID schemeID="6">10472810371</cbc:ID>
+               </cac:PartyIdentification>
+               <cac:PartyName>
+                  <cbc:Name><![CDATA[JOEL VLADIMIR MEDRANO GÜERE]]></cbc:Name>
+               </cac:PartyName>
+               <cac:PartyLegalEntity>
+                  <cbc:RegistrationName><![CDATA[JOEL VLADIMIR MEDRANO GÜERE]]></cbc:RegistrationName>
+                  <cac:RegistrationAddress>
+                     <cbc:ID>150106</cbc:ID>
+                     <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
+                     <cbc:CitySubdivisionName>NONE</cbc:CitySubdivisionName>
+                     <cbc:CityName>LIMA</cbc:CityName>
+                     <cbc:CountrySubentity>LIMA</cbc:CountrySubentity>
+                     <cbc:District>CARABAYLLO</cbc:District>
+                     <cac:AddressLine>
+                        <cbc:Line><![CDATA[CAL. GREGORIO SISA 133 - CARABAYLLO]]></cbc:Line>
+                     </cac:AddressLine>
+                     <cac:Country>
+                        <cbc:IdentificationCode>PE</cbc:IdentificationCode>
+                     </cac:Country>
+                  </cac:RegistrationAddress>
+               </cac:PartyLegalEntity>
+            </cac:Party>
+         </cac:AccountingSupplierParty>
+         <cac:AccountingCustomerParty>
+            <cac:Party>
+               <cac:PartyIdentification>
+                  <cbc:ID schemeID="1">47490910</cbc:ID>
+               </cac:PartyIdentification>
+               <cac:PartyLegalEntity>
+                  <cbc:RegistrationName><![CDATA[CUNZA CASTILLO TIFFANY THALIA]]></cbc:RegistrationName>
+                  <cac:RegistrationAddress>
+                     <cac:AddressLine>
+                        <cbc:Line><![CDATA[MZI LT 5-COVIDA]]></cbc:Line>
+                     </cac:AddressLine>
+                     <cac:Country>
+                        <cbc:IdentificationCode>PE</cbc:IdentificationCode>
+                     </cac:Country>
+                  </cac:RegistrationAddress>
+               </cac:PartyLegalEntity>
+            </cac:Party>
+         </cac:AccountingCustomerParty><cac:TaxTotal>
+            <cbc:TaxAmount currencyID="PEN">1.33</cbc:TaxAmount>
+            <cac:TaxSubtotal>
+               <cbc:TaxableAmount currencyID="PEN">7.41</cbc:TaxableAmount>
+               <cbc:TaxAmount currencyID="PEN">1.33</cbc:TaxAmount>
+               <cac:TaxCategory>
+                  <cac:TaxScheme>
+                     <cbc:ID>1000</cbc:ID>
+                     <cbc:Name>IGV</cbc:Name>
+                     <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+                  </cac:TaxScheme>
+               </cac:TaxCategory>
+            </cac:TaxSubtotal></cac:TaxTotal>
+         <cac:LegalMonetaryTotal>
+            <cbc:PayableAmount currencyID="PEN">8.74</cbc:PayableAmount>
+         </cac:LegalMonetaryTotal><cac:CreditNoteLine>
+               <cbc:ID>1</cbc:ID>
+               <cbc:CreditedQuantity unitCode="C62">1.000</cbc:CreditedQuantity>
+               <cbc:LineExtensionAmount currencyID="PEN">3.88</cbc:LineExtensionAmount>
+               <cac:PricingReference>
+                  <cac:AlternativeConditionPrice>
+                     <cbc:PriceAmount currencyID="PEN">4.58</cbc:PriceAmount>
+                     <cbc:PriceTypeCode>01</cbc:PriceTypeCode>
+                  </cac:AlternativeConditionPrice>
+               </cac:PricingReference>
+               <cac:TaxTotal>
+                  <cbc:TaxAmount currencyID="PEN">0.70</cbc:TaxAmount>
+                  <cac:TaxSubtotal>
+                     <cbc:TaxableAmount currencyID="PEN">3.88</cbc:TaxableAmount>
+                     <cbc:TaxAmount currencyID="PEN">0.70</cbc:TaxAmount>
+                     <cac:TaxCategory>
+                        <cbc:Percent>18</cbc:Percent>
+                        <cbc:TaxExemptionReasonCode>10</cbc:TaxExemptionReasonCode>
+                        <cac:TaxScheme>
+                           <cbc:ID>1000</cbc:ID>
+                           <cbc:Name>IGV</cbc:Name>
+                           <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+                        </cac:TaxScheme>
+                     </cac:TaxCategory>
+                  </cac:TaxSubtotal>
+               </cac:TaxTotal>
+               <cac:Item>
+                  <cbc:Description><![CDATA[TRUSA SEÑORIAL ROXY]]></cbc:Description>
+                  <cac:SellersItemIdentification>
+                     <cbc:ID>RL250</cbc:ID>
+                  </cac:SellersItemIdentification>
+               </cac:Item>
+               <cac:Price>
+                  <cbc:PriceAmount currencyID="PEN">3.88</cbc:PriceAmount>
+               </cac:Price>
+            </cac:CreditNoteLine><cac:CreditNoteLine>
+               <cbc:ID>2</cbc:ID>
+               <cbc:CreditedQuantity unitCode="C62">1.000</cbc:CreditedQuantity>
+               <cbc:LineExtensionAmount currencyID="PEN">3.53</cbc:LineExtensionAmount>
+               <cac:PricingReference>
+                  <cac:AlternativeConditionPrice>
+                     <cbc:PriceAmount currencyID="PEN">4.17</cbc:PriceAmount>
+                     <cbc:PriceTypeCode>01</cbc:PriceTypeCode>
+                  </cac:AlternativeConditionPrice>
+               </cac:PricingReference>
+               <cac:TaxTotal>
+                  <cbc:TaxAmount currencyID="PEN">0.64</cbc:TaxAmount>
+                  <cac:TaxSubtotal>
+                     <cbc:TaxableAmount currencyID="PEN">3.53</cbc:TaxableAmount>
+                     <cbc:TaxAmount currencyID="PEN">0.64</cbc:TaxAmount>
+                     <cac:TaxCategory>
+                        <cbc:Percent>18</cbc:Percent>
+                        <cbc:TaxExemptionReasonCode>10</cbc:TaxExemptionReasonCode>
+                        <cac:TaxScheme>
+                           <cbc:ID>1000</cbc:ID>
+                           <cbc:Name>IGV</cbc:Name>
+                           <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+                        </cac:TaxScheme>
+                     </cac:TaxCategory>
+                  </cac:TaxSubtotal>
+               </cac:TaxTotal>
+               <cac:Item>
+                  <cbc:Description><![CDATA[TANGA JASMY]]></cbc:Description>
+                  <cac:SellersItemIdentification>
+                     <cbc:ID>RL260</cbc:ID>
+                  </cac:SellersItemIdentification>
+               </cac:Item>
+               <cac:Price>
+                  <cbc:PriceAmount currencyID="PEN">3.53</cbc:PriceAmount>
+               </cac:Price>
+            </cac:CreditNoteLine></CreditNote>
