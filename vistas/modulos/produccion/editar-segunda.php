@@ -118,7 +118,7 @@
                     <div class="input-group">
                         <input type="hidden" name="pasarTra" id="pasarTra" value=<?php echo $ingreso["trabajador"]?>>
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <select class="form-control  input-sm selectpicker" name="editarTrabajadores" id="editarTrabajadores" data-live-search="true"   required>
+                        <select class="form-control  input-sm selectpicker" name="editarTrabajadores" id="editarTrabajadores" data-live-search="true"   >
                         
                         <?php
                             $sector=ControladorTrabajador::ctrMostrarTrabajador(null,null);
