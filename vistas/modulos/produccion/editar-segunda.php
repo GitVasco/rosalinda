@@ -108,7 +108,7 @@
                         <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
                         <input class="form-control  input-sm selectpicker" name="editarTalleres" id="editarTalleres" data-live-search="true" readonly>
                         
-
+                        <input type="text" id="editarTipoSector" name="editarTipoSector">
                     </div>
 
                 </div>
@@ -442,4 +442,28 @@ $('.nuevoArticuloIngreso').ready(function(){
        
     });
   });
+
+  $(document).ready(function(){
+    var ingreso = $("#editarTalleres").val();
+    var datos = new FormData();
+    datos.append("idSector", ingreso);
+    $.ajax({
+
+          url: "ajax/sectores.ajax.php",
+          method: "POST",
+          data: datos,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: "json",
+          success: function (respuesta) {
+
+              //console.log("respuesta", respuesta);
+
+              $("#editarTipoSector").val(respuesta["tipo"]);
+
+          }
+
+      })
+  })
 </script>

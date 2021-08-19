@@ -138,7 +138,7 @@ class ControladorIngresos{
 
                     #var_dump("listaArticulos", $listaArticulos);
 
-                    if($_POST["nuevoTalleres"] == "T1" || $_POST["nuevoTalleres"] == "T2" || $_POST["nuevoTalleres"] = "T3"){
+                    if($_POST["nuevoTipoSector"] == "1" ){
                         foreach($listaArticulos as $value){
 
                             $tabla = "cierres_detallejf";
@@ -355,7 +355,7 @@ class ControladorIngresos{
 
                     #var_dump("listaArticulos", $listaArticulos);
 
-                    if($_POST["nuevoTalleres"] == "T5" ){
+                    if($_POST["nuevoTipoSector"] != "1" ){
                         foreach($listaArticulos as $value){
 
                             $tabla = "articulojf";
@@ -532,7 +532,7 @@ class ControladorIngresos{
                     /* 
                     todo: Actualizamos en articulos de ingresos
                     */
-                    if($_POST["editarTalleres"] == "T5" ){
+                    if($_POST["editarTipoSector"] != "1" ){
                         foreach($listaArticulosOC as $value){
 
                             $tabla = "articulojf";
@@ -738,7 +738,7 @@ class ControladorIngresos{
                     /* 
                     todo: Actualizamos en articulos  los ingresos
                     */
-                    if($_POST["editarTalleres"] == "T5" ){
+                    if($_POST["editarTipoSector"] != "1" ){
                         foreach($listaArticulosOC as $value){
 
                             $tabla = "articulojf";
