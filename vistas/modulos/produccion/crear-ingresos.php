@@ -308,6 +308,8 @@
 <script>
 window.document.title = "Crear ingreso";
 
+localStorage.setItem("sectorIngreso",null);
+
 $('.nuevoArticuloIngreso').ready(function(){
     $('#buscadorIngreso').keyup(function(){
 

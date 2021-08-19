@@ -80,15 +80,15 @@ class ControladorCortes{
                     
                     $ticket=$_POST["ticket"];
 
-                    // if($ticket == "1"){
+                    if($ticket == "1"){
 
-                    //     /* 
-                    //     * Actualizamos la cantidad que queda en corte y pasa al taller en el articulo
-                    //     */
-                    //     $articulo  = $_POST["nuevoArticulo"];
-                    //     $cantidad =  $_POST["nuevoAlmCorte"];
+                        /* 
+                        * Actualizamos la cantidad que queda en corte y pasa al taller en el articulo
+                        */
+                        $articulo  = $_POST["nuevoArticulo"];
+                        $cantidad =  $_POST["nuevoAlmCorte"];
 
-                    //     $actualizaArticuloTaller = ModeloArticulos::mdlActualizarTallerCorte($articulo,$cantidad);
+                            $actualizaArticuloTaller = ModeloArticulos::mdlActualizarTallerCorte($articulo,$cantidad);
 
                     //     $nombre_impresora = "Star BSC10"; 
  
@@ -151,8 +151,8 @@ class ControladorCortes{
                     //         }
     
                     //     $printer -> close();
-                    // }
-                    if($ticket != "1"){
+                     }
+                    else{
                         /* 
                         * Actualizamos la cantidad que queda en corte y pasa al servicio en el articulo
                         */

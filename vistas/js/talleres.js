@@ -915,6 +915,26 @@ $("#nuevoTalleres").change(function(){
 })
 $("#editarTalleres").change(function(){
 	var ingreso = $(this).val();
+	var datos = new FormData();
+    datos.append("idSector", ingreso);
+	$.ajax({
+
+        url: "ajax/sectores.ajax.php",
+        method: "POST",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function (respuesta) {
+
+            //console.log("respuesta", respuesta);
+
+            $("#editarTipoSector").val(respuesta["tipo"]);
+
+        }
+
+    })
     var datos2 = new FormData();
     datos2.append("ingreso", ingreso);
     $.ajax({
@@ -1095,6 +1115,7 @@ $(".tablaArticulosTalleres tbody").on("click", "button.agregarArtiTaller", funct
 	
     var talleres = $(this).attr("taller");
 	var idCierre = $(this).attr("idCierre");
+	//console.log(talleres);
 	//console.log(idCierre);
     $(this).removeClass("btn-primary agregarArtiTaller");
 
@@ -1147,7 +1168,7 @@ $(".tablaArticulosTalleres tbody").on("click", "button.agregarArtiTaller", funct
 	
 						'<div class="col-xs-3">' +
 	
-							'<input type="number" class="form-control nuevaCantidadArticuloIngreso input-sm" name="nuevaCantidadArticuloIngreso" id="nuevaCantidadArticuloIngreso" min="1" value="0" taller="' + talleres + '" articulo="'+ articulo +'" nuevoTaller="' + Number(Number(talleres) - Number($("#nuevaCantidadArticuloIngreso").val())) + '" cantidad = "" nuevaCantidad = "0" required>' +
+							'<input type="number" class="form-control nuevaCantidadArticuloIngreso input-sm" name="nuevaCantidadArticuloIngreso" id="nuevaCantidadArticuloIngreso" min="1" value="0" taller="' + talleres + '" articulo="'+ articulo +'" nuevoTaller="' + talleres + '" cantidad = "" nuevaCantidad = "0" required>' +
 	
 						"</div>" +
 						"<!-- saldo de la Orden de Corte -->" +
@@ -1184,7 +1205,7 @@ $(".tablaArticulosTalleres tbody").on("click", "button.agregarArtiTaller", funct
 	
 						'<div class="col-xs-3">' +
 	
-							'<input type="number" class="form-control nuevaCantidadArticuloIngreso input-sm" name="nuevaCantidadArticuloIngreso" id="nuevaCantidadArticuloIngreso" min="1" value="0" taller="' + talleres + '" articulo="'+ articulo +'" nuevoTaller="' + Number(Number(talleres) - Number($("#nuevaCantidadArticuloIngreso").val())) + '" cantidad = "" nuevaCantidad="0"  required>' +
+							'<input type="number" class="form-control nuevaCantidadArticuloIngreso input-sm" name="nuevaCantidadArticuloIngreso" id="nuevaCantidadArticuloIngreso" min="1" value="0" taller="' + talleres + '" articulo="'+ articulo +'" nuevoTaller="' + talleres + '" cantidad = "" nuevaCantidad="0"  required>' +
 	
 						"</div>" +
 						"<!-- saldo de la Orden de Corte -->" +
@@ -1310,38 +1331,93 @@ $(".formularioIngreso").on("change", "input.nuevaCantidadArticuloIngreso", funct
     var nuevoTaller = Number($(this).attr("taller")) - Number($(this).val());
 
 	if($(this).attr("nuevaCantidad") == "0"){
-		$(this).attr("cantidad", Number($(this).val()));
+		if (Number($(this).val()) > Number($(this).attr("taller"))) {
+			/*=============================================
+			SI LA CANTIDAD ES SUPERIOR AL STOCK REGRESAR VALORES INICIALES
+			=============================================*/
+		
+			$(this).val(0);
+			$(this).attr("cantidad", "");
+			sumarTotalIngreso();
+			$(this).attr("nuevoTaller",$(this).attr("taller"));
+			var inputTaller = $(this)
+			.parent()
+			.parent()
+			.children(".divSaldoIngreso")
+			.children(".nuevoSaldoIngreso");
+			// console.log(inputSer);
+			inputTaller.val($(this).attr("taller"));
+			swal({
+			  title: "La cantidad supera el Taller",
+			  text: "¡Sólo hay " + $(this).attr("taller") + " unidades!",
+			  type: "error",
+			  confirmButtonText: "¡Cerrar!"
+			});
+		
+			return;
+		  }else{
+			$(this).attr("cantidad", Number($(this).val()));
+			$(this).attr("nuevoTaller", Number(nuevoTaller));
+			var inputTaller = $(this)
+			.parent()
+			.parent()
+			.children(".divSaldoIngreso")
+			.children(".nuevoSaldoIngreso");
+			// console.log(inputSer);
+			inputTaller.val(nuevoTaller);
+			//console.log(articulo);
+		
+			
+		  }
+		
+		
 	}else{
-		var nuevaCantidad = Number($(this).val()) - Number($(this).attr("nuevaCantidad"));
-		$(this).attr("cantidad", Number(nuevaCantidad));
+		if (Number($(this).val()) > Number($(this).attr("taller"))) {
+			/*=============================================
+			SI LA CANTIDAD ES SUPERIOR AL STOCK REGRESAR VALORES INICIALES
+			=============================================*/
+		
+			$(this).val($(this).attr("nuevaCantidad"));
+			$(this).attr("nuevoTaller",$(this).attr("taller") - $(this).attr("nuevaCantidad"));
+			$(this).attr("cantidad", Number($(this).val()));
+			var inputTaller = $(this)
+			.parent()
+			.parent()
+			.children(".divSaldoIngreso")
+			.children(".nuevoSaldoIngreso");
+			// console.log(inputSer);
+			inputTaller.val($(this).attr("taller") - $(this).attr("nuevaCantidad"));
+			sumarTotalIngreso();
+		
+			swal({
+			  title: "La cantidad supera el Taller",
+			  text: "¡Sólo hay " + $(this).attr("taller") + " unidades!",
+			  type: "error",
+			  confirmButtonText: "¡Cerrar!"
+			});
+		
+			return;
+		  }else{
+			var nuevaCantidad = Number($(this).val()) - Number($(this).attr("nuevaCantidad"));
+			$(this).attr("cantidad", Number(nuevaCantidad));
+			$(this).attr("nuevoTaller", Number(nuevoTaller));
+			var inputTaller = $(this)
+			.parent()
+			.parent()
+			.children(".divSaldoIngreso")
+			.children(".nuevoSaldoIngreso");
+			// console.log(inputSer);
+			inputTaller.val(nuevoTaller);
+			//console.log(articulo);
+		
+	
+		  }
+		
 	}
 
-    var inputTaller = $(this)
-    .parent()
-    .parent()
-    .children(".divSaldoIngreso")
-    .children(".nuevoSaldoIngreso");
-    // console.log(inputSer);
-    inputTaller.val(nuevoTaller);
-    //console.log(articulo);
+   
 
-    var pendiente = $(this)
-    .parent()
-    .parent()
-    .children(".pendiente")
-    .children(".nuevoPendienteProy");
-    //console.log(pendiente);
-
-    var pendienteReal = pendiente.attr("pendienteReal");
-    //console.log(pendiente);
-    //console.log(pendienteReal);
-
-    var quedaPen = pendienteReal - Number($(this).val());
-    //console.log(quedaPen);
-
-    pendiente.val(quedaPen);
-
-    $(this).attr("nuevoTaller", Number(nuevoTaller));
+    
 
 
     // SUMAR TOTAL DE UNIDADES
