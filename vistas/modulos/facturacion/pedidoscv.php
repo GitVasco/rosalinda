@@ -122,7 +122,7 @@
               <th>Estado</th>
               <th>Usuario</th>
               <th>Fecha</th>
-              <th>Acciones</th>
+              <th width="120px">Acciones</th>
             </tr>
 
           </thead>
@@ -385,6 +385,15 @@ MODAL FACTURAR
   </div>
 
 </div>
+
+
+<?php
+
+  $anularPedido = new ControladorPedidos();
+  $anularPedido -> ctrAnularPedido();
+
+?>
+
 
 <script>
 window.document.title = "Pedidos"

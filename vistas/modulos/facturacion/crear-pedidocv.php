@@ -1305,9 +1305,9 @@ MODAL PARA GENERAR EL PEDIDO
 
                     <div>
 
-                        <h3>
+                        <h4>
                             <label>Totales</label>
-                        </h3>
+                        </h4>
 
                     </div>
 
@@ -1321,7 +1321,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Op. Gravada <b>S/</b></span>
 
-                        <input type="text" class="form-control input-lg" style="text-align:right;" name="opGravadaM" id="opGravadaM" required readonly>
+                        <input type="text" class="form-control input-sm" style="text-align:right;" name="opGravadaM" id="opGravadaM" required readonly>
 
                     </div>
 
@@ -1333,7 +1333,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Descuento <b>S/</b></span>
 
-                        <input type="text" class="form-control input-lg" style="text-align:right;" name="descuentoM" id="descuentoM" required readonly>
+                        <input type="text" class="form-control input-sm" style="text-align:right;" name="descuentoM" id="descuentoM" required readonly>
 
                     </div>
 
@@ -1345,7 +1345,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Subtotal <b>S/</b></span>
 
-                        <input type="text" class="form-control input-lg" style="text-align:right;" name="subTotalM" id="subTotalM" required readonly>
+                        <input type="text" class="form-control input-sm" style="text-align:right;" name="subTotalM" id="subTotalM" required readonly>
 
                     </div>
 
@@ -1357,7 +1357,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Igv <b>18%</b></span>
 
-                        <input type="text" class="form-control input-lg" style="text-align:right;" name="igvM" id="igvM" required readonly>
+                        <input type="text" class="form-control input-sm" style="text-align:right;" name="igvM" id="igvM" required readonly>
 
                     </div>
 
@@ -1369,7 +1369,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Total <b>S/</b></span>
 
-                        <input type="text" class="form-control input-lg" style="text-align:right;" name="totalM" id="totalM" required readonly>
+                        <input type="text" class="form-control input-sm" style="text-align:right;" name="totalM" id="totalM" required readonly>
 
                     </div>
 
@@ -1379,7 +1379,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                     <div class="input-group">
 
-                        <input type="hidden" class="form-control input-lg" style="text-align:right;" name="articulosM" id="articulosM" required readonly>
+                        <input type="hidden" class="form-control input-sm" style="text-align:right;" name="articulosM" id="articulosM" required readonly>
 
                     </div>
 

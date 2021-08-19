@@ -395,7 +395,6 @@ $(".tablaPedidosCV").DataTable({
     }
 });
 
-
 /*
 * BOTON REVISAR PEDIDO
 */
@@ -609,7 +608,6 @@ $(".chkBoleta").change(function(){
     })
 
 })
-
 
 /*
 * ACTIVAR MODAL
@@ -1258,3 +1256,34 @@ $(".btnCalCantA").click(function () {
     //console.log(totalCantidadA);
 
 })
+
+
+/* 
+*ANULAR PEDIDOS
+*/
+$(".tablaPedidosCV").on("click",".btnAnularPedidoCV",function(){
+	
+    var codigo = $(this).attr("codigo");
+    var estado = $(this).attr("estado");
+    console.log(codigo,estado);
+ 
+	// Capturamos el id de la orden de compra
+	swal({
+        title: '¿Está seguro de anular el pedido?',
+        text: "¡Si no lo está puede cancelar la acción!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Si, anular pedido!'
+    }).then(function (result) {
+
+	if (result.value) {
+
+		window.location = "index.php?ruta=pedidoscv&codigoP="+codigo;
+
+	}
+	})
+
+});
