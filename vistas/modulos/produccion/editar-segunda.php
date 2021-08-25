@@ -108,7 +108,7 @@
                         <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
                         <input class="form-control  input-sm selectpicker" name="editarTalleres" id="editarTalleres" data-live-search="true" readonly>
                         
-                        <input type="text" id="editarTipoSector" name="editarTipoSector">
+                        <input type="hidden" id="editarTipoSector" name="editarTipoSector">
                     </div>
 
                 </div>

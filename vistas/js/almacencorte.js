@@ -1119,3 +1119,18 @@ $("#daterange-btnVerCortes").daterangepicker(
       }
     }
   });
+
+  $(".tablaAlmacenCorte").on("click", "button.btnReporteAC", function () {
+    var codigo =$(this).attr("codigo");
+    // console.log(codigo);
+    window.location = "vistas/reportes_excel/rpt_corte.php?codigo="+codigo;
+  });
+  
+
+  $(".tablaAlmacenCorte").on("click", "button.btnEditarCorteP", function () {
+    var codigo =$(this).attr("codigoAC");
+    // console.log(codigo);
+    window.location = "index.php?ruta=editar-almacencorte&codigo="+codigo;
+  });
+  
+  

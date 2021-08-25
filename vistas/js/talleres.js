@@ -2508,7 +2508,7 @@ $(".tablaIngresoM").on("click", ".btnVisualizarIngreso", function () {
 		dataType:"json",
 		success:function(respuesta){
 
-			// console.log("respuesta", respuesta);
+			console.log("respuesta", respuesta);
 
       $("#cierre").val(respuesta["documento"]);
       $("#guia").val(respuesta["guia"]);
@@ -2524,7 +2524,7 @@ $(".tablaIngresoM").on("click", ".btnVisualizarIngreso", function () {
     })
     
     var documentoDIngreso = $(this).attr("documentoIngreso");	
-    //console.log("codigoDAC", codigoDAC);
+    // console.log("documentoDIngreso", documentoDIngreso);
 
     var datosDOC = new FormData();
     datosDOC.append("documentoDIngreso", documentoDIngreso);
@@ -2540,7 +2540,7 @@ $(".tablaIngresoM").on("click", ".btnVisualizarIngreso", function () {
 		dataType:"json",
 		success:function(respuestaDetalle){
 
-			console.log("respuestaDetalle", respuestaDetalle);
+			// console.log("respuestaDetalle", respuestaDetalle);
 
       $(".detalleMP").remove();
             

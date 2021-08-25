@@ -262,6 +262,19 @@ class ControladorAlmacenCorte{
 
     }
 
+    /*
+    * MOSTRAR DETALLES DE ALMACEN DE CORTE
+    */
+    static public function ctrMostrarDetallesAlmacenCorte($item,$valor){
+
+        $tabla = "almacencorte_detallejf";
+
+        $respuesta = ModeloAlmacenCorte::mdlMostarDetallesAlmacenCorte($tabla,$item,$valor);
+
+        return $respuesta;
+
+    }
+
 	/* 
 	* VISUALIZAR DATOS DEL CORTE DETALLE
 	*/
@@ -397,6 +410,265 @@ class ControladorAlmacenCorte{
 
 
 		}
+
+    }
+
+    /*
+    * EDITAR ALMACEN DE CORTE
+    */
+    static public function ctrEditarAlmacenCorte(){
+
+        /*
+        todo: ver si trae datos
+        */
+        if( isset($_POST["editarAlmacenCorte"]) &&
+            isset($_POST["idUsuario"]) &&
+            isset($_POST["listaArticulosAC"])){
+
+            #var_dump("nuevoAlmacenCorte", $_POST["nuevaAlmacenCorte"]);
+            #var_dump("idUsuario", $_POST["idUsuario"]);
+            #var_dump("listaArticulosAC", $_POST["listaArticulosAC"]);
+
+                if($_POST["listaArticulosAC"] == ""){
+
+                    /*
+                    ? Mostramos una alerta suave si viene vacia
+                    */
+                    echo '<script>
+                            swal({
+                                type: "error",
+                                title: "Error",
+                                text: "¡No se realizo ningún cambio. Por favor, intenteló de nuevo!",
+                                showConfirmButton: true,
+                                confirmButtonText: "Cerrar"
+                            }).then((result)=>{
+                                if(result.value){
+                                    window.location = "index.php?ruta=editar-almacencorte&codigo='.$_POST["editarAlmacenCorte"].'";}
+                            });
+                        </script>';
+
+                }else{
+
+                    #var_dump("listaArticulosAC", $_POST["listaArticulosAC"]);
+
+                    //RECUPERAMOS TODO COMO ANTES DE SU CREACION DEL CORTE
+                    $item = "almacencorte";
+                    $valor = $_POST["editarAlmacenCorte"];
+                    $listaArticuloCorte= ControladorAlmacenCorte::ctrMostrarDetallesAlmacenCorte($item,$valor);
+
+                    // var_dump($listaArticuloCorte);
+
+                    foreach ($listaArticuloCorte as $key => $value) {
+                    
+                        $valor = $value["articulo"];
+
+                        $valor1 = $value["ordencorte"];
+                        
+                        $valor2 = $value["cantidad"];
+
+                        ModeloAlmacenCorte::mdlRecuperarAlmCorte($valor, $valor2);
+
+                        ModeloAlmacenCorte::mdlRecuperarOrdCorte($valor, $valor2);
+
+                        $descontarSaldo = ModeloAlmacenCorte::mdlRecuperarSaldoOrdCorte($valor, $valor1, $valor2);
+
+                        // var_dump($descontarSaldo);
+
+                    }
+                    /*
+                    ? Capturamos los articulos unicos y sumamos sus cantidades
+                    */
+
+                    $listArticulo = json_decode($_POST["listArticulo"], true);
+                    #var_dump("listArticulo", $listArticulo);
+
+                    /*
+                    * array on los articulos unicos sin repetir
+                    */
+                    $articulos_array = [];
+                    foreach ($listArticulo as $valor) {
+
+                        $articulo = $valor["articulo"];
+
+                        if (! in_array($articulo, $articulos_array)) {
+
+                            $articulos_array[] = $articulo;
+
+                        }
+
+                    }
+                    #var_dump("articulos_array", $articulos_array);
+
+                    /*
+                    * crear un array con la lista unica
+                    */
+                    $resultado = [];
+                    foreach ($articulos_array as $unico_id) {
+
+                        $temporal = [];
+                        $cantidad = 0;
+                        foreach ($listArticulo as $valor) {
+
+                            $id = $valor["articulo"];
+
+                            if ($id === $unico_id) {
+
+                                $temporal[] = $valor;
+
+                            }
+
+                        }
+
+                        $producto = $temporal[0];
+
+                        $producto["cantidad"] = 0;
+                        foreach ($temporal as $producto_temporal) {
+
+                            $producto["cantidad"] = $producto["cantidad"] + $producto_temporal["cantidad"];
+
+                        }
+                        // dx($producto["cantidad"]); // trace
+
+                        // store unique productoo with updated quantity
+                        $resultado[] = $producto;
+
+                    }
+                    #var_dump("resultado", $resultado);
+
+                    /*
+                    todo: GUARDAMOS LOS TOTALES DEL CORTE EN ARTICULO
+                    */
+                    foreach($resultado as $value){
+
+                        $valor = $value["articulo"];
+
+                        $valor1 = $value["cantidad"];
+
+                        ModeloAlmacenCorte::mdlActualizarAlmCorte($valor, $valor1);
+
+                    }
+
+                    /*
+                    todo: DESCONTAMOS LOS TOTALES DEL CORTE EN ARTICULO - ORDEN DE CORTE
+                    */
+                    foreach($resultado as $value){
+
+                        $valor = $value["articulo"];
+
+                        $valor1 = $value["cantidad"];
+
+                        ModeloAlmacenCorte::mdlActualizarOrdCorte($valor, $valor1);
+
+                        ModeloAlmacenCorte::mdlIngresarCantCorte($valor, $valor1);
+
+                    }
+
+                    /*
+                    todo: Actualizamos saldos de las Detalles de Ordenes de Corte
+                    */
+
+                    $listaArticulosAC = json_decode($_POST["listaArticulosAC"], true);
+                    #var_dump("listaArticulosAC", $listaArticulosAC);
+
+                    foreach($listaArticulosAC as $value){
+
+                        $valor = $value["articulo"];
+
+                        $valor1 = $value["ordencorte"];
+
+                        $valor2 = $value["cantidad"];
+
+                        ModeloAlmacenCorte::mdlActualizarSaldoOrdCorte($valor, $valor1, $valor2);
+
+                    }
+
+                    /*
+                    todo: Actualizamos saldos de las ordenes de corte y estados
+                    */
+                        ModeloAlmacenCorte::mdlActualizarSaldoOrdCorteGral();
+
+                        ModeloAlmacenCorte::mdlActualizarOrdCorteEstadoParcial();
+
+                        ModeloAlmacenCorte::mdlActualizarOrdCorteEstadoCerrado();
+
+                    /*
+                    todo: Editar cabeera de ALMACEN DE CORTE
+                    */
+                    $datos=array(   "codigo"=>$_POST["editarAlmacenCorte"],
+                                    "guia"=>$_POST["editarGuia"],
+                                    "usuario"=>$_POST["idUsuario"],
+                                    "total"=>$_POST["totalAlmacenCorte"],
+                                    "estado"=>"1");
+                    //var_dump("datos", $datos);
+
+                    $respuesta = ModeloAlmacenCorte::mdlEditarAlmacenCorte($datos);
+                    #var_dump("respuesta", $respuesta);
+
+                    /* 
+                    todo: Editamos los cambios del detalle almacencorte, primero eliminamos los detalles de almacencorte y de almacenmp
+                    */
+
+                    $eliminarDato = ModeloIngresos::mdlEliminarDato("almacencorte_detallejf", "almacencorte", $_POST["editarAlmacenCorte"]);
+                    $eliminarDatoMP = ModeloIngresos::mdlEliminarDato("almacencorte_detalle_mpjf", "almacencorte", $_POST["editarAlmacenCorte"]);
+                    #$respuesta = "no";
+
+                    if($respuesta =="ok"){
+
+                        /*
+                        todo: Guardar detalle de almacen de corte
+                        */
+                        #var_dump("ultimoId", $ultimoId);
+
+                        foreach($listaArticulosAC as $key=>$value){
+
+                            $datosD = array("almacencorte"=>$_POST["editarAlmacenCorte"],
+                                            "ordcorte"=>$value["ordencorte"],
+                                            "idocd"=>$value["idocd"],
+                                            "articulo"=>$value["articulo"],
+                                            "cantidad"=>$value["nuevaCantidad"]);
+                            // var_dump("datosD", $datosD);
+
+                            ModeloAlmacenCorte::mdlGuardarDetallesAlmacenCorte($datosD);
+
+                        }
+
+                        ModeloAlmacenCorte::mdlGuardarDetallesAlmacenCorteMP($_POST["editarAlmacenCorte"]);
+
+                        # Mostramos una alerta suave
+                        echo '<script>
+                                swal({
+                                    type: "success",
+                                    title: "Felicitaciones",
+                                    text: "¡La información fue editada con éxito!",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Cerrar"
+                                }).then((result)=>{
+                                    if(result.value){
+                                        window.location="almacencorte";}
+                                });
+                            </script>';
+
+                    }else{
+
+                        # Mostramos una alerta suave
+                        echo '<script>
+                                swal({
+                                    type: "error",
+                                    title: "Error",
+                                    text: "¡La información presento problemas y no se registro adecuadamente. Por favor, intenteló de nuevo!",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Cerrar"
+                                }).then((result)=>{
+                                    if(result.value){
+                                        window.location = "index.php?ruta=editar-almacencorte&codigo='.$_POST["editarAlmacenCorte"].'";}
+                                });
+                            </script>';
+
+                    }
+
+                }
+
+        }
 
     }
 }

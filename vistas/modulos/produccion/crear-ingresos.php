@@ -98,7 +98,7 @@
 
                         <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
                         <select class="form-control  input-sm selectpicker" name="nuevoTalleres" id="nuevoTalleres" data-live-search="true" >
-                        <option value="">SIN TALLER</option>
+                        
                         <?php
 
                             $sector=ControladorSectores::ctrMostrarSectores(null);
@@ -348,4 +348,23 @@ $('.nuevoArticuloIngreso').ready(function(){
        
     });
   });
+
+  $(document).ready(function(){
+    var ingreso = $("#nuevoTalleres").val();
+    var datos2 = new FormData();
+    datos2.append("ingreso", ingreso);
+    $.ajax({
+      url: "ajax/talleres.ajax.php",
+      method: "POST",
+      data: datos2,
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: "json",
+      success: function(respuesta2) {
+		//   console.log(respuesta);
+        $("#nuevoCodigo").val(ingreso+("000"+respuesta2["ultimo_codigo"]).slice(-4));
+      }
+    })
+  })
 </script>
