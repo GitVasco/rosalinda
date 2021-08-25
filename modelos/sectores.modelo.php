@@ -58,7 +58,7 @@ class ModeloSectores{
 			$stmt = Conexion::conectar()->prepare("  SELECT 
                                                             * 
                                                         FROM
-                                                            sectorjf ORDER BY nom_sector");
+                                                            sectorjf ORDER BY cod_sector");
 
 			$stmt -> execute();
 
