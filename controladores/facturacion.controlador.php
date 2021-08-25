@@ -1,6 +1,5 @@
 <?php
 
-
 class ControladorFacturacion{
 
     static public function ctrFacturar(){
@@ -1975,7 +1974,7 @@ class ControladorFacturacion{
 	    $doc->save($ruta.'.XML');
         
 
-        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,$tipo,$documento);
+        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
 
         //CREAR XML FIRMA
         require_once('/../vistas/generar_xml/ApiFacturacion.php');
@@ -1985,7 +1984,7 @@ class ControladorFacturacion{
 
         if($envio == "1"){
             echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
-            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,$tipo,$documento);
+            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
 
         }else{
 
@@ -2814,5 +2813,129 @@ class ControladorFacturacion{
 
     }
     
+    static public function ctrAnularDocumento(){
+
+        if(isset($_GET["documento"])){
+
+            $documento=$_GET["documento"];
+            $tipo=$_GET["tipo"];
+            #var_dump($documento,$tipo);
+
+            #regresar stock al almacén
+            $articulo = ModeloFacturacion::mdlRegresarStock($tipo, $documento);
+            #var_dump($articulo);     
+
+            #eliminar movimientos detalle
+            $detalle = ModeloFacturacion::mdlEliminarDetalle($tipo, $documento);
+            #var_dump($detalle);   
+
+            #anular cabecera
+            $cabecera = ModeloFacturacion::mdlAnularCabecera($tipo, $documento,$_SESSION["id"]);
+            #var_dump($cabecera); 
+
+            #eliminar cta cte
+            if($tipo == "S03"){
+
+                $tip = "01";
+
+            }else if($tipo == "S02"){
+
+                $tip = "03";
+
+            }else if($tipo == "E05"){
+
+                $tip = "07";
+
+            }else if($tipo = "S70"){
+
+                $tip = "09";
+
+            }
+
+            $cta = ModeloFacturacion::mdlEliminarCta($tip, $documento);
+            #var_dump($cta); 
+
+            if($cabecera == "ok"){
+
+                echo'<script>
+
+                swal({
+                    type: "success",
+                    title: "El documento ha sido anulada correctamente",
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar",
+                    closeOnConfirm: false
+                    }).then(function(result){
+                        if (result.value) {
+
+                        window.location = "'.$_GET["pagina"].'";
+
+                        }
+                    })
+    
+                </script>';
+
+            }
+
+        }
+    
+    }    
+
+    static public function ctrEliminarDocumento(){
+
+        if(isset($_GET["documentoE"])){
+
+            $documento=$_GET["documentoE"];
+            $tipo=$_GET["tipo"];
+            $pagina=$_GET["pagina"];
+            var_dump($documento, $tipo, $pagina);
+
+            $respuesta = ModeloFacturacion::mdlEliminarDocumento($tipo, $documento);
+            var_dump($respuesta);
+
+            if($respuesta == "ok"){
+
+                echo'<script>
+
+                swal({
+                    type: "success",
+                    title: "El documento ha sido anulada correctamente",
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar",
+                    closeOnConfirm: false
+                    }).then(function(result){
+                        if (result.value) {
+
+                        window.location = "'.$pagina.'";
+
+                        }
+                    })
+    
+                </script>';
+
+            }            
+
+        }
+
+    }    
+
+    //* mostrar cabecera del documento
+	static public function ctrMostrarCabeceraDoc($tipo, $documento){
+
+		$respuesta = ModeloFacturacion::mdlMostrarCabeceraDoc($tipo, $documento);
+
+		return $respuesta;
+
+    }
+
+    //* mostrar detalle del documento
+	static public function ctrMostrarDetalleDoc($tipo, $documento){
+
+		$respuesta = ModeloFacturacion::mdlMostrarDetalleDoc($tipo, $documento);
+
+		return $respuesta;
+
+    }    
 
 }
+

@@ -84,6 +84,15 @@
 
 </div>
 
+    <?php
+
+        $anularDocumento = new ControladorFacturacion();
+        $anularDocumento -> ctrAnularDocumento();
+        
+        $eliminarDocumento = new ControladorFacturacion();
+        $eliminarDocumento -> ctrEliminarDocumento();
+    ?>
+
 <script>
     window.document.title = "Proformas"
 </script>

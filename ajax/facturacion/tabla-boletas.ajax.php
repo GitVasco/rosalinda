@@ -11,40 +11,55 @@ class TablaGuiasRemision{
 
     public function mostrarTablaGuiasRemision(){
 
-        $gremision = ControladorFacturacion::ctrRangoFechasBoletas($_GET["fechaInicial"],$_GET["fechaFinal"]);
+        $boletas = ControladorFacturacion::ctrRangoFechasBoletas($_GET["fechaInicial"],$_GET["fechaFinal"]);
 
-        if(count($gremision)>0){
+        if(count($boletas)>0){
 
         $datosJson = '{
         "data": [';
 
-        for($i = 0; $i < count($gremision); $i++){
+        for($i = 0; $i < count($boletas); $i++){
 
         /*=============================================
         TRAEMOS LAS ACCIONES
         =============================================*/
 
-        if($gremision[$i]["doc_destino"] != ""){
-            $botones =  "<div class='btn-group'><button title='Facturar Pedido' class='btn btn-xs btn-primary btnFacturarA' documento='".$gremision[$i]["documento"]."' cod_cli='".$gremision[$i]["cliente"]."'  nom_cli='".$gremision[$i]["nombre"]."' tip_doc='".$gremision[$i]["tip_doc"]."' nro_doc='".$gremision[$i]["num_doc"]."' cod_ven='".$gremision[$i]["vendedor"]."' serie_dest='".$gremision[$i]["serie_dest"]."' nro_dest='".$gremision[$i]["nro_dest"]."' data-toggle='modal' data-target='#modalFacturarA'><i class='fa fa-paper-plane'></i></button><button title='Imprimir Boleta' class='btn btn-xs btn-success btnImprimirBoleta' tipo='".$gremision[$i]["tipo"]."' documento='".$gremision[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+            /* 
+            *estado
+            */
+            if($boletas[$i]["estado"] == "GENERADO"){
+
+                $estado = "<span style='font-size:85%' class='label label-success'>GENERADO</span>";
+                
+            }else if($boletas[$i]["estado"] == "ANULADO"){
+
+                $estado = "<span class='btn btn-danger btn-xs btn btnEliminarDocumento' documento='".$boletas[$i]["documento"]."' tipo='".$boletas[$i]["tipo"]."' pagina='boletas'>ANULADO</span>";
+
+            }
+
+            $total = "<div style='text-align:right !important'>".number_format($boletas[$i]["total"],2)."</div>";        
+
+        if($boletas[$i]["estado"] == "GENERADO"){
+            $botones =  "<div class='btn-group'><button title='Imprimir Boleta' class='btn btn-xs btn-success btnImprimirBoleta' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-print'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$boletas[$i]["documento"]."' tipo='".$boletas[$i]["tipo"]."' pagina='boletas'><i class='fa fa-close'></i></button></div>";
         }else{
 
-            $botones =  "<div class='btn-group'><button title='Facturar Pedido' class='btn btn-xs btn-primary btnFacturarB' documento='".$gremision[$i]["documento"]."' cod_cli='".$gremision[$i]["cliente"]."'  nom_cli='".$gremision[$i]["nombre"]."' tip_doc='".$gremision[$i]["tip_doc"]."' nro_doc='".$gremision[$i]["num_doc"]."' cod_ven='".$gremision[$i]["vendedor"]."' data-toggle='modal' data-target='#modalFacturarB'><i class='fa fa-paper-plane'></i></button><button title='Imprimir Boleta' class='btn btn-xs btn-success btnImprimirBoleta' tipo='".$gremision[$i]["tipo"]."' documento='".$gremision[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+            $botones =  "<div class='btn-group'><button title='Imprimir Boleta' class='btn btn-xs btn-success btnImprimirBoleta' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
 
         }
 
 
             $datosJson .= '[
-            "'.$gremision[$i]["tipo_documento"].'",
-            "<b>'.$gremision[$i]["documento"].'</b>",
-            "'.$gremision[$i]["total"].'",
-            "'.$gremision[$i]["cliente"].'",
-            "<b>'.$gremision[$i]["nombre"].'</b>",
-            "'.$gremision[$i]["vendedor"].'",
-            "'.$gremision[$i]["fecha"].'",
-            "'.$gremision[$i]["doc_destino"].'",
-            "'.$gremision[$i]["estado"].'",
-            "'.$gremision[$i]["agencia"].'",
-            "'.$gremision[$i]["ubigeo"].'",
+            "'.$boletas[$i]["tipo_documento"].'",
+            "<b>'.$boletas[$i]["documento"].'</b>",
+            "'.$total.'",
+            "'.$boletas[$i]["cliente"].'",
+            "<b>'.$boletas[$i]["nombre"].'</b>",
+            "'.$boletas[$i]["vendedor"].'",
+            "'.$boletas[$i]["fecha"].'",
+            "'.$boletas[$i]["doc_destino"].'",
+            "'.$estado.'",
+            "'.$boletas[$i]["agencia"].'",
+            "'.$boletas[$i]["ubigeo"].'",
             "'.$botones.'"
             ],';
             }

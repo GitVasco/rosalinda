@@ -9,7 +9,7 @@ class TablaGuiasRemision{
     MOSTRAR LA TABLA DE ARTICULOS
     =============================================*/
 
-    public function mostrarTablaGuiasRemision(){
+    public function mostrarTablaFacturas(){
 
         $factura = ControladorFacturacion::ctrRangoFechasFacturas($_GET["fechaInicial"],$_GET["fechaFinal"]);
 
@@ -24,28 +24,51 @@ class TablaGuiasRemision{
         TRAEMOS LAS ACCIONES
         =============================================*/
 
-        if($factura[$i]["doc_destino"] != ""){
-    
-            $botones =  "<div class='btn-group'><button title='Editar Factura' class='btn btn-xs btn-warning btnEditarFacturaCV' codigo='".$factura[$i]["documento"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Facturar Pedido' class='btn btn-xs btn-primary btnFacturarA' documento='".$factura[$i]["documento"]."' cod_cli='".$factura[$i]["cliente"]."'  nom_cli='".$factura[$i]["nombre"]."' tip_doc='".$factura[$i]["tip_doc"]."' nro_doc='".$factura[$i]["num_doc"]."' cod_ven='".$factura[$i]["vendedor"]."' serie_dest='".$factura[$i]["serie_dest"]."' nro_dest='".$factura[$i]["nro_dest"]."' data-toggle='modal' data-target='#modalFacturarA'><i class='fa fa-paper-plane'></i></button><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
-        }else{
+            /* 
+            *estado
+            */
+            if($factura[$i]["facturacion"] == "0"){
 
-            $botones =  "<div class='btn-group'><button title='Editar Factura' class='btn btn-xs btn-warning btnEditarFacturaCV' codigo='".$factura[$i]["documento"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Facturar Pedido' class='btn btn-xs btn-primary btnFacturarB' documento='".$factura[$i]["documento"]."' cod_cli='".$factura[$i]["cliente"]."'  nom_cli='".$factura[$i]["nombre"]."' tip_doc='".$factura[$i]["tip_doc"]."' nro_doc='".$factura[$i]["num_doc"]."' cod_ven='".$factura[$i]["vendedor"]."' data-toggle='modal' data-target='#modalFacturarB'><i class='fa fa-paper-plane'></i></button><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+                $estado = "<span style='font-size:85%' class='label label-success'>GENERADO</span>";
+                
+            }else if($factura[$i]["facturacion"] == "1"){
 
-        }
+                $estado = "<span style='font-size:85%' class='label label-warning'>ERROR</span>";
 
+            }else if($factura[$i]["facturacion"] == "2"){
+
+                $estado = "<span style='font-size:85%' class='label label-primary'>ENVIADO</span>";
+
+            }else if($factura[$i]["facturacion"] == "4"){
+
+                $estado = "<span class='btn btn-danger btn-xs btn btnEliminarDocumento' documento='".$factura[$i]["documento"]."' tipo='".$factura[$i]["tipo"]."' pagina='facturas'>ANULADO</span>";
+
+            }
+
+            $total = "<div style='text-align:right !important'>".number_format($factura[$i]["total"],2)."</div>";
+
+            if($factura[$i]["facturacion"] == "0"){
+
+                $botones =  "<div class='btn-group'><button title='Editar Documento' class='btn btn-xs  btn-warning btnEditarDocumentoCV' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$factura[$i]["documento"]."' tipo='".$factura[$i]["tipo"]."' pagina='facturas'><i class='fa fa-close'></i></button></div>";
+
+            }else{
+
+                $botones =  "<div class='btn-group'><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+
+            }
 
             $datosJson .= '[
             "'.$factura[$i]["tipo_documento"].'",
             "<b>'.$factura[$i]["documento"].'</b>",
-            "'.$factura[$i]["total"].'",
+            "'.$total.'",
             "'.$factura[$i]["cliente"].'",
             "<b>'.$factura[$i]["nombre"].'</b>",
             "'.$factura[$i]["vendedor"].'",
             "'.$factura[$i]["fecha"].'",
+            "'.$factura[$i]["doc_origen"].'",
             "'.$factura[$i]["doc_destino"].'",
-            "'.$factura[$i]["estado"].'",
+            "'.$estado.'",
             "'.$factura[$i]["agencia"].'",
-            "'.$factura[$i]["ubigeo"].'",
             "'.$botones.'"
             ],';
             }
@@ -73,4 +96,4 @@ class TablaGuiasRemision{
 ACTIVAR TABLA DE articulos
 =============================================*/
 $activarArticulosPedidos = new TablaGuiasRemision();
-$activarArticulosPedidos -> mostrarTablaGuiasRemision();
+$activarArticulosPedidos -> mostrarTablaFacturas();

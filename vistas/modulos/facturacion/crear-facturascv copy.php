@@ -4,7 +4,7 @@
 
         <h1>
 
-            Editar Documento
+            Crear pedido
 
         </h1>
 
@@ -12,7 +12,7 @@
 
             <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
 
-            <li class="active">Editar Documento</li>
+            <li class="active">Crear pedido</li>
 
         </ol>
 
@@ -26,7 +26,7 @@
             EL FORMULARIO
             ======================================-->
 
-            <div class="col-lg-8 col-xs-12">
+            <div class="col-lg-7 col-xs-12">
 
                 <div class="box box-success">
 
@@ -79,11 +79,10 @@
 
                                         <?php
 
-                                        $tipo = $_GET["tipo"];
-                                        $doc = $_GET["documento"];
-                                        #var_dump("documento", $documento);
+                                        $pedido = $_GET["pedido"];
+                                        //var_dump("pedido", $pedido);
 
-                                        echo '<input type="text" class="form-control input-sm" id="nuevoCodigo" name="nuevoCodigo" value="'.$doc.'" readonly>';
+                                        echo '<input type="text" class="form-control input-sm" id="nuevoCodigo" name="nuevoCodigo" value="' . $pedido . '" readonly>';
 
                                         ?>
 
@@ -96,11 +95,6 @@
                                 <!--=====================================
                                 ENTRADA DEL CLIENTE
                                 ======================================-->
-                                <div class="form-group">
-                                    <div class='progress progress-striped'>
-                                        <div id='progressBar1' class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%'>0%</div>
-                                    </div>
-                                </div>
 
                                 <div class="form-group">
 
@@ -108,80 +102,50 @@
 
                                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
 
-                                        <select class="form-control selectpicker" id="seleccionarCliente" name="seleccionarCliente" data-live-search="true" data-size="10" required>
-
                                         <?php
 
-                                        $tipo = $_GET["tipo"];
-                                        $doc = $_GET["documento"];
+                                        $valor = $_GET["pedido"];
 
-                                        $documento = ControladorFacturacion::ctrMostrarCabeceraDoc($tipo, $doc);
-                                        #var_dump("pedido", $documento);
+                                        $pedido = ControladorPedidos::ctrMostrarTemporal($valor);
+                                        var_dump("pedido", $pedido);
 
-                                        if ($documento["documento"] != "") {
+                                        if ($pedido["codigo"] != "") {
 
-                                            $item = "codigo";
-                                            $valor = $documento["cliente"];
+                                            $cliente = ControladorClientes::ctrMostrarClientes("id", $pedido["cliente"]);
 
-                                            $clientes = ControladorClientes::ctrMostrarClientesP($item, $valor);
-                                            #var_dump($clientes["nombreB"]);
+                                            echo '<input type="hidden" class="form-control input-sm" id="codCliente" name="codCliente" value="' . $cliente["id"] . '" readonly>';
 
-                                            echo '<option value="'.$clientes["codigo"].'">'.$clientes["nombreB"].'</option>';
+                                            echo '<input type="text" class="form-control input-sm" id="seleccionarCliente" name="seleccionarCliente" value="' . $cliente["nombre"] . '" readonly>';
+                                            #var_dump("nombre", $cliente["nombre"]);
 
-                                            $client2 = ControladorClientes::ctrMostrarClientesP(null, null);
-                                            #var_dump($client2);
 
-                                            foreach ($client2 as $key => $value) {
-
-                                            echo '<option value="'.$value["codigo"].'">'.$value["nombreB"].'</option>';
-
-                                            }
 
                                         } else {
 
-                                            // $clientes = ControladorClientes::ctrMostrarClientesP(null, null);
-                                            // var_dump($clientes);
+                                            echo '<select class="form-control selectpicker" id="seleccionarCliente" name="seleccionarCliente" data-live-search="true" required>
 
-                                            echo '<option value="">Seleccione Cliente</option>';
-                                            //var_dump($clientes);
+                                                <option value="">Seleccionar cliente</option>';
 
-                                            // foreach ($clientes as $key => $value) {
+                                            $item = null;
+                                            $valor = null;
 
-                                            //     echo '<option value="'.$value["codigo"].'">'.$value["nombreB"].'</option>';
+                                            $categorias = ControladorClientes::ctrMostrarClientesP($item, $valor);
 
-                                            // }
+                                            foreach ($categorias as $key => $value) {
 
+                                                echo '<option value="' . $value["id"] . '">' . $value["codigo"] . ' - ' . $value["nombre"] . '</option>';
+                                            }
+
+                                            echo '</select>
+
+                                            <span class="input-group-addon"><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modalAgregarClienteP" data-dismiss="modal">Agregar
+                                                    cliente</button></span>';
                                         }
 
 
                                         ?>
 
-                                        </select>
 
-                                        <?php
-
-                                            $valor = $_GET["documento"];
-
-                                            if($valor == ""){
-                                                echo "<button  type='button' class='btn btn-primary btnCargarCliente'> Cargar</button> ";
-                                            }
-
-                                            $documento = ControladorFacturacion::ctrMostrarCabeceraDoc($tipo, $doc);
-                                            #var_dump("pedido", $documento);
-
-                                            if ($documento["documento"] != "") {
-
-                                                $item = "codigo";
-                                                $valor = $documento["cliente"];
-
-                                                $clientes = ControladorClientes::ctrMostrarClientesP($item, $valor);
-
-                                                echo '<input type="hidden" class="form-control input-sm" id="codCliente" name="codCliente" value="' . $clientes["codigo"] . '" readonly>';
-
-                                                echo '<input type="text" class="form-control input-sm" id="nomCliente" name="nomCliente" value="' . $clientes["nombre"] . '" readonly>';
-                                            }
-
-                                        ?>
 
                                     </div>
 
@@ -197,50 +161,34 @@
 
                                         <span class="input-group-addon"><i class="fa fa-shopping-cart"></i></span>
 
-                                        <select class="form-control" id="seleccionarVendedor" name="seleccionarVendedor" required>
-
                                         <?php
 
-                                        $tipo = $_GET["tipo"];
-                                        $doc = $_GET["documento"];
+                                        $valor = $_GET["pedido"];
 
-                                        $documento = ControladorFacturacion::ctrMostrarCabeceraDoc($tipo, $doc);
-                                        #var_dump("pedido", $documento["vendedor"]);
+                                        $pedido = ControladorPedidos::ctrMostrarTemporal($valor);
+                                        #var_dump("pedido", $pedido);
 
-                                        if ($documento["vendedor"] != "") {
+                                        if ($pedido["codigo"] != "") {
 
-                                            $vendedor = ControladorVendedores::ctrMostrarVendedores("codigo", $documento["vendedor"]);
-                                            #var_dump($vendedor);
-
-                                            echo '<option value="'.$vendedor["codigo"].'">'.$vendedor["codigo"].' - '.$vendedor["descripcion"].'</option>';
-
-                                            $vend2 = ControladorVendedores::ctrMostrarVendedores(null, null);
-                                            #var_dump($vend2);
-
-                                            foreach ($vend2 as $key => $value) {
-
-                                            echo '<option value="'.$value["id"].'">'.$value["codigo"].' - '.$value["descripcion"].'</option>';
-
-                                            }
-
+                                            echo '<input type="text" class="form-control input-sm" id="seleccionarVendedor" name="seleccionarVendedor" value="' . $pedido["vendedor"] . '" readonly>';
                                         } else {
 
-                                            $vendedor = ControladorVendedores::ctrMostrarVendedores(null, null);
+                                            echo '<select class="form-control" id="seleccionarVendedor" name="seleccionarVendedor" required>
 
-                                            echo '<option value="">Seleccione Vendedor</option>';
-                                            //var_dump($vendedor);
+                                                    <option value="">Vendedor</option>
+                                                    <option value="00">00 - Oficina</option>
+                                                    <option value="02">02 - Manuel Vasquez</option>
+                                                    <option value="07">07 - Antonio Diaz</option>
+                                                    <option value="18A">18A - Oscar Ponce</option>
+                                                    <option value="19">19 - Juan Carlos Diaz</option>
+                                                    <option value="20">20 - Amelia Portal</option>
 
-                                            foreach ($vendedor as $key => $value) {
-
-                                                echo '<option value="'.$value["codigo"].'">'.$value["codigo"].' - '.$value["descripcion"].'</option>';
-
-                                            }
-
+                                                </select>';
                                         }
 
                                         ?>
 
-                                        </select>
+
 
                                     </div>
 
@@ -252,36 +200,31 @@
 
                                     <?php
 
-                                    $tipo = $_GET["tipo"];
-                                    $doc = $_GET["documento"];
+                                    $valor = $_GET["pedido"];
 
-                                    $documento = ControladorFacturacion::ctrMostrarCabeceraDoc($tipo, $doc);
-                                    #var_dump("pedido", $documento);
+                                    $pedido = ControladorPedidos::ctrMostrarTemporal($valor);
+                                    #var_dump("pedido", $pedido);
 
-                                    if ($documento["documento"] != "") {
+                                    if ($pedido["codigo"] != "") {
 
-                                        echo '<input type="hidden" class="form-control input-sm" id="seleccionarLista" name="seleccionarLista" value="' . $documento["lista_precios"] . '" readonly>';
+                                        echo '<input type="hidden" class="form-control input-sm" id="seleccionarLista" name="seleccionarLista" value="' . $pedido["lista"] . '" readonly>';
                                     } else {
 
-                                        echo '<input type="hidden" class="form-control input-sm" id="seleccionarLista" name="seleccionarLista" value="' . $documento["lista_precios"] . '" readonly>';
+                                        echo '<input type="hidden" class="form-control input-sm" id="seleccionarLista" name="seleccionarLista" value="' . $pedido["lista"] . '" readonly>';
                                     }
 
                                     ?>
-                                <div class=" form-group buscador" id="elid" style="padding-bottom:25px">
-                                    <label for="" class="col-form-label col-lg-1">Buscar:</label>
-                                    <div class="col-lg-11">
-                                        <div class="input-group">
-                                            
-                                            <input type="text" class="form-control " id="buscador" name="buscador"/>
-                                            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <!--=====================================
                                 ENTRADA PARA AGREGAR PRODUCTO
                                 ======================================-->
 
                                 <div class="form-group row nuevoProductoPedido" style="height:500px; overflow: scroll;">
+
+                                <p class="buscador" id="elid">
+                                    <label>Buscar:</label>
+                                    <input type="text" class="form-control input-sm" id="buscador" name="buscador">
+                                </p>   
 
                                 <!--=====================================
                                         TITULOS
@@ -291,7 +234,7 @@
 
                                     <div class="row">
 
-                                        <div class="col-xs-5">
+                                        <div class="col-xs-7">
 
                                             <label>Item</label>
 
@@ -303,29 +246,11 @@
 
                                         </div>
 
-                                        <div class="col-xs-2">
+                                        <div class="col-xs-3">
 
-                                            <label for="">P. Unit</label>
-
-                                        </div>                                        
-
-                                        <div class="col-xs-1">
-
-                                            <label for="">Total</label>
+                                            <label for="">Total S/ IGV</label>
 
                                         </div>
-
-                                        <div class="col-xs-1">
-
-                                            <label for="">U. IGV</label>
-
-                                        </div>                                        
-
-                                        <div class="col-xs-1">
-
-                                            <label for="">T. IGV</label>
-
-                                        </div>                                        
 
                                     </div>
 
@@ -334,9 +259,7 @@
                                     <?php
 
                                     #tremos la lista de items
-                                    $tipo = $_GET["tipo"];
-                                    $doc = $_GET["documento"];
-                                    $listaArtPed = ControladorFacturacion::ctrMostrarDetalleDoc($tipo, $doc);
+                                    $listaArtPed = ControladorPedidos::ctrMostrarDetallesTemporal($_GET["pedido"]);
                                     #var_dump("listaArtPed", $listaArtPed);
 
                                     foreach ($listaArtPed as $key => $value) {
@@ -348,7 +271,7 @@
 
                                         echo '  <div class="row mundito" style="padding:5px 15px">
 
-                                                <div class="col-xs-5" style="padding-right:0px">
+                                                <div class="col-xs-7" style="padding-right:0px">
 
                                                     <div class="input-group">
 
@@ -370,33 +293,17 @@
 
                                                 </div>
 
-                                                <div class="col-xs-2">
-
-                                                    <input type="text" class="form-control nuevoPunit input-sm" name="nuevoPunit" min="1" value="' . $value["precio"] . '" readonly>
-
-                                                </div>                                                
-
-                                                <div class="col-xs-1 ingresoPrecio" style="padding-left:0px">
+                                                <div class="col-xs-3 ingresoPrecio" style="padding-left:0px">
 
                                                     <div class="input-group">
 
-                                                        <input type="text" class="form-control nuevoPrecioArticulo input-sm" precioReal="' . $value["precio"] . '" name="nuevoPrecioArticulo" value="' . round($total_detalle,2) . '" readonly required>
+                                                        <span class="input-group-addon"><i class="fa fa-money"></i></span>
+
+                                                        <input type="text" class="form-control nuevoPrecioArticulo" precioReal="' . $value["precio"] . '" name="nuevoPrecioArticulo" value="' . $total_detalle . '" readonly required>
 
                                                     </div>
 
                                                 </div>
-
-                                                <div class="col-xs-1">
-
-                                                    <input type="text" class="form-control nuevoPunitC input-sm" name="nuevoPunitC" min="1" value="' . ($value["precio"]*1.18) . '" readonly>
-
-                                                </div> 
-                                                
-                                                <div class="col-xs-1">
-
-                                                    <input type="text" class="form-control nuevoTotalC input-sm" name="nuevoTotalC" min="1" value="' . round($total_detalle*1.18,2) . '" readonly>
-
-                                                </div>                                                 
 
                                             </div>';
                                     }
@@ -446,14 +353,15 @@
 
                                                 <?php
 
-                                                    $tipo = $_GET["tipo"];
-                                                    $doc = $_GET["documento"];
-                                                    $totalArt = ControladorFacturacion::ctrMostrarCabeceraDoc($tipo, $doc);
-                                                    #var_dump($totalArt["neto"]);
+                                                    $valor = $_GET["pedido"];
 
-                                                    echo '<input type="text" style="text-align:right;" min="1" class="form-control" id="nuevoSubTotalA" name="nuevoSubTotalA" value="'.number_format($totalArt["neto"],2).'" readonly required>';
+                                                    $totalArt = ControladorPedidos::ctrMostrarTemporalTotal($valor);
 
-                                                    echo '<input type="hidden" id="nuevoSubTotal" name="nuevoSubTotal" value="'.$totalArt["neto"].'">';
+                                                    //var_dump($totalArt["totalArt"]);
+
+                                                    echo '<input type="text" style="text-align:right;" min="1" class="form-control" id="nuevoSubTotalA" name="nuevoSubTotalA" value="'.number_format($totalArt["totalArt"],2).'" readonly required>';
+
+                                                    echo '<input type="hidden" id="nuevoSubTotal" name="nuevoSubTotal" value="'.$totalArt["totalArt"].'">';
 
                                                 ?>
 
@@ -485,7 +393,7 @@
 
                                                 <?php
 
-                                                $valor = $_GET["documento"];
+                                                $valor = $_GET["pedido"];
 
                                                 $descuento = ControladorPedidos::ctrMostrarTemporal($valor);
                                                 //var_dump($descuento["descuento_total"]);
@@ -528,7 +436,7 @@
 
                                                 <?php
 
-                                                $valor = $_GET["documento"];
+                                                $valor = $_GET["pedido"];
 
                                                 $descuento = ControladorPedidos::ctrMostrarTemporal($valor);
                                                 //var_dump($descuento["descuento_total"]);
@@ -590,7 +498,7 @@
 
                                                 <?php
 
-                                                $valor = $_GET["documento"];
+                                                $valor = $_GET["pedido"];
 
                                                 $subTotalA = ControladorPedidos::ctrMostrarTemporal($valor);
                                                 //var_dump($subTotalA["sub_total"]);
@@ -649,7 +557,7 @@
 
                                                 <?php
 
-                                                $valor = $_GET["documento"];
+                                                $valor = $_GET["pedido"];
 
                                                 $igvA = ControladorPedidos::ctrMostrarTemporal($valor);
                                                 //var_dump($igvA["sub_total"]);
@@ -712,7 +620,7 @@
 
                                                 <?php
 
-                                                $valor = $_GET["documento"];
+                                                $valor = $_GET["pedido"];
 
                                                 $totalA = ControladorPedidos::ctrMostrarTemporal($valor);
                                                 //var_dump($totalA["descuento_total"]);
@@ -767,17 +675,18 @@
                                             <select class="form-control selectpicker" id="condicionVenta" name="condicionVenta" data-live-search="true"  required>
 
                                                 <?php
-                                                    $valor = $_GET["documento"];
+                                                    $valor = $_GET["pedido"];
 
-                                                    $documento = ControladorPedidos::ctrMostrarTemporal($valor);
-                                                    //var_dump("pedido", $documento["condicion_venta"]);
+                                                    $pedido = ControladorPedidos::ctrMostrarTemporal($valor);
+                                                    //var_dump("pedido", $pedido["condicion_venta"]);
 
-                                                    if($documento["condicion_venta"] > 0){
+                                                    if($pedido["condicion_venta"] > 0){
 
                                                         $item = "id";
-                                                        $valor = $documento["condicion_venta"];
+                                                        $valor = $pedido["condicion_venta"];
 
                                                         $condiciones = ControladorCondicionVentas::ctrMostrarCondicionVentas($item, $valor);
+
                                                         //var_dump($condiciones["descripcion"]);
 
                                                         echo '<option value="'.$condiciones["id"].'">'.$condiciones["codigo"].' - '.$condiciones["descripcion"].'</option>';
@@ -835,15 +744,15 @@
 
                                         <?php
 
-                                            $valor = $_GET["documento"];
+                                            $valor = $_GET["pedido"];
 
-                                            $documento = ControladorPedidos::ctrMostrarTemporal($valor);
-                                            //var_dump("pedido", $documento["agencia"]);
+                                            $pedido = ControladorPedidos::ctrMostrarTemporal($valor);
+                                            //var_dump("pedido", $pedido["agencia"]);
 
-                                            if($documento["agencia"] > 0){
+                                            if($pedido["agencia"] > 0){
 
                                                 $item = "id";
-                                                $valor = $documento["agencia"];
+                                                $valor = $pedido["agencia"];
 
                                                 $agencias = ControladorAgencias::ctrMostrarAgencias($item, $valor);
 
@@ -897,17 +806,17 @@
 
                         <div class="box-header with-border">
 
-                            <button onclick="history.back()" type="button" class="btn btn-danger pull-left">Cancelar
+                            <button onclick="location.href='pedidoscv'" type="button" class="btn btn-danger pull-left">Cancelar
                             </button>
 
                         <?php
 
-                            $valor = $_GET["documento"];
+                            $valor = $_GET["pedido"];
 
-                            $documento = ControladorPedidos::ctrMostrarTemporal($valor);
-                            //var_dump("pedido", $documento["estado"]);
+                            $pedido = ControladorPedidos::ctrMostrarTemporal($valor);
+                            //var_dump("pedido", $pedido["estado"]);
 
-                            if($documento["estado"] == "GENERADO"){
+                            if($pedido["estado"] == "GENERADO"){
 
                                 //var_dump("hola 1");
 
@@ -938,7 +847,7 @@
             LA TABLA DE PRODUCTOS
             ======================================-->
 
-            <div class="col-lg-4 hidden-md hidden-sm hidden-xs">
+            <div class="col-lg-5 hidden-md hidden-sm hidden-xs">
 
                 <div class="box box-warning">
 
@@ -946,7 +855,7 @@
 
                     <div class="box-body">
 
-                        <table class="table table-bordered table-striped dt-responsive tablaArticulosPedidos" width="100%"> 
+                        <table class="table table-bordered table-striped dt-responsive tablaArticulosPedidos" width="100%">
 
                             <thead>
 
@@ -975,17 +884,18 @@
     </section>
 
 </div>
+
 <!--=====================================
-MODAL MODIFICAR ARTICULOS
+MODAL AGREGAR ARTICULOS
 ======================================-->
 
-<div id="modalModificarClienteP" class="modal fade" role="dialog">
+<div id="modalAgregarClienteP" class="modal fade" role="dialog">
 
     <div class="modal-dialog" style="width: 60% !important;">
 
         <div class="modal-content">
 
-            <form role="form" method="post" class="formularioPedido" onkeypress="return anular(event)">
+            <form role="form" method="post" class="formularioPedido">
 
                 <!--=====================================
                 CABEZA DEL MODAL
@@ -1015,7 +925,7 @@ MODAL MODIFICAR ARTICULOS
 
                                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                                    <input type="text" class="form-control input-sm" id="modeloModalA" name="modeloModalA" readonly>
+                                    <input type="text" class="form-control input-sm" id="modeloModal" name="modeloModal" readonly>
 
                                 </div>
 
@@ -1027,7 +937,7 @@ MODAL MODIFICAR ARTICULOS
 
                                     <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
-                                    <input type="text" class="form-control input-sm" id="precioA" name="precioA">
+                                    <input type="text" class="form-control input-sm" id="precio" name="precio">
 
                                 </div>
 
@@ -1039,7 +949,7 @@ MODAL MODIFICAR ARTICULOS
 
                                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                                    <input type="text" class="form-control input-sm" id="clienteA" name="clienteA" placeholder="Tiene que escoger el Cliente" required>
+                                    <input type="text" class="form-control input-sm" id="cliente" name="cliente" placeholder="Tiene que escoger el Cliente" required>
 
                                 </div>
 
@@ -1051,7 +961,7 @@ MODAL MODIFICAR ARTICULOS
 
                                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                                    <input type="text" class="form-control input-sm" id="vendedorA" name="vendedorA" placeholder="Tiene que escoger el Vendedor" required>
+                                    <input type="text" class="form-control input-sm" id="vendedor" name="vendedor" placeholder="Tiene que escoger el Vendedor" required>
 
                                     <input type="hidden" class="form-control input-sm" id="nLista" name="nLista" readonly>
 
@@ -1064,9 +974,9 @@ MODAL MODIFICAR ARTICULOS
 
                             <?php
 
-                            $documento = $_GET["documento"];
+                            $pedido = $_GET["pedido"];
 
-                            echo '<input type="hidden" class="form-control input-sm" id="pedido" name="pedido" value="' . $documento . '" readonly>';
+                            echo '<input type="hidden" class="form-control input-sm" id="pedido" name="pedido" value="' . $pedido . '" readonly>';
 
 
                             ?>
@@ -1155,7 +1065,7 @@ MODAL MODIFICAR ARTICULOS
 
                         <div class="input-group">
 
-                            <input type="text" name="totalCantidadA" id="totalCantidadA" readonly>
+                            <input type="text" name="totalCantidad" id="totalCantidad" readonly>
 
 
                         </div>
@@ -1168,7 +1078,7 @@ MODAL MODIFICAR ARTICULOS
 
                         <div class="input-group">
 
-                            <input type="text" name="totalSolesA" id="totalSolesA" readonly>
+                            <input type="text" name="totalSoles" id="totalSoles" readonly>
 
 
                         </div>
@@ -1182,7 +1092,7 @@ MODAL MODIFICAR ARTICULOS
 
                         <div class="input-group">
 
-                            <button type="button" class="btn btn-success pull-left btnCalCantA">Calcular</button>
+                            <button type="button" class="btn btn-success pull-left btnCalCant">Calcular</button>
 
                         </div>
 
@@ -1308,9 +1218,9 @@ MODAL PARA GENERAR EL PEDIDO
 
                     <div>
 
-                        <h4>
+                        <h3>
                             <label>Totales</label>
-                        </h4>
+                        </h3>
 
                     </div>
 
@@ -1324,7 +1234,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Op. Gravada <b>S/</b></span>
 
-                        <input type="text" class="form-control input-sm" style="text-align:right;" name="opGravadaM" id="opGravadaM" required readonly>
+                        <input type="text" class="form-control input-lg" style="text-align:right;" name="opGravadaM" id="opGravadaM" required readonly>
 
                     </div>
 
@@ -1336,7 +1246,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Descuento <b>S/</b></span>
 
-                        <input type="text" class="form-control input-sm" style="text-align:right;" name="descuentoM" id="descuentoM" required readonly>
+                        <input type="text" class="form-control input-lg" style="text-align:right;" name="descuentoM" id="descuentoM" required readonly>
 
                     </div>
 
@@ -1348,7 +1258,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Subtotal <b>S/</b></span>
 
-                        <input type="text" class="form-control input-sm" style="text-align:right;" name="subTotalM" id="subTotalM" required readonly>
+                        <input type="text" class="form-control input-lg" style="text-align:right;" name="subTotalM" id="subTotalM" required readonly>
 
                     </div>
 
@@ -1360,7 +1270,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Igv <b>18%</b></span>
 
-                        <input type="text" class="form-control input-sm" style="text-align:right;" name="igvM" id="igvM" required readonly>
+                        <input type="text" class="form-control input-lg" style="text-align:right;" name="igvM" id="igvM" required readonly>
 
                     </div>
 
@@ -1372,7 +1282,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                         <span class="input-group-addon" style="width: 150px;">Total <b>S/</b></span>
 
-                        <input type="text" class="form-control input-sm" style="text-align:right;" name="totalM" id="totalM" required readonly>
+                        <input type="text" class="form-control input-lg" style="text-align:right;" name="totalM" id="totalM" required readonly>
 
                     </div>
 
@@ -1382,7 +1292,7 @@ MODAL PARA GENERAR EL PEDIDO
 
                     <div class="input-group">
 
-                        <input type="hidden" class="form-control input-sm" style="text-align:right;" name="articulosM" id="articulosM" required readonly>
+                        <input type="hidden" class="form-control input-lg" style="text-align:right;" name="articulosM" id="articulosM" required readonly>
 
                     </div>
 
@@ -1442,7 +1352,7 @@ MODAL PARA GENERAR EL PEDIDO
 </div>
 
 <script>
-window.document.title = "Editar Documento"
+window.document.title = "Crear Factura"
 </script>
 
 <script>
@@ -1462,13 +1372,12 @@ $('.nuevoProductoPedido').ready(function(){
 
        for( var i = 0; i < nombres.length; i++ ){
 
-        item = $(nombres[i]).val();
-        item2 = $(nombres[i]).val().toLowerCase();
-        // console.log(item);
+        item = $(nombres[i]).val().toLowerCase();
+        console.log(item);
 
             for(var x = 0; x < item.length; x++ ){
 
-                if( buscando.length == 0 || item.indexOf( buscando ) > -1 || item2.indexOf( buscando ) > -1 ){
+                if( buscando.length == 0 || item.indexOf( buscando ) > -1 ){
 
                     $(nombres[i]).parents('.mundito').show(); 
 
@@ -1481,13 +1390,5 @@ $('.nuevoProductoPedido').ready(function(){
        }
     });
   });
-
-  function anular(e){
-
-    tecla = (document.all) ? e.keyCode : e.which;
-    //console.log(tecla);
-    return (tecla != 13);
-
-  }
 
 </script>

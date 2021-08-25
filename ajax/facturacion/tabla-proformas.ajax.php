@@ -25,11 +25,26 @@ class TablaProformas{
         TRAEMOS LAS ACCIONES
         =============================================*/
 
-        if($proformas[$i]["doc_destino"] != ""){
-            $botones =  "<div class='btn-group'><button title='Facturar Pedido' class='btn btn-xs btn-primary btnFacturarA' documento='".$proformas[$i]["documento"]."' cod_cli='".$proformas[$i]["cliente"]."'  nom_cli='".$proformas[$i]["nombre"]."' tip_doc='".$proformas[$i]["tip_doc"]."' nro_doc='".$proformas[$i]["num_doc"]."' cod_ven='".$proformas[$i]["vendedor"]."' serie_dest='".$proformas[$i]["serie_dest"]."' nro_dest='".$proformas[$i]["nro_dest"]."' data-toggle='modal' data-target='#modalFacturarA'><i class='fa fa-paper-plane'></i></button><button title='Imprimir Proforma' class='btn btn-xs btn-success btnImprimirProforma' tipo='".$proformas[$i]["tipo"]."' documento='".$proformas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+            /* 
+            *estado
+            */
+            if($proformas[$i]["estado"] == "GENERADO"){
+
+                $estado = "<span style='font-size:85%' class='label label-success'>GENERADO</span>";
+                
+            }else if($proformas[$i]["estado"] == "ANULADO"){
+
+                $estado = "<span class='btn btn-danger btn-xs btn btnEliminarDocumento' documento='".$proformas[$i]["documento"]."' tipo='".$proformas[$i]["tipo"]."' pagina='proformas'>ANULADO</span>";
+
+            }
+
+            $total = "<div style='text-align:right !important'>".number_format($proformas[$i]["total"],2)."</div>";        
+
+        if($proformas[$i]["estado"] == "GENERADO"){
+            $botones =  "<div class='btn-group'><button title='Imprimir Proforma' class='btn btn-xs btn-success btnImprimirProforma' tipo='".$proformas[$i]["tipo"]."' documento='".$proformas[$i]["documento"]."'><i class='fa fa-print'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$proformas[$i]["documento"]."' tipo='".$proformas[$i]["tipo"]."' pagina='proformas'><i class='fa fa-close'></i></button></div>";
         }else{
 
-            $botones =  "<div class='btn-group'><button title='Facturar Pedido' class='btn btn-xs btn-primary btnFacturarB' documento='".$proformas[$i]["documento"]."' cod_cli='".$proformas[$i]["cliente"]."'  nom_cli='".$proformas[$i]["nombre"]."' tip_doc='".$proformas[$i]["tip_doc"]."' nro_doc='".$proformas[$i]["num_doc"]."' cod_ven='".$proformas[$i]["vendedor"]."' data-toggle='modal' data-target='#modalFacturarB'><i class='fa fa-paper-plane'></i></button><button title='Imprimir Proforma' class='btn btn-xs btn-success btnImprimirProforma' tipo='".$proformas[$i]["tipo"]."' documento='".$proformas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+            $botones =  "<div class='btn-group'><button title='Imprimir Proforma' class='btn btn-xs btn-success btnImprimirProforma' tipo='".$proformas[$i]["tipo"]."' documento='".$proformas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
 
         }
 
@@ -37,13 +52,13 @@ class TablaProformas{
             $datosJson .= '[
             "'.$proformas[$i]["tipo_documento"].'",
             "<b>'.$proformas[$i]["documento"].'</b>",
-            "'.$proformas[$i]["total"].'",
+            "'.$total.'",
             "'.$proformas[$i]["cliente"].'",
             "<b>'.$proformas[$i]["nombre"].'</b>",
             "'.$proformas[$i]["vendedor"].'",
             "'.$proformas[$i]["fecha"].'",
             "'.$proformas[$i]["doc_destino"].'",
-            "'.$proformas[$i]["estado"].'",
+            "'.$estado.'",
             "'.$proformas[$i]["agencia"].'",
             "'.$proformas[$i]["ubigeo"].'",
             "'.$botones.'"

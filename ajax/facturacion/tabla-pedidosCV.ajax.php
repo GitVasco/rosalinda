@@ -51,6 +51,8 @@ class TablaPedidosCV{
 
             }
 
+            $total = "<div style='text-align:right !important'>S/ ".number_format($pedidos[$i]["total"],2)."</div>";
+
             /*=============================================
             TRAEMOS LAS ACCIONES
             =============================================*/
@@ -70,7 +72,7 @@ class TablaPedidosCV{
             "'.$pedidos[$i]["cod_cli"].'",
             "<b>'.$pedidos[$i]["nombre"].'</b>",
             "'.$pedidos[$i]["vendedor"].'",
-            "<b>S/ '.$pedidos[$i]["total"].'</b>",
+            "<b>'.$total.'</b>",
             "'.$pedidos[$i]["descripcion"].'",
             "'.$estado.'",
             "'.$pedidos[$i]["nom_usu"].'",

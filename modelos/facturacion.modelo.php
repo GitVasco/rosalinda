@@ -1373,12 +1373,14 @@ class ModeloFacturacion{
           v.vendedor,
           v.fecha,
           cv.descripcion,
+          v.doc_origen,
           v.doc_destino,
           LEFT(v.doc_destino,4) AS serie_dest,
           SUBSTR(v.doc_destino,5,8) AS nro_dest,
           v.estado,
           IFNULL(a.nombre, '') AS agencia,
-          IFNULL(u.nom_ubi, '') AS ubigeo
+          IFNULL(u.nom_ubi, '') AS ubigeo,
+          v.facturacion
       FROM
           ventajf v
           LEFT JOIN clientesjf c
@@ -1390,7 +1392,6 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S03'
-          AND v.estado = 'GENERADO'
           AND YEAR(v.fecha) = 2021";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1413,12 +1414,14 @@ class ModeloFacturacion{
           v.vendedor,
           v.fecha,
           cv.descripcion,
+          v.doc_origen,
           v.doc_destino,
           LEFT(v.doc_destino,4) AS serie_dest,
           SUBSTR(v.doc_destino,5,8) AS nro_dest,
           v.estado,
           IFNULL(a.nombre, '') AS agencia,
-          IFNULL(u.nom_ubi, '') AS ubigeo
+          IFNULL(u.nom_ubi, '') AS ubigeo,
+          v.facturacion
       FROM
           ventajf v
           LEFT JOIN clientesjf c
@@ -1430,7 +1433,6 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S03'
-          AND v.estado = 'GENERADO'
           AND DATE(v.fecha)  like '%$fechaFinal%' ";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1463,12 +1465,14 @@ class ModeloFacturacion{
             v.vendedor,
             v.fecha,
             cv.descripcion,
+            v.doc_origen,
             v.doc_destino,
             LEFT(v.doc_destino,4) AS serie_dest,
             SUBSTR(v.doc_destino,5,8) AS nro_dest,
             v.estado,
             IFNULL(a.nombre, '') AS agencia,
-            IFNULL(u.nom_ubi, '') AS ubigeo
+            IFNULL(u.nom_ubi, '') AS ubigeo,
+            v.facturacion
         FROM
             ventajf v
             LEFT JOIN clientesjf c
@@ -1480,7 +1484,6 @@ class ModeloFacturacion{
             LEFT JOIN ubigeojf u
             ON c.ubigeo = u.cod_ubi
         WHERE v.tipo = 'S03'
-            AND v.estado = 'GENERADO'
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1505,12 +1508,14 @@ class ModeloFacturacion{
             v.vendedor,
             v.fecha,
             cv.descripcion,
+            v.doc_origen,
             v.doc_destino,
             LEFT(v.doc_destino,4) AS serie_dest,
             SUBSTR(v.doc_destino,5,8) AS nro_dest,
             v.estado,
             IFNULL(a.nombre, '') AS agencia,
-            IFNULL(u.nom_ubi, '') AS ubigeo
+            IFNULL(u.nom_ubi, '') AS ubigeo,
+            v.facturacion
         FROM
             ventajf v
             LEFT JOIN clientesjf c
@@ -1522,7 +1527,6 @@ class ModeloFacturacion{
             LEFT JOIN ubigeojf u
             ON c.ubigeo = u.cod_ubi
         WHERE v.tipo = 'S03'
-            AND v.estado = 'GENERADO'
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
             $stmt=Conexion::conectar()->prepare($sql);
@@ -1564,7 +1568,8 @@ class ModeloFacturacion{
           SUBSTR(v.doc_destino,5,8) AS nro_dest,
           v.estado,
           IFNULL(a.nombre, '') AS agencia,
-          IFNULL(u.nom_ubi, '') AS ubigeo
+          IFNULL(u.nom_ubi, '') AS ubigeo,
+          v.facturacion
       FROM
           ventajf v
           LEFT JOIN clientesjf c
@@ -1576,7 +1581,6 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S02'
-          AND v.estado = 'GENERADO'
           AND YEAR(v.fecha) = 2021";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1604,7 +1608,8 @@ class ModeloFacturacion{
           SUBSTR(v.doc_destino,5,8) AS nro_dest,
           v.estado,
           IFNULL(a.nombre, '') AS agencia,
-          IFNULL(u.nom_ubi, '') AS ubigeo
+          IFNULL(u.nom_ubi, '') AS ubigeo,
+          v.facturacion
       FROM
           ventajf v
           LEFT JOIN clientesjf c
@@ -1616,7 +1621,6 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S02'
-          AND v.estado = 'GENERADO'
           AND DATE(v.fecha)  like '%$fechaFinal%' ";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1654,7 +1658,8 @@ class ModeloFacturacion{
             SUBSTR(v.doc_destino,5,8) AS nro_dest,
             v.estado,
             IFNULL(a.nombre, '') AS agencia,
-            IFNULL(u.nom_ubi, '') AS ubigeo
+            IFNULL(u.nom_ubi, '') AS ubigeo,
+            v.facturacion
         FROM
             ventajf v
             LEFT JOIN clientesjf c
@@ -1666,7 +1671,6 @@ class ModeloFacturacion{
             LEFT JOIN ubigeojf u
             ON c.ubigeo = u.cod_ubi
         WHERE v.tipo = 'S02'
-            AND v.estado = 'GENERADO'
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1696,7 +1700,8 @@ class ModeloFacturacion{
             SUBSTR(v.doc_destino,5,8) AS nro_dest,
             v.estado,
             IFNULL(a.nombre, '') AS agencia,
-            IFNULL(u.nom_ubi, '') AS ubigeo
+            IFNULL(u.nom_ubi, '') AS ubigeo,
+            v.facturacion
         FROM
             ventajf v
             LEFT JOIN clientesjf c
@@ -1708,7 +1713,6 @@ class ModeloFacturacion{
             LEFT JOIN ubigeojf u
             ON c.ubigeo = u.cod_ubi
         WHERE v.tipo = 'S02'
-            AND v.estado = 'GENERADO'
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
             $stmt=Conexion::conectar()->prepare($sql);
@@ -1750,7 +1754,8 @@ class ModeloFacturacion{
           SUBSTR(v.doc_destino,5,8) AS nro_dest,
           v.estado,
           IFNULL(a.nombre, '') AS agencia,
-          IFNULL(u.nom_ubi, '') AS ubigeo
+          IFNULL(u.nom_ubi, '') AS ubigeo,
+          v.facturacion
       FROM
           ventajf v
           LEFT JOIN clientesjf c
@@ -1762,7 +1767,6 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S70'
-          AND v.estado = 'GENERADO'
           AND YEAR(v.fecha) = 2021";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1790,7 +1794,8 @@ class ModeloFacturacion{
           SUBSTR(v.doc_destino,5,8) AS nro_dest,
           v.estado,
           IFNULL(a.nombre, '') AS agencia,
-          IFNULL(u.nom_ubi, '') AS ubigeo
+          IFNULL(u.nom_ubi, '') AS ubigeo,
+          v.facturacion
       FROM
           ventajf v
           LEFT JOIN clientesjf c
@@ -1802,7 +1807,6 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S70'
-          AND v.estado = 'GENERADO'
           AND DATE(v.fecha)  like '%$fechaFinal%' ";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1840,7 +1844,8 @@ class ModeloFacturacion{
             SUBSTR(v.doc_destino,5,8) AS nro_dest,
             v.estado,
             IFNULL(a.nombre, '') AS agencia,
-            IFNULL(u.nom_ubi, '') AS ubigeo
+            IFNULL(u.nom_ubi, '') AS ubigeo,
+            v.facturacion
         FROM
             ventajf v
             LEFT JOIN clientesjf c
@@ -1852,7 +1857,6 @@ class ModeloFacturacion{
             LEFT JOIN ubigeojf u
             ON c.ubigeo = u.cod_ubi
         WHERE v.tipo = 'S70'
-            AND v.estado = 'GENERADO'
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1882,7 +1886,8 @@ class ModeloFacturacion{
             SUBSTR(v.doc_destino,5,8) AS nro_dest,
             v.estado,
             IFNULL(a.nombre, '') AS agencia,
-            IFNULL(u.nom_ubi, '') AS ubigeo
+            IFNULL(u.nom_ubi, '') AS ubigeo,
+            v.facturacion
         FROM
             ventajf v
             LEFT JOIN clientesjf c
@@ -1894,7 +1899,6 @@ class ModeloFacturacion{
             LEFT JOIN ubigeojf u
             ON c.ubigeo = u.cod_ubi
         WHERE v.tipo = 'S70'
-            AND v.estado = 'GENERADO'
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
             $stmt=Conexion::conectar()->prepare($sql);
@@ -2139,12 +2143,13 @@ class ModeloFacturacion{
        /*
     * ACTUALIZAR ESTADO DE FACTURACION ELECTRONICA 
     */
-	static public function mdlActualizarProcesoFacturacion($estado,$tipo,$documento){
+	static public function mdlActualizarProcesoFacturacion($estado,$situacion,$tipo,$documento){
 
 		$sql="UPDATE 
                 ventajf 
             SET
-                facturacion = :estado 
+                facturacion = :estado,
+                estado = :situacion 
             WHERE tipo = :tipo 
                 AND documento = :documento ";
 
@@ -2152,6 +2157,7 @@ class ModeloFacturacion{
 
         
         $stmt->bindParam(":estado", $estado, PDO::PARAM_STR);
+        $stmt->bindParam(":situacion", $situacion, PDO::PARAM_STR);
         $stmt->bindParam(":tipo", $tipo, PDO::PARAM_STR);
         $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
 
@@ -2242,4 +2248,199 @@ class ModeloFacturacion{
       $stmt=null;
   
       }
+
+  static public function mdlRegresarStock($tipo, $documento){
+
+    $sql="UPDATE 
+          articulojf a 
+          LEFT JOIN movimientosjf_2021 m 
+            ON a.articulo = m.articulo SET a.stock = a.stock + m.cantidad 
+        WHERE m.tipo = :tipo 
+          AND m.documento = :documento";
+
+    $stmt=Conexion::conectar()->prepare($sql);
+
+    $stmt->bindParam(":tipo", $tipo, PDO::PARAM_STR);
+    $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+
+      return "ok";
+
+    }else{
+
+      return "error";
+
+    }
+
+    $stmt=null;
+
+  }
+
+  static public function mdlEliminarDetalle($tipo, $documento){
+
+    $sql="DELETE 
+            FROM
+              movimientosjf_2021  
+            WHERE tipo = :tipo
+              AND documento = :documento";
+
+    $stmt=Conexion::conectar()->prepare($sql);
+
+    $stmt->bindParam(":tipo", $tipo, PDO::PARAM_STR);
+    $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+
+      return "ok";
+
+    }else{
+
+      return $stmt->errorInfo();
+
+    }
+
+    $stmt=null;
+
+  }  
+
+  static public function mdlAnularCabecera($tipo, $documento, $usuario){
+
+    $sql="UPDATE 
+                ventajf 
+              SET
+                neto = 0,
+                igv = 0,
+                dscto = 0,
+                total = 0,
+                cliente = '',
+                vendedor = '',
+                agencia = '',
+                lista_precios = '',
+                condicion_venta = '',
+                usuario = :usuario,
+                fecha_creacion = NOW(),
+                estado = 'ANULADO',
+                facturacion = '4' 
+              WHERE tipo = :tipo 
+                AND documento = :documento";
+
+    $stmt=Conexion::conectar()->prepare($sql);
+
+    $stmt->bindParam(":tipo", $tipo, PDO::PARAM_STR);
+    $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
+    $stmt->bindParam(":usuario", $usuario, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+
+      return "ok";
+
+    }else{
+
+      return $stmt->errorInfo();
+
+    }
+
+    $stmt=null;
+
+  }  
+
+  static public function mdlEliminarCta($tip, $documento){
+
+    $sql="DELETE 
+              FROM
+                cuenta_ctejf 
+              WHERE tipo_doc = :tipo 
+                AND num_cta = :documento";
+
+    $stmt=Conexion::conectar()->prepare($sql);
+
+    $stmt->bindParam(":tipo", $tip, PDO::PARAM_STR);
+    $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+
+      return "ok";
+
+    }else{
+
+      return $stmt->errorInfo();
+
+    }
+
+    $stmt=null;
+
+  }  
+
+  static public function mdlEliminarDocumento($tipo, $documento){
+
+    $sql="DELETE 
+            FROM
+              ventajf 
+            WHERE tipo = :tipo 
+              AND documento = :documento";
+
+    $stmt=Conexion::conectar()->prepare($sql);
+
+    $stmt->bindParam(":tipo", $tipo, PDO::PARAM_STR);
+    $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+
+      return "ok";
+
+    }else{
+
+      return $stmt->errorInfo();
+
+    }
+
+    $stmt=null;
+
+  }  
+
+  static public function mdlMostrarCabeceraDoc($tipo, $documento){
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+                                * 
+                              FROM
+                                ventajf v 
+                              WHERE v.tipo = :tipo
+                                AND v.documento = :documento");
+
+			$stmt -> bindParam(":tipo", $tipo, PDO::PARAM_STR);
+      $stmt -> bindParam(":documento", $documento, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+			return $stmt -> fetch();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+    }
+    
+    static public function mdlMostrarDetalleDoc($tipo, $documento){
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+                                    * 
+                                  FROM
+                                    movimientosjf_2021 m 
+                              WHERE m.tipo = :tipo
+                                AND m.documento = :documento");
+
+			$stmt -> bindParam(":tipo", $tipo, PDO::PARAM_STR);
+      $stmt -> bindParam(":documento", $documento, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+			return $stmt -> fetchAll();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+    }     
+
 }

@@ -64,11 +64,11 @@
                             <th>Nombre</th>
                             <th>Vendedor</th>
                             <th>Fec. Emisión</th>
+                            <th>Doc. Origen</th>
                             <th>Doc. Destino</th>
                             <th>Estado</th>
                             <th>Agencia</th>
-                            <th>Destino</th>
-                            <th>Acciones</th>
+                            <th width="120px">Acciones</th>
 
                         </tr>
 
@@ -83,6 +83,20 @@
     </section>
 
 </div>
+
+<?php
+
+  $anularDocumento = new ControladorFacturacion();
+  $anularDocumento -> ctrAnularDocumento();
+
+  $eliminarDocumento = new ControladorFacturacion();
+  $eliminarDocumento -> ctrEliminarDocumento();
+
+  $editarDocumento = new ControladorFacturacion();
+  $editarDocumento -> ctrEditarDocumento();  
+
+?>
+
 
 <script>
     window.document.title = "Facturas"

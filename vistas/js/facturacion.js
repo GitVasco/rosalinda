@@ -2028,3 +2028,79 @@ $(".btnVerToken").click(function(){
   })
 
 })
+
+/* 
+*ANULAR PEDIDOS
+*/
+$(".tablaFacturas, .tablaBoletas, .tablaProformas").on("click",".btnAnularDocumento",function(){
+	
+  var documento = $(this).attr("documento");
+  var tipo = $(this).attr("tipo");
+  var pagina = $(this).attr("pagina");
+  //console.log(documento,tipo,pagina);
+
+  // Capturamos el id de la orden de compra
+  swal({
+        title: '¿Está seguro de anular el documento?',
+        text: "¡Si no lo está puede cancelar la acción!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Si, anular documento!'
+    }).then(function (result) {
+
+    if (result.value) {
+
+      window.location = "index.php?ruta="+pagina+"&documento="+documento+"&tipo="+tipo+"&pagina="+pagina;
+
+    }
+  })
+
+});
+
+/* 
+*ELIMINAR PEDIDOS
+*/
+$(".tablaFacturas, .tablaBoletas, .tablaProformas").on("click",".btnEliminarDocumento",function(){
+	
+  var documentoE = $(this).attr("documento");
+  var tipo = $(this).attr("tipo");
+  var pagina = $(this).attr("pagina");
+  //console.log(documentoE,tipo,pagina);
+
+  // Capturamos el id de la orden de compra
+  swal({
+        title: '¿Está seguro de anular el documento?',
+        text: "¡Si no lo está puede cancelar la acción!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Si, anular documento!'
+    }).then(function (result) {
+
+    if (result.value) {
+
+      window.location = "index.php?ruta="+pagina+"&documentoE="+documentoE+"&tipo="+tipo+"&pagina="+pagina;
+
+    }
+  })
+
+});
+
+
+/*
+* BOTON CREAR PEDIDO
+*/
+$(".tablaFacturas, .tablaBoletas, .tablaProformas").on("click",".btnEditarDocumentoCV",function(){
+
+  var documento = $(this).attr("documento");
+  var tipo = $(this).attr("tipo");
+  //console.log(documento,tipo);
+
+  window.location = "index.php?ruta=crear-facturascv&tipo=" + tipo + "&documento=" + documento;
+
+})

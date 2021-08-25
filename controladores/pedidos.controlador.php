@@ -373,38 +373,36 @@ class ControladorPedidos{
             $pedido = ModeloPedidos::mdlMostraPedidosCabecera($codigo);
             //var_dump($pedido);
 
+            $respuesta = ModeloFacturacion::mdlActualizarPedido($codigo,"ANULADO",$_SESSION["id"]);
+            #var_dump($respuesta);
 
+            $reiniciar = ModeloPedidos::mdlReiniciarPedido();
+            #var_dump($reiniciar);
 
-                $respuesta = ModeloFacturacion::mdlActualizarPedido($codigo,"ANULADO",$_SESSION["id"]);
-                var_dump($respuesta);
+            $contar = ModeloPedidos::mdlCantAprobados();
+            #var_dump($contar);
 
-                $reiniciar = ModeloPedidos::mdlReiniciarPedido();
-                var_dump($reiniciar);
+            if($contar == "ok"){
 
-                $contar = ModeloPedidos::mdlCantAprobados();
-                var_dump($contar);
+                echo'<script>
 
-                if($contar == "ok"){
+                swal({
+                    type: "success",
+                    title: "El pedido ha sido anulada correctamente",
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar",
+                    closeOnConfirm: false
+                    }).then(function(result){
+                                if (result.value) {
 
-                    echo'<script>
+                                window.location = "pedidoscv";
 
-                    swal({
-                        type: "success",
-                        title: "El pedido ha sido anulada correctamente",
-                        showConfirmButton: true,
-                        confirmButtonText: "Cerrar",
-                        closeOnConfirm: false
-                        }).then(function(result){
-                                    if (result.value) {
+                                }
+                            })
 
-                                    window.location = "pedidoscv";
+                </script>';
 
-                                    }
-                                })
-
-                    </script>';
-
-                }
+            }
 
 
 
