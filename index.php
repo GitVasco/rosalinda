@@ -143,5 +143,9 @@ require_once "modelos/salidas.modelo.php";
 
 require_once "extensiones/vendor/autoload.php";
 
+
+
+
+
 $plantilla = new ControladorPlantilla();
 $plantilla -> ctrPlantilla();

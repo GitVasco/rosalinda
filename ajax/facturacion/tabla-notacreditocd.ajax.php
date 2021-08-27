@@ -23,7 +23,7 @@ class TablaNotasCD{
             todo: formato de miles
             */
                 $estado = "<button class='btn btn-success btn-xs'>FACTURADO</button>";
-                $botones =  "<div class='btn-group'><button class='btn btn-xs btn-warning btnEditarNotaCD' title='Editar notas CD' tipo='".$notas[$i]["tipo"]."' documento='".$notas[$i]["documento"]."'><i class='fa fa-pencil'></i></button></div>";
+                $botones =  "<div class='btn-group'><button class='btn btn-xs btn-warning btnEditarNotaCD' title='Editar notas CD' tipo='".$notas[$i]["tipo"]."' documento='".$notas[$i]["documento"]."'><i class='fa fa-pencil'></i></button><button title='Imprimir Nota Credito' class='btn btn-xs btn-success btnImprimirNC' tipo='".$notas[$i]["tipo"]."' documento='".$notas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
 
             
             

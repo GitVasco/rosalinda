@@ -18,7 +18,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-  <link rel="icon" href="vistas/img/plantilla/vascorp.png">
+  <link rel="icon" href="vistas/img/plantilla/logo-comprenssed.png">
 
   <!--=====================================
   PLUGINS DE CSS
@@ -176,7 +176,7 @@
 CUERPO DOCUMENTO
 ======================================-->
 
-<body class="hold-transition skin-blue sidebar-collapse sidebar-mini login-page">
+<body class="hold-transition skin-black sidebar-collapse sidebar-mini login-page">
 
   <?php
 

@@ -1675,43 +1675,30 @@ class ControladorFacturacion{
             $modelos = ControladorFacturacion::ctrMostrarModeloImpresion($documento,$tipo);
 
             $unidad= ControladorFacturacion::ctrMostrarUnidadesImpresion($documento,$tipo);
-            // var_dump($modelos);
-            // $emisor = 	array(
-            //             'tipodoc'		=> '6',
-            //             'ruc' 			=> '20513613939', 
-            //             'nombre_comercial'=> 'JACKY FORM',
-            //             'razon_social'	=> 'Corporacion Vasco S.A.C.', 
-            //             'referencia'	=> 'URB.SANTA LUISA 1RA ETAPA', 
-            //             'direccion'		=> 'CAL.SANTO TORIBIO NRO. 259',
-            //             'pais'			=> 'PE', 
-            //             'departamento'  => 'LIMA',
-            //             'provincia'		=> 'LIMA',
-            //             'distrito'		=> 'SAN MARTIN DE PORRES',
-            //             'ubigeo'		=> '140101', //CHICLAYO
-            //             'usuario_sol'	=> 'MODDATOS', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-            //             'clave_sol'		=> 'MODDATOS' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
-            //             );
-
-            //prueba para mandar a sunat 
+             
 
             if($tipo == 'S03'){
                 $tipcomprobante = '01';
+
+                $nomcomprobante = "FACTURA";
             }else{
                 $tipcomprobante = '03';
+
+                $nomcomprobante = "BOLETA";
             }
             $emisor = 	array(
                 'tipodoc'		=> '6',
-                'ruc' 			=> '10472810371', 
-                'razon_social'	=> 'JOEL VLADIMIR MEDRANO GÜERE', 
-                'nombre_comercial'	=> 'JOEL VLADIMIR MEDRANO GÜERE', 
-                'direccion'		=> 'CAL. GREGORIO SISA 133 - CARABAYLLO', 
+                'ruc' 			=> '10094806777', 
+                'razon_social'	=> 'JOSE ADOLFO VASQUEZ CORTEZ', 
+                'nombre_comercial'	=> 'ROSALINDA', 
+                'direccion'		=> 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA', 
                 'pais'			=> 'PE', 
                 'departamento'  => 'LIMA',//LIMA 
                 'provincia'		=> 'LIMA',//LIMA 
-                'distrito'		=> 'CARABAYLLO', //CARABAYLLO
-                'ubigeo'		=> '150106', //CARABAYLLO
-                'usuario_sol'	=> 'JOELABCD', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-                'clave_sol'		=> 'Unisty1' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'distrito'		=> 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'		=> '150117', //CARABAYLLO
+                'usuario_sol'	=> 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'		=> 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
                 );
     
     
@@ -1976,15 +1963,113 @@ class ControladorFacturacion{
 
         $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
 
-        //CREAR XML FIRMA
+        // CREAR XML FIRMA
         require_once('/../vistas/generar_xml/ApiFacturacion.php');
+
+        //LIBRERIA PHPMAILER
+        require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
 
         $objApi = new ApiFacturacion();
         $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
+        // $envio = "1";
 
         if($envio == "1"){
             echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
             $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
+
+            $validarCorreo = strpos($venta["email"],"@");
+
+            if($validarCorreo !== false ){
+
+                //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
+                $mail = new PHPMailer;
+
+                $mail->CharSet = 'UTF-8';
+
+                $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
+                $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
+                $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
+                $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
+                $mail->Password = "notificaciones123";		// Tu contraseña de gmail
+                $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
+                $mail->Port = 587;
+                $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
+                $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
+                $mail->Subject = "EMISION DE FACTURA ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+
+                $mail->addAddress($venta["email"]);
+
+                $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
+                    
+                        <div style="background-color:#e46c89;color:#1e282c;padding:20px 0px">
+                        <img style=" width:25%;margin:0px;" src="vistas/img/plantilla/jackyform_letras.png">
+
+                        <span style="margin-left:80px" >FACTURACIÓN ELECTRONICA ROSALINDA</span>
+                        </div>
+                        <p style="text-align:left;color:black">Hola,<br>Te ha llegado a traves de nuestro sistema una <span style="color:#e46c89">'.$nomcomprobante.'</span> de <span style="color:#e46c89">Rosalinda</span>.</p>
+
+                        <table style="color:#e46c89;border: 1px solid black;padding:20px 100px" width="100%">
+                            <tr>
+                                <td width="150px">N° '.$nomcomprobante.'</td>
+                                <td width="20px">:</td>
+                                <td width="150px">'.$comprobante["serie"]."-".$comprobante["correlativo"].'</td>
+                            </tr>
+                            <tr>
+                                <td width = "150px">VENCIMIENTO</td>
+                                <td width = "20px">:</td>
+                                <td  width="150px"></td>
+                            </tr>
+                            <tr>
+                                <td width = "150px">MONTO TOTAL</td>
+                                <td width = "20px">:</td>
+                                <td  width="150px">PEN '.$venta["total"].'</td>
+                            </tr>
+                            
+                        
+                    </table>
+
+
+                        <br>
+                        <div style="line-height:60px; background:#f2f2f2; width:100%;color:black;text-align:center">Para mayor información llamar al +51 987 654 321</div>
+
+
+                        <br>
+
+                        <hr style="border:1px solid #e46c89; width:80%">
+
+
+
+
+                </div>');
+
+
+                $mail->AddAttachment($ruta.".XML", $nombrexml.".XML");
+
+
+                $ruta_cdr = "vistas/generar_xml/cdr/R-".$nombrexml;
+
+                $mail->AddAttachment($ruta_cdr.".XML", "R-".$nombrexml.".XML");
+
+
+
+                $ruta_pdf = "vistas/generar_xml/documentos_pdf/".$nombrexml;
+
+                $mail->AddAttachment($ruta_pdf.".pdf", $nombrexml.".pdf");
+                
+
+                $envio = $mail->Send();
+
+                if($envio){
+                    echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
+                }else{
+                    echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                }
+
+            }else{
+                echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+            }
+
+            
 
         }else{
 
@@ -2027,17 +2112,17 @@ class ControladorFacturacion{
             
             $emisor = 	array(
                 'tipodoc'		=> '6',
-                'ruc' 			=> '10472810371', 
-                'razon_social'	=> 'JOEL VLADIMIR MEDRANO GÜERE', 
-                'nombre_comercial'	=> 'JOEL VLADIMIR MEDRANO GÜERE', 
-                'direccion'		=> 'CAL. GREGORIO SISA 133 - CARABAYLLO', 
+                'ruc' 			=> '10094806777', 
+                'razon_social'	=> 'JOSE ADOLFO VASQUEZ CORTEZ', 
+                'nombre_comercial'	=> 'ROSALINDA', 
+                'direccion'		=> 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA', 
                 'pais'			=> 'PE', 
                 'departamento'  => 'LIMA',//LIMA 
                 'provincia'		=> 'LIMA',//LIMA 
-                'distrito'		=> 'CARABAYLLO', //CARABAYLLO
-                'ubigeo'		=> '150106', //CARABAYLLO
-                'usuario_sol'	=> 'JOELABCD', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-                'clave_sol'		=> 'Unisty1' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'distrito'		=> 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'		=> '150117', //CARABAYLLO
+                'usuario_sol'	=> 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'		=> 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
                 );
     
     
@@ -2499,6 +2584,9 @@ class ControladorFacturacion{
 
         $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,$tipo,$documento);
 
+        //LIBRERIA PHPMAILER
+        require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
+        
         //CREAR XML FIRMA
         require_once('/../vistas/generar_xml/ApiFacturacion.php');
 
@@ -2508,6 +2596,98 @@ class ControladorFacturacion{
         if($envio == "1"){
             echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
             $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,$tipo,$documento);
+
+            $validarCorreo = strpos($venta["email"],"@");
+
+            if($validarCorreo !== false ){
+
+                //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
+                $mail = new PHPMailer;
+
+                $mail->CharSet = 'UTF-8';
+
+                $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
+                $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
+                $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
+                $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
+                $mail->Password = "notificaciones123";		// Tu contraseña de gmail
+                $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
+                $mail->Port = 587;
+                $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
+                $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
+                $mail->Subject = "EMISION DE NOTA DE CREDITO ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+
+                $mail->addAddress($venta["email"]);
+
+                $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
+                    
+                        <div style="background-color:#e46c89;color:#1e282c;padding:20px 0px">
+                        <img style=" width:25%;margin:0px;" src="vistas/img/plantilla/jackyform_letras.png">
+
+                        <span style="margin-left:80px" >FACTURACIÓN ELECTRONICA ROSALINDA</span>
+                        </div>
+                        <p style="text-align:left;color:black">Hola,<br>Te ha llegado a traves de nuestro sistema una <span style="color:#e46c89">NOTA DE CREDITO</span> de <span style="color:#e46c89">Rosalinda</span>.</p>
+
+                        <table style="color:#e46c89;border: 1px solid black;padding:20px 100px" width="100%">
+                            <tr>
+                                <td width="190px">N° NOTA DE CREDITO</td>
+                                <td width="20px">:</td>
+                                <td width="150px">'.$comprobante["serie"]."-".$comprobante["correlativo"].'</td>
+                            </tr>
+                            <tr>
+                                <td width = "190px">VENCIMIENTO</td>
+                                <td width = "20px">:</td>
+                                <td  width="150px"></td>
+                            </tr>
+                            <tr>
+                                <td width = "190px">MONTO TOTAL</td>
+                                <td width = "20px">:</td>
+                                <td  width="150px">PEN '.$venta["total"].'</td>
+                            </tr>
+                            
+                        
+                    </table>
+
+
+                        <br>
+                        <div style="line-height:60px; background:#f2f2f2; width:100%;color:black;text-align:center">Para mayor información llamar al +51 987 654 321</div>
+
+
+                        <br>
+
+                        <hr style="border:1px solid #e46c89; width:80%">
+
+
+
+
+                </div>');
+
+
+                $mail->AddAttachment($ruta.".XML", $nombrexml.".XML");
+
+
+                $ruta_cdr = "vistas/generar_xml/cdr/R-".$nombrexml;
+
+                $mail->AddAttachment($ruta_cdr.".XML", "R-".$nombrexml.".XML");
+
+
+
+                $ruta_pdf = "vistas/generar_xml/documentos_pdf/".$nombrexml;
+
+                $mail->AddAttachment($ruta_pdf.".pdf", $nombrexml.".pdf");
+                
+
+                $envio = $mail->Send();
+
+                if($envio){
+                    echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
+                }else{
+                    echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                }
+
+            }else{
+                echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+            }
 
         }else{
 
@@ -2550,17 +2730,17 @@ class ControladorFacturacion{
             
             $emisor = 	array(
                 'tipodoc'		=> '6',
-                'ruc' 			=> '10472810371', 
-                'razon_social'	=> 'JOEL VLADIMIR MEDRANO GÜERE', 
-                'nombre_comercial'	=> 'JOEL VLADIMIR MEDRANO GÜERE', 
-                'direccion'		=> 'CAL. GREGORIO SISA 133 - CARABAYLLO', 
+                'ruc' 			=> '10094806777', 
+                'razon_social'	=> 'JOSE ADOLFO VASQUEZ CORTEZ', 
+                'nombre_comercial'	=> 'ROSALINDA', 
+                'direccion'		=> 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA', 
                 'pais'			=> 'PE', 
                 'departamento'  => 'LIMA',//LIMA 
                 'provincia'		=> 'LIMA',//LIMA 
-                'distrito'		=> 'CARABAYLLO', //CARABAYLLO
-                'ubigeo'		=> '150106', //CARABAYLLO
-                'usuario_sol'	=> 'JOELABCD', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-                'clave_sol'		=> 'Unisty1' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'distrito'		=> 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'		=> '150117', //CARABAYLLO
+                'usuario_sol'	=> 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'		=> 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
                 );
     
     
@@ -2793,6 +2973,9 @@ class ControladorFacturacion{
 
         $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,$tipo,$documento);
 
+        //LIBRERIA PHPMAILER
+        require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
+
         //CREAR XML FIRMA
         require_once('/../vistas/generar_xml/ApiFacturacion.php');
 
@@ -2802,6 +2985,98 @@ class ControladorFacturacion{
         if($envio == "1"){
             echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
             $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,$tipo,$documento);
+
+            $validarCorreo = strpos($venta["email"],"@");
+
+            if($validarCorreo !== false ){
+
+                //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
+                $mail = new PHPMailer;
+
+                $mail->CharSet = 'UTF-8';
+
+                $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
+                $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
+                $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
+                $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
+                $mail->Password = "notificaciones123";		// Tu contraseña de gmail
+                $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
+                $mail->Port = 587;
+                $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
+                $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
+                $mail->Subject = "EMISION DE NOTA DE DEBITO ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+
+                $mail->addAddress($venta["email"]);
+
+                $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
+                    
+                        <div style="background-color:#e46c89;color:#1e282c;padding:20px 0px">
+                        <img style=" width:25%;margin:0px;" src="vistas/img/plantilla/jackyform_letras.png">
+
+                        <span style="margin-left:80px" >FACTURACIÓN ELECTRONICA ROSALINDA</span>
+                        </div>
+                        <p style="text-align:left;color:black">Hola,<br>Te ha llegado a traves de nuestro sistema una <span style="color:#e46c89">NOTA DE DEBITO</span> de <span style="color:#e46c89">Rosalinda</span>.</p>
+
+                        <table style="color:#e46c89;border: 1px solid black;padding:20px 100px" width="100%">
+                            <tr>
+                                <td width="190px">N° NOTA DE DEBITO</td>
+                                <td width="20px">:</td>
+                                <td width="150px">'.$comprobante["serie"]."-".$comprobante["correlativo"].'</td>
+                            </tr>
+                            <tr>
+                                <td width = "190px">VENCIMIENTO</td>
+                                <td width = "20px">:</td>
+                                <td  width="150px"></td>
+                            </tr>
+                            <tr>
+                                <td width = "190px">MONTO TOTAL</td>
+                                <td width = "20px">:</td>
+                                <td  width="150px">PEN '.$venta["total"].'</td>
+                            </tr>
+                            
+                        
+                    </table>
+
+
+                        <br>
+                        <div style="line-height:60px; background:#f2f2f2; width:100%;color:black;text-align:center">Para mayor información llamar al +51 987 654 321</div>
+
+
+                        <br>
+
+                        <hr style="border:1px solid #e46c89; width:80%">
+
+
+
+
+                </div>');
+
+
+                $mail->AddAttachment($ruta.".XML", $nombrexml.".XML");
+
+
+                $ruta_cdr = "vistas/generar_xml/cdr/R-".$nombrexml;
+
+                $mail->AddAttachment($ruta_cdr.".XML", "R-".$nombrexml.".XML");
+
+
+
+                $ruta_pdf = "vistas/generar_xml/documentos_pdf/".$nombrexml;
+
+                $mail->AddAttachment($ruta_pdf.".pdf", $nombrexml.".pdf");
+                
+
+                $envio = $mail->Send();
+
+                if($envio){
+                    echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
+                }else{
+                    echo "<script>  Command: toastr['error']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                }
+
+            }else{
+                echo "<script>  Command: toastr['error']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+            }
 
         }else{
 

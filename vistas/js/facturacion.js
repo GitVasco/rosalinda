@@ -371,6 +371,13 @@ $(".tablaProformas").on("click", ".btnImprimirProforma", function () {
     window.open("extensiones/tcpdf/pdf/reporte_proforma.php?tipo="+tipo+"&documento="+documento,"_blank");
 })
 
+$(".tablaNotaCredito").on("click", ".btnImprimirNC", function () {
+  var tipo = $(this).attr("tipo");
+  var documento = $(this).attr("documento");
+
+  window.open("extensiones/tcpdf/pdf/reporte_credito.php?tipo="+tipo+"&documento="+documento,"_blank");
+})
+
 /*=============================================
 RANGO DE FECHAS FACTURA
 =============================================*/

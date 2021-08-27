@@ -10,8 +10,8 @@ class ApiFacturacion
         // $ruta_xml_firmar = $ruta . '.XML'; //es el archivo XML que se va a firmar
         $ruta = $ruta_archivo_xml . $nombre . '.XML';
 
-        $ruta_firma = $rutacertificado. '10472810371.pfx'; //ruta del archivo del certicado para firmar
-        $pass_firma = 'Unisty2019';
+        $ruta_firma = $rutacertificado. '10094806777.pfx'; //ruta del archivo del certicado para firmar
+        $pass_firma = 'CorpVasco123';
         
         $resp = $objfirma->signature_xml($flg_firma, $ruta, $ruta_firma, $pass_firma);
         print_r($resp);

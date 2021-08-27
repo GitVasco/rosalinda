@@ -4,7 +4,7 @@
 
   <div class="login-logo">
 
-    <img src="vistas/img/plantilla/jackyform_letras.png" class="img-responsive" style="padding:0px 0px 0px 0px">
+    <img src="vistas/img/plantilla/logo-extend.png" class="img-responsive" style="padding:0px 0px 0px 0px">
 
   </div>
 

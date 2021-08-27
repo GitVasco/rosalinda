@@ -8,7 +8,7 @@
         <!-- logo mini -->
         <span class="logo-mini">
 
-            <img src="vistas/img/plantilla/vascorp.png" class="img-responsive" style="padding:10px">
+            <img src="vistas/img/plantilla/logo-comprenssed.png" class="img-responsive" style="padding:10px">
 
         </span>
 
@@ -16,7 +16,7 @@
 
         <span class="logo-lg">
 
-            <img src="vistas/img/plantilla/vasco.png" class="img-responsive" style="padding:10px 0px">
+            <img src="vistas/img/plantilla/letras-rosa.png" class="img-responsive" style="padding:10px 0px">
 
         </span>
 
