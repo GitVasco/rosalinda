@@ -253,7 +253,7 @@
             <div class="  col-lg-12" style="margin-top:23px">
                 <label for="" class="col-form-label col-lg-6">Sub - Total: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm " name="notaSubTotal" id="notaSubTotal" step ="any" min="0">
+                    <input type="number"  class="form-control input-sm text-right" name="notaSubTotal" id="notaSubTotal" step ="any" min="0">
 
                 </div>
             </div>
@@ -261,21 +261,21 @@
             <div class="  col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Descuentos: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaDsctos" id="notaDsctos" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaDsctos" id="notaDsctos" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
             <div class=" col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Flete: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaFlete" id="notaFlete" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaFlete" id="notaFlete" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
             <div class="col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Otros:</label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaOtros" id="notaOtros" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaOtros" id="notaOtros" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
@@ -284,11 +284,11 @@
                 <label for="" class="col-form-label col-lg-4">IGV: </label>
                 <div class="input-group">
                 <div class="col-lg-5">
-                  <input type="number"  class="form-control input-sm" name="IGV" id="IGV" value="18.00" step ="any" min="0" readonly>
+                  <input type="number"  class="form-control input-sm text-right" name="IGV" id="IGV" value="18.00" step ="any" min="0" readonly>
                 </div>
 
                 <div class="col-lg-6">
-                <input type="number"  class="form-control input-sm" name="notaIGV" id="notaIGV" step ="any" min="0" value="0.00" readonly>
+                <input type="number"  class="form-control input-sm text-right" name="notaIGV" id="notaIGV" step ="any" min="0" value="0.00" readonly>
                 </div>
                 </div>
             </div>
@@ -296,7 +296,7 @@
             <div class=" col-lg-12">
                 <label for="" class="col-form-label col-lg-6">No afecto: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaNoAfecto" id="notaNoAfecto" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaNoAfecto" id="notaNoAfecto" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
@@ -304,7 +304,7 @@
             <div class=" col-lg-12" style="margin-bottom:23px">
                 <label for="" class="col-form-label col-lg-6">Total:</label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaTotal" id="notaTotal" step ="any" min="0" value="0.00" readonly>
+                    <input type="number"  class="form-control input-sm text-right" name="notaTotal" id="notaTotal" step ="any" min="0" value="0.00" readonly>
                     <input type="hidden" name="notaUsuario" id ="notaUsuario" value="<?php echo $_SESSION["id"]?>">
                 </div>
             </div>

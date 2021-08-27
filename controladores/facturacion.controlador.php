@@ -1116,6 +1116,16 @@ class ControladorFacturacion{
 
     }
 
+     /*
+    * MOSTRAR VENTA DE NOTAS PARA IMPRESION
+    */
+	static public function ctrMostrarCreditoImpresion($documento, $tipo){
+		$respuesta = ModeloFacturacion::mdlMostrarCreditoImpresion( $documento, $tipo);
+
+		return $respuesta;
+
+    }
+
     /*
     * MOSTRAR MODELO DE NOTAS PARA IMPRESION
     */
@@ -2582,7 +2592,7 @@ class ControladorFacturacion{
 	    $doc->save($ruta.'.XML');
         
 
-        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,$tipo,$documento);
+        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
 
         //LIBRERIA PHPMAILER
         require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
@@ -2595,7 +2605,7 @@ class ControladorFacturacion{
 
         if($envio == "1"){
             echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
-            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,$tipo,$documento);
+            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
 
             $validarCorreo = strpos($venta["email"],"@");
 
@@ -2971,7 +2981,7 @@ class ControladorFacturacion{
 	    $doc->save($ruta.'.XML');
         
 
-        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,$tipo,$documento);
+        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
 
         //LIBRERIA PHPMAILER
         require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
@@ -2984,7 +2994,7 @@ class ControladorFacturacion{
 
         if($envio == "1"){
             echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
-            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,$tipo,$documento);
+            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
 
             $validarCorreo = strpos($venta["email"],"@");
 

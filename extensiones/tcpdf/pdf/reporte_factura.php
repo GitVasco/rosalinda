@@ -40,7 +40,7 @@ class MYPDF extends TCPDF {
         $venta = ControladorFacturacion::ctrMostrarVentaImpresion($documento,$tipo);
         $documento2 =  substr($venta["documento"],0,4)."-".substr($venta["documento"],4,12);
         $destino =  substr($venta["doc_destino"],0,3)."-".substr($venta["doc_destino"],3,10);
-        $image_file = K_PATH_IMAGES.'paloma_azul.png';
+        $image_file = K_PATH_IMAGES.'logo-comprenssed.png';
         $this->Image($image_file, 10, 10, 40, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
         $image_file = K_PATH_IMAGES.'jackyform_letras.png';
@@ -49,26 +49,26 @@ class MYPDF extends TCPDF {
 
         $this->SetFont('helvetica', 'B', 9);
         
-        $this->MultiCell(70, 35, 'RUC: 20513613939'."\n\n".'FACTURA ELECTRONICA'."\n\n".'Nro.: '.$documento2.'   ', 1, 'C', 0, 0, '', '', true, 0, false, true, 35, 'M');
+        $this->MultiCell(70, 35, 'RUC: 10094806777'."\n\n".'FACTURA ELECTRONICA'."\n\n".'Nro.: '.$documento2.'   ', 1, 'C', 0, 0, '', '', true, 0, false, true, 35, 'M');
       
         
         // Title
         $this->Ln(13);
         $this->SetFont('helvetica', 'B', 9);
-        $this->Cell(140, 0, 'Corporación Vasco S.A.C.', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, '', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
         $this->SetFont('helvetica', 'A', 8);
-        $this->Cell(140, 0, 'Cal.Santo Toribio Nro. 259 - Urb Santa Luisa 1ra Etapa', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, 'Calle 2 Mz. O Lt.10 - San Elias', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
-        $this->Cell(140, 0, 'San Martin de Porres - Lima - Lima', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, 'Los Olivos - Lima - Lima', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
-        $this->Cell(140, 0, 'Telfs: 537-2501/536-4024 Cel 964570509 / 964543475', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, 'Teléfono:  914275598', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
-        $this->Cell(140, 0, 'Página Web: www.jackyform.com.pe', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, '', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
-        $this->Cell(140, 0, 'Email: gerenciadeventas@jackyform.com.pe', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, 'Email: lenceria.rosalinda@gmail.com', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
-        $this->Cell(150, 0, 'cuentascorrientes@jackyform.com.pe', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(150, 0, '', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
         $this->SetFont('helvetica', 'I', 9);
         $this->Cell(140, 0, 'Confecciones de Prendas de Ropa Interior', 0, false, 'C', 0, '', 0, false, false, false );
@@ -123,7 +123,7 @@ class MYPDF extends TCPDF {
         // Set font
         $this->SetFont('helvetica', 'A', 8);
         // Page number
-        $this->Cell(0, 10, 'Representación Impresa del Documento Electronico, consulte en www.efact.com', 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, 'Representación Impresa del Documento Electronico.', 0, false, 'L', 0, '', 0, false, 'T', 'M');
         $this->Ln(4);
         $this->Cell(0, 10, 'Autorizado mediante Resolución de Intendencia No. 034005004177/SUNAT', 0, false, 'L', 0, '', 0, false, 'T', 'M');
     }
