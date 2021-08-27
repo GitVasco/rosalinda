@@ -93,7 +93,7 @@
   $eliminarDocumento -> ctrEliminarDocumento();
 
   $editarDocumento = new ControladorFacturacion();
-  $editarDocumento -> ctrEditarDocumento();  
+  //$editarDocumento -> ctrEditarDocumento();  
 
 ?>
 

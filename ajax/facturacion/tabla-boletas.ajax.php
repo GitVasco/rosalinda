@@ -27,25 +27,35 @@ class TablaGuiasRemision{
             /* 
             *estado
             */
-            if($boletas[$i]["estado"] == "GENERADO"){
+            if($boletas[$i]["facturacion"] == "0"){
 
                 $estado = "<span style='font-size:85%' class='label label-success'>GENERADO</span>";
                 
-            }else if($boletas[$i]["estado"] == "ANULADO"){
+            }else if($boletas[$i]["facturacion"] == "1"){
 
-                $estado = "<span class='btn btn-danger btn-xs btn btnEliminarDocumento' documento='".$boletas[$i]["documento"]."' tipo='".$boletas[$i]["tipo"]."' pagina='boletas'>ANULADO</span>";
+                $estado = "<span style='font-size:85%' class='label label-warning'>ERROR</span>";
+
+            }else if($boletas[$i]["facturacion"] == "2"){
+
+                $estado = "<span style='font-size:85%' class='label label-primary'>ENVIADO</span>";
+
+            }else if($boletas[$i]["facturacion"] == "4"){
+
+                $estado = "<span class='btn btn-danger btn-xs btn btnEliminarDocumento' documento='".$boletas[$i]["documento"]."' tipo='".$boletas[$i]["tipo"]."' pagina='facturas'>ANULADO</span>";
 
             }
 
-            $total = "<div style='text-align:right !important'>".number_format($boletas[$i]["total"],2)."</div>";        
+            $total = "<div style='text-align:right !important'>".number_format($boletas[$i]["total"],2)."</div>";
 
-        if($boletas[$i]["estado"] == "GENERADO"){
-            $botones =  "<div class='btn-group'><button title='Imprimir Boleta' class='btn btn-xs btn-success btnImprimirBoleta' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-print'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$boletas[$i]["documento"]."' tipo='".$boletas[$i]["tipo"]."' pagina='boletas'><i class='fa fa-close'></i></button></div>";
-        }else{
+            if($boletas[$i]["facturacion"] == "0"){
 
-            $botones =  "<div class='btn-group'><button title='Imprimir Boleta' class='btn btn-xs btn-success btnImprimirBoleta' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+                $botones =  "<div class='btn-group'><button title='Editar Documento' class='btn btn-xs  btn-warning btnEditarDocumentoCV' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-print'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$boletas[$i]["documento"]."' tipo='".$boletas[$i]["tipo"]."' pagina='facturas'><i class='fa fa-close'></i></button></div>";
 
-        }
+            }else{
+
+                $botones =  "<div class='btn-group'><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$boletas[$i]["tipo"]."' documento='".$boletas[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+
+            }
 
 
             $datosJson .= '[
