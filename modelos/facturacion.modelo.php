@@ -740,6 +740,7 @@ class ModeloFacturacion{
         c.nombre,
         c.documento as dni,
         c.direccion,
+        c.email,
         CONCAT(u.distrito, ' / ', u.provincia) AS nom_ubigeo,
         u.departamento,
         c.ubigeo,

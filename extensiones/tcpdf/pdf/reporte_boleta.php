@@ -281,3 +281,5 @@ $pdf->Cell(180, 10, 'Lima, ________ de __________________ de _______', 0, false,
 $pdf->Output('reporte_boleta.pdf');
 
 
+//NOBRE DEL ARCHIVO PDF A GUARDAR PARA ENVIAR POR CORREO LUEGO
+$pdf->Output('C:\xampp\htdocs\rosalinda\vistas\generar_xml\documentos_pdf\10094806777-03-'.substr($venta["documento"],0,4)."-".substr($venta["documento"],4,12).".pdf", 'F');

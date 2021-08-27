@@ -279,8 +279,10 @@ $pdf->Ln(8);
 $pdf->Cell(180, 10, 'Lima, ________ de __________________ de _______', 0, false, 'R', 0, '', 0, false, false, false );
 // ---------------------------------------------------------
 //SALIDA DEL ARCHIVO 
+$pdf->Output('facturaprueba.pdf');
 
-//$pdf->Output('factura.pdf', 'D');
-$pdf->Output('reporte_cuenta.pdf');
+//NOBRE DEL ARCHIVO PDF A GUARDAR PARA ENVIAR POR CORREO LUEGO
+$pdf->Output('C:\xampp\htdocs\rosalinda\vistas\generar_xml\documentos_pdf\10094806777-01-'.substr($venta["documento"],0,4)."-".substr($venta["documento"],4,12).".pdf", 'F');
+
 
 
