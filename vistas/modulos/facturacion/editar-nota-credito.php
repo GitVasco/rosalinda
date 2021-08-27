@@ -22,7 +22,7 @@
     $tipo = $_GET["tipo"];
     $documento = $_GET["documento"];
 
-    $venta = ModeloFacturacion::mdlMostraVentaDocumento($documento,$tipo);
+    $venta = ModeloFacturacion::mdlMostrarVentaImpresion($documento,$tipo);
     
 
     ?>
@@ -115,19 +115,24 @@
                 
                     <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
-                    <select class="form-control input-lg selectpicker" data-live-search="true" name="selectNotaCliente" id="selectNotaCliente" >
+                    <select class="form-control input-md selectpicker" data-live-search="true" name="selectNotaCliente" id="selectNotaCliente" >
 
                         <?php
 
                         $item = "codigo";
                         $valor = $venta["cliente"];
 
-                        $clientes = ControladorClientes::ctrMostrarClientesP($item, $valor);
-                        echo '<option value="'.$clientes["codigo"].'">'.$clientes["nombreB"].'</option>';
 
                         $client2 = ControladorClientes::ctrMostrarClientesP(null, null);
                         foreach ($client2 as $key => $value) {
-                            echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["nombre"]. '</option>';
+
+                            if($value["codigo"] == $valor){
+                                echo '<option value="' . $value["codigo"] . '" selected>' .$value["codigo"]. " - " .$value["nombre"]. '</option>';
+                            }else{
+                                echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["nombre"]. '</option>';
+                            }
+                            
+                          
                         }
 
                         ?>
@@ -165,18 +170,21 @@
                 
                     <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
-                    <select class="form-control input-lg selectpicker" data-live-search="true" name="selectNotaVendedor" id="selectNotaVendedor">
+                    <select class="form-control input-md selectpicker" data-live-search="true" name="selectNotaVendedor" id="selectNotaVendedor">
                     <?php
 
                         $item = "codigo";
-                        $valor = $venta["vendedor"];
+                        $valor = "R1";
 
-                        $vendedor = ControladorVendedores::ctrMostrarVendedores($item,$valor);
-                        echo '<option value="'.$vendedor["codigo"].'">'.$vendedor["codigo"]. " - " .$vendedor["descripcion"].'</option>';
 
                         $vendedores2 = ControladorVendedores::ctrMostrarVendedores(null, null);
                         foreach ($vendedores2 as $key => $value) {
-                            echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                            if($value["codigo"] == $valor){
+                                echo '<option value="' . $value["codigo"] . '" selected>' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                            }else{
+                                echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                            }
+                            
                         }
 
                         ?>
@@ -191,7 +199,7 @@
                 
                     <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
-                    <select class="form-control input-lg selectpicker" data-live-search="true" name="selectNotaDocumento" id="selectNotaDocumento">
+                    <select class="form-control input-md selectpicker" data-live-search="true" name="selectNotaDocumento" id="selectNotaDocumento">
                     <option value="">Seleccionar documento</option>
 
                     <?php
@@ -201,7 +209,12 @@
                     $documentos = ControladorCuentas::ctrMostrarPagos($item,$valor);
 
                     foreach ($documentos as $key => $value) {
-                      echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " . $value["descripcion"] . '</option>';
+                        if($value["codigo"] == $venta["tipo_doc"]){
+                            echo '<option value="' . $value["codigo"] . '" selected>' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                        }else{
+                            echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                        }
+                        
                     }
 
                     ?>   
@@ -219,7 +232,7 @@
                 
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
 
-                    <input type="text"  class="form-control input-lg" name="notaNroFactura" id="notaNroFactura" required>
+                    <input type="text"  class="form-control input-lg" name="notaNroFactura" id="notaNroFactura" value="<?php echo $venta["doc_origen"]?>" required>
 
                 </div>
             </div>
@@ -230,7 +243,7 @@
                 
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
 
-                    <input type="date"  class="form-control input-lg" name="notaFechaFactura" id="notaFechaFactura" required>
+                    <input type="date"  class="form-control input-lg" name="notaFechaFactura" id="notaFechaFactura" value="<?php echo $venta["fecha_origen"] ?>"required>
 
                 </div>
             </div>
@@ -239,7 +252,7 @@
             <label for="">Motivo</label>
                 
 
-                    <select  class="form-control input-lg selectpicker" name="notaMotivo" id="notaMotivo" data-live-search="true" style="width:200px !important" required>
+                    <select  class="form-control input-md selectpicker" name="notaMotivo" id="notaMotivo" data-live-search="true" style="width:200px !important" required>
                     <option value="">Seleccionar motivo</option>
                     <?php
                       $item= "tipo_dato";
@@ -248,7 +261,13 @@
                     $documentos = ControladorCuentas::ctrMostrarPagos($item,$valor);
 
                     foreach ($documentos as $key => $value) {
-                      echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " . $value["descripcion"] . '</option>';
+
+                        if($value["codigo"] == $venta["motivo"]){
+                            echo '<option value="' . $value["codigo"] . '" selected>' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                        }else{
+                            echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                        }
+                        
                     }
 
                     ?>   
@@ -261,7 +280,7 @@
             <label for="">Tipo cont.</label>
                 
 
-                    <select  class="form-control input-lg selectpicker" name="notaTipoCont" id="notaTipoCont" data-live-search="true" required>
+                    <select  class="form-control input-md selectpicker" name="notaTipoCont" id="notaTipoCont" data-live-search="true" required>
                     <option value="">Seleccionar tipo contable</option>
                     <?php
                       $item= "tipo_dato";
@@ -270,7 +289,11 @@
                     $documentos = ControladorCuentas::ctrMostrarPagos($item,$valor);
 
                     foreach ($documentos as $key => $value) {
-                      echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " . $value["descripcion"] . '</option>';
+                        if($value["codigo"] == $venta["tip_cont"]){
+                            echo '<option value="' . $value["codigo"] . '" selected>' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                        }else{
+                            echo '<option value="' . $value["codigo"] . '">' .$value["codigo"]. " - " .$value["descripcion"]. '</option>';
+                        }
                     }
 
                     ?>   
@@ -284,7 +307,7 @@
             <div class="form-group  col-lg-12" style="margin-top:23px">
                 <label for="" class="col-form-label col-lg-6">Sub - Total: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm " name="notaSubTotal" id="notaSubTotal" step ="any" min="0" value="<?php echo $venta["neto"];?>">
+                    <input type="number"  class="form-control input-sm text-right" name="notaSubTotal" id="notaSubTotal" step ="any" min="0" value="<?php echo number_format(($venta["neto"]*-1),2);?>">
 
                 </div>
             </div>
@@ -292,21 +315,21 @@
             <div class="form-group  col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Descuentos: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaDsctos" id="notaDsctos" step ="any" min="0" value="<?php echo $venta["dscto"];?>">
+                    <input type="number"  class="form-control input-sm text-right" name="notaDsctos" id="notaDsctos" step ="any" min="0" value="<?php echo $venta["dscto"];?>">
 
                 </div>
             </div>
             <div class="form-group   col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Flete: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaFlete" id="notaFlete" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaFlete" id="notaFlete" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
             <div class="form-group col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Otros:</label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaOtros" id="notaOtros" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaOtros" id="notaOtros" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
@@ -314,12 +337,12 @@
             <div class="form-group col-lg-12">
                 <label for="" class="col-form-label col-lg-4">IGV: </label>
                 <div class="input-group">
-                <div class="col-lg-4">
-                  <input type="number"  class="form-control input-sm" name="IGV" id="IGV" value="18.00" step ="any" min="0" readonly>
+                <div class="col-lg-5">
+                  <input type="number"  class="form-control input-sm text-right" name="IGV" id="IGV" value="18.00" step ="any" min="0" readonly>
                 </div>
 
                 <div class="col-lg-6">
-                <input type="number"  class="form-control input-sm" name="notaIGV" id="notaIGV" step ="any" min="0" value="<?php echo $venta["igv"];?>" readonly>
+                <input type="number"  class="form-control input-sm text-right" name="notaIGV" id="notaIGV" step ="any" min="0" value="<?php echo number_format(($venta["igv"]*-1),2);?>" readonly>
                 </div>
                 </div>
             </div>
@@ -327,7 +350,7 @@
             <div class="form-group col-lg-12">
                 <label for="" class="col-form-label col-lg-6">No afecto: </label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaNoAfecto" id="notaNoAfecto" step ="any" min="0" value="0.00">
+                    <input type="number"  class="form-control input-sm text-right" name="notaNoAfecto" id="notaNoAfecto" step ="any" min="0" value="0.00">
 
                 </div>
             </div>
@@ -335,7 +358,7 @@
             <div class="form-group  col-lg-12">
                 <label for="" class="col-form-label col-lg-6">Total:</label>
                 <div class="input-group">
-                    <input type="number"  class="form-control input-sm" name="notaTotal" id="notaTotal" step ="any" min="0" value="<?php echo substr($venta["total"],1);?>" readonly>
+                    <input type="number"  class="form-control input-sm text-right" name="notaTotal" id="notaTotal" step ="any" min="0" value="<?php echo number_format(($venta["total"]*-1),2);?>" readonly>
                     <input type="hidden" name="notaUsuario" id ="notaUsuario" value="<?php echo $_SESSION["id"]?>">
                 </div>
             </div>
@@ -347,7 +370,7 @@
 
             <div class="form-group">
             <label for="">Detalle</label>
-                <textarea class="form-control" rows="8" name="notaTexto" id="notaTexto"></textarea>
+                <textarea class="form-control" rows="8" name="notaTexto" id="notaTexto"><?php echo $venta["observacion"]?></textarea>
             </div>
         </div>
     </div>
@@ -386,4 +409,6 @@
 
 <script>
 window.document.title = "Notas de crédito"
+
+
 </script>

@@ -46,7 +46,7 @@ class TablaProcesarCE{
             }
 
             //NOMBRE DEL ARCHIVO DEL XML
-            $archivo = "10472810371"."-".$tipo."-".substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12);
+            $archivo = "10094806777"."-".$tipo."-".substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12);
 
             /* 
             todo: TIPO DE ENVIO
