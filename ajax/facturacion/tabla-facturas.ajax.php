@@ -63,7 +63,7 @@ class TablaGuiasRemision{
             "'.$total.'",
             "'.$factura[$i]["cliente"].'",
             "<b>'.$factura[$i]["nombre"].'</b>",
-            "'.$factura[$i]["vendedor"].'",
+            "'.$factura[$i]["nom_ven"].'",
             "'.$factura[$i]["fecha"].'",
             "'.$factura[$i]["doc_origen"].'",
             "'.$factura[$i]["doc_destino"].'",
