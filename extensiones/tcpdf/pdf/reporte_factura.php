@@ -43,7 +43,7 @@ class MYPDF extends TCPDF {
         $image_file = K_PATH_IMAGES.'logo-comprenssed.png';
         $this->Image($image_file, 10, 10, 40, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-        $image_file = K_PATH_IMAGES.'jackyform_letras.png';
+        $image_file = K_PATH_IMAGES.'letras-rosa.png';
         $this->Image($image_file, 60, 10, 50, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         $this->MultiCell(15, 5, '', 0, 'C', 0, 0, '', '', true);
 
@@ -125,7 +125,7 @@ class MYPDF extends TCPDF {
         // Page number
         $this->Cell(0, 10, 'Representación Impresa del Documento Electronico.', 0, false, 'L', 0, '', 0, false, 'T', 'M');
         $this->Ln(4);
-        $this->Cell(0, 10, 'Autorizado mediante Resolución de Intendencia No. 034005004177/SUNAT', 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        //$this->Cell(0, 10, 'Autorizado mediante Resolución de Intendencia No. 034005004177/SUNAT', 0, false, 'L', 0, '', 0, false, 'T', 'M');
     }
 }
 
@@ -273,7 +273,7 @@ if( $tamaño>= 25){
 $pdf->Ln(0);
 $pdf->Cell(0, 7, 'Son: '.$monto_letra, 0, false, 'L', 0, '', 0, false, false, false );
 $pdf->Ln(6);
-$pdf->Cell(120, 10, 'Cta. Recaudadora Bco. Crédito:  191-1553564-0-64', 0, false, 'L', 0, '', 0, false, false, false );
+$pdf->Cell(120, 10, 'Cta. Recaudadora Bco. Crédito:  191-99334889-0-69', 0, false, 'L', 0, '', 0, false, false, false );
 $pdf->Cell(70, 10, 'CANCELADO', 0, false, 'L', 0, '', 0, false, false, false );
 $pdf->Ln(8);
 $pdf->Cell(180, 10, 'Lima, ________ de __________________ de _______', 0, false, 'R', 0, '', 0, false, false, false );
