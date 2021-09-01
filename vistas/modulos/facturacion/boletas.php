@@ -68,7 +68,7 @@
                             <th>Estado</th>
                             <th>Agencia</th>
                             <th>Destino</th>
-                            <th>Acciones</th>
+                            <th width="120px">Acciones</th>
 
                         </tr>
 
@@ -91,6 +91,9 @@
 
     $eliminarDocumento = new ControladorFacturacion();
     $eliminarDocumento -> ctrEliminarDocumento();
+
+    $editarDocumento = new ControladorFacturacion();
+    //$editarDocumento -> ctrEditarDocumento();  
 
     ?>
 

@@ -174,7 +174,7 @@
                     <?php
 
                         $item = "codigo";
-                        $valor = "R1";
+                        $valor = $venta["vendedor"];
 
 
                         $vendedores2 = ControladorVendedores::ctrMostrarVendedores(null, null);
