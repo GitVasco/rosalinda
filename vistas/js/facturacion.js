@@ -920,6 +920,10 @@ $(".btnImprimirNotaCredito").click(function(){
     window.open("extensiones/tcpdf/pdf/reporte_credito.php?tipo="+tipo+"&documento="+documento,"_blank");
 })
 
+$(".btnTerminarNotaCredito").click(function(){
+  window.location = "ver-nota-credito";
+})
+
 
 
   $(".box").on("change", ".optNotas1", function () {
