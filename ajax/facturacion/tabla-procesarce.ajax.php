@@ -60,15 +60,21 @@ class TablaProcesarCE{
 
                 $envio = "<span style='font-size:85%' class='label label-danger'>ERROR</span>";
                 
-            $botones =  "<div class='btn-group'><button title='Generar XML' class='btn btn-xs btn-primary btnGenerarXMLCE' tipo = '".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-paper-plane'></i></button></div>";
+                $botones =  "<div class='btn-group'><button title='Generar XML' class='btn btn-xs btn-primary btnGenerarXMLCE' tipo = '".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-paper-plane'></i></button></div>";
        
 
-            }else{
+            }else if ($factura[$i]["facturacion"] == "0" && (substr($factura[$i]["documento"],0,1) == 'B' || substr($factura[$i]["documento"],0,4) == 'F') ){
 
                 $envio = "<span style='font-size:85%' class='label label-info'>SIN ENVIAR</span>";
-
                 
-            $botones =  "<div class='btn-group'><button title='Generar XML' class='btn btn-xs btn-primary btnGenerarXMLCE' tipo = '".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-paper-plane'></i></button></div>";
+                $botones =  "<div class='btn-group'><button title='Generar XML' class='btn btn-xs btn-primary btnGenerarXMLCE' tipo = '".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-paper-plane'></i></button></div>";
+       
+
+            }else if ($factura[$i]["facturacion"] == "0" && substr($factura[$i]["documento"],0,1) == 'E'){
+
+                $envio = "<span style='font-size:85%' class='label label-info'>SIN ENVIAR</span>";
+                
+                $botones =  "";
        
 
             }
