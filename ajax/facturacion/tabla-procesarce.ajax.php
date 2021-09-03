@@ -56,6 +56,7 @@ class TablaProcesarCE{
                 $envio = "<span style='font-size:85%' class='label label-success'>ENVIADO</span>";
 
                 $botones =  "<div class='btn-group' ><a class='btn btn-xs btn-success' href='vistas/generar_xml/archivos_xml/".$archivo.".XML' download title='Descargar XML'>XML</a><a class='btn btn-xs btn-info' href='vistas/generar_xml/cdr/R-".$archivo.".XML' download title='Descargar CDR' >CDR</a></div>"; 
+
             }else if($factura[$i]["facturacion"] == "1"){
 
                 $envio = "<span style='font-size:85%' class='label label-danger'>ERROR</span>";
@@ -63,7 +64,14 @@ class TablaProcesarCE{
                 $botones =  "<div class='btn-group'><button title='Generar XML' class='btn btn-xs btn-primary btnGenerarXMLCE' tipo = '".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-paper-plane'></i></button></div>";
        
 
-            }else if ($factura[$i]["facturacion"] == "0" && (substr($factura[$i]["documento"],0,1) == 'B' || substr($factura[$i]["documento"],0,4) == 'F') ){
+            }else if ($factura[$i]["facturacion"] == "0" && (substr($factura[$i]["documento"],0,1) == 'B') ){
+
+                $envio = "<span style='font-size:85%' class='label label-info'>SIN ENVIAR</span>";
+                
+                $botones =  "<div class='btn-group'><button title='Generar XML' class='btn btn-xs btn-primary btnGenerarXMLCE' tipo = '".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-paper-plane'></i></button></div>";
+       
+
+            }else if ($factura[$i]["facturacion"] == "0" && (substr($factura[$i]["documento"],0,1) == 'F') ){
 
                 $envio = "<span style='font-size:85%' class='label label-info'>SIN ENVIAR</span>";
                 
