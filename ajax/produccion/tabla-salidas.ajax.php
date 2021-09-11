@@ -55,7 +55,7 @@ class TablaSalidas{
 
             
             }else{
-                $botones =  "<div class='btn-group'><button title='Editar Pedido' class='btn btn-xs btn-warning btnEditarSalidaVarios' codigo='".$salidas[$i]["codigo"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Imprimir Salida' class='btn btn-sxs btn-success btnImprimirSalida' codigo='".$salidas[$i]["codigo"]."'><i class='fa fa-print'></i></button><button title='Facturar salida' class='btn btn-xs btn-primary btnFacturarSalida' codigo='".$salidas[$i]["codigo"]."' cod_cli='".$salidas[$i]["cod_cli"]."'  nom_cli='".$salidas[$i]["nombre"]."' tip_doc='".$salidas[$i]["tipo_documento"]."' nro_doc='".$salidas[$i]["documento"]."' dscto='".$salidas[$i]["dscto"]."' cod_ven='".$salidas[$i]["vendedor"]."' data-toggle='modal' data-target='#modalFacturar'><i class='fa fa-paper-plane'></i></button></div>";
+                $botones =  "<div class='btn-group'><button title='Editar Pedido' class='btn btn-xs btn-warning btnEditarSalidaVarios' codigo='".$salidas[$i]["codigo"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Imprimir Salida' class='btn btn-xs btn-success btnImprimirSalida' codigo='".$salidas[$i]["codigo"]."'><i class='fa fa-print'></i></button><button title='Facturar salida' class='btn btn-xs btn-primary btnFacturarSalida' codigo='".$salidas[$i]["codigo"]."' cod_cli='".$salidas[$i]["cod_cli"]."'  nom_cli='".$salidas[$i]["nombre"]."' tip_doc='".$salidas[$i]["tipo_documento"]."' nro_doc='".$salidas[$i]["documento"]."' dscto='".$salidas[$i]["dscto"]."' cod_ven='".$salidas[$i]["vendedor"]."' data-toggle='modal' data-target='#modalFacturar'><i class='fa fa-paper-plane'></i></button></div>";
 
             }
 
