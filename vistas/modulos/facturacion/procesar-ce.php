@@ -68,6 +68,12 @@
                 <i class="fa fa-caret-down"></i>
 
                 </button>
+
+
+                    <button type="button" class="btn btn-success" id="regMesM" name="regMesM" data-toggle="modal" data-target="#modalRegMEs">Registro Ventas
+                    </button>
+
+
             </div>
 
             <div class="box-body">
@@ -472,6 +478,98 @@ MODAL CONSULTAR SUNAT
 
       </form>
 
+
+    </div>
+
+  </div>
+
+</div>
+
+<!--=====================================
+MODAL REGISTRO DE VENTAS
+======================================-->
+
+<div id="modalRegMEs" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post" id="formularioRegistro">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Registro del Mes</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+
+            <!-- ENTRADA PARA PORCENTAJE -->
+
+            <div class="form-group">
+              
+              <div class="input-group">
+
+                <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+
+                <input type="hidden" id="usuario" name="usuario" value = "<?php echo $_SESSION["id"]?>">
+
+                  <select class="form-control input-sm selectpicker" id="regMes" name="regMes" data-live-search="true" required>
+
+                    <option value="">Seleccionar Mes</option>
+
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                    
+
+
+                  </select>
+
+              </div>
+
+            </div>       
+
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="button" id="generarReg" name="generarReg" class="btn btn-primary btnGenerarReg">GENERAR</button>
+
+        </div>
+
+      </form>
 
     </div>
 

@@ -2118,3 +2118,12 @@ $(".tablaFacturas, .tablaBoletas, .tablaProformas").on("click",".btnEditarDocume
   window.location = "index.php?ruta=crear-facturascv&tipo=" + tipo + "&documento=" + documento;
 
 })
+
+$("#formularioRegistro").on("click","button.btnGenerarReg",function(){
+
+  var mes = cod = document.getElementById("regMes").value;
+  //console.log(mes);
+
+  window.location = "vistas/reportes_excel/rpt_registro_ventas.php?mes="+mes;
+
+})
