@@ -322,7 +322,7 @@ $objPHPExcel->getActiveSheet()->getStyle("C$fila")->getAlignment()->setHorizonta
 
 
 
-#query para sacar los datos deL detalle
+#query para sacar los datos deL detallex|
 $sqlDetalle = mysql_query("SELECT * FROM sectorjf") or die(mysql_error());
 
 $cont = 0;

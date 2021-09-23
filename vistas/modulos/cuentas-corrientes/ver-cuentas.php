@@ -5,8 +5,36 @@
     <h1>
     <?php
 
-                $cuentas=ControladorCuentas::ctrMostrarCuentas("num_cta",$_GET["numCta"]);
-                $cliente=ControladorClientes::ctrMostrarClientes("codigo",$cuentas["cliente"]);
+
+                if(isset($_GET["numCta"])){
+
+                    $cuentas=ControladorCuentas::ctrMostrarCuentas("num_cta",$_GET["numCta"]);
+
+                    $cliente=ControladorClientes::ctrMostrarClientes("codigo",$cuentas["cliente"]);
+                    
+                }else{
+
+                  $cuentas = '';
+                  $cliente = '';
+                  $cuentas["num_cta"] = '';
+                  $cuentas["tipo_doc"] = '';
+                  $cuentas["num_cta"] = '';
+                  $cuentas["fecha"] = '';
+                  $cuentas["fecha_ven"] = '';
+                  $cuentas["cliente"] = '';
+                  $cliente["nombre"] = '';
+                  $cuentas["vendedor"] = '';
+                  $cuentas["estado"] = '';
+                  $cuentas["saldo"] = '';
+                  $cuentas["num_unico"] = '';
+                  $cuentas["monto"] = '';
+
+                }
+
+
+                //var_dump($cuentas["num_cta"]);
+
+
 
      ?>
       Administrar cancelaciones de N° de cuenta <?php echo $cuentas["num_cta"]?>
@@ -29,9 +57,9 @@
         <div class="box-body">
           <div class="col-md-3" style="margin-bottom:10px">
             <?php 
-              if($_GET["rutas"] == "cuentas-pendientes") {
+              if($_GET["ruta"] == "cuentas-pendientes") {
                 echo'<a href="cuentas-pendientes" class="btn btn-danger"><i class ="fa fa-arrow-left"> Atrás </i></a>';
-              }else if($_GET["rutas"] == "cuentas-canceladas") {
+              }else if($_GET["ruta"] == "cuentas-canceladas") {
                 echo'<a href="cuentas-canceladas" class="btn btn-danger"><i class ="fa fa-arrow-left"> Atrás </i></a>';
               }else{
                 echo'<a href="cuentas" class="btn btn-danger"><i class ="fa fa-arrow-left"> Atrás </i></a>';
@@ -211,6 +239,9 @@ MODAL EDITAR TIPO PAGO
                 <span class="input-group-addon"><i class="fa fa-credit-card"></i></span> 
 
                 <input type="text" class="form-control input-lg" name="cancelarDocumento" id="cancelarDocumento"  required>
+                <input type="hidden" class="form-control input-lg" name="docEditar" id="docEditar"  required>
+                <input type="hidden" class="form-control input-lg" name="tipEditar" id="tipEditar"  required>
+                <input type="hidden" class="form-control input-lg" name="cliEditar" id="cliEditar"  required>
 
               </div>
 

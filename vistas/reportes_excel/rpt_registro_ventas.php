@@ -409,7 +409,7 @@ $sqlDetalleTotal = mysql_query("SELECT
             v.fecha") or die(mysql_error());
 
 $fila+=1;    
-$fila+=1;            
+$fila+=1;     
 
 $resTotal=mysql_fetch_array($sqlDetalleTotal);
 $objPHPExcel->getActiveSheet()->SetCellValue("F$fila", "0");

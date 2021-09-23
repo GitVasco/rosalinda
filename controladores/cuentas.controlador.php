@@ -537,19 +537,22 @@ class ControladorCuentas{
 
 			$tabla="cuenta_ctejf";
 			
-			$datos = array("id" => $_POST["idCuenta2"],
-							"tipo_doc"=>$_POST["cancelarCodigo"],
-						   "num_cta"=>$_POST["cancelarDocumento"],
-						   "vendedor"=>$_POST["cancelarVendedor"],
-						   "fecha"=>$_POST["cancelarCliente"],
-						   "monto"=>$_POST["cancelarMonto2"],
-						   "notas"=>$_POST["cancelarNota"],
-						   "usuario"=>$_POST["cancelarUsuario"],
-						   "fecha"=>$_POST["cancelarFechaUltima"]);
+			$datos = array(	"id" => $_POST["idCuenta2"],
+							"tipo_doc"=>$_POST["tipEditar"],
+							"cod_pago"=>$_POST["cancelarCodigo"],
+						   	"num_cta"=>$_POST["docEditar"],
+							"doc_prigen"=>$_POST["docEditar"],
+							"cliente"=>$_POST["cliEditar"],
+						   	"vendedor"=>$_POST["cancelarVendedor"],
+						   	"fecha"=>$_POST["cancelarCliente"],
+						   	"monto"=>$_POST["cancelarMonto2"],
+						   	"notas"=>$_POST["cancelarNota"],
+						   	"usuario"=>$_POST["cancelarUsuario"],
+						   	"fecha"=>$_POST["cancelarFechaUltima"]);
 						   
 				$origen=ControladorCuentas::ctrMostrarCuentas("num_cta",$_POST["cancelarDocumento"]);
 				$idOrigen=$origen["id"];
-				$saldoNuevo=$_POST["cancelarMontoAntiguo"]-$_POST["cancelarMonto2"];
+				$saldoNuevo= $_POST["cancelarSaldoAntiguo"] + $_POST["cancelarMontoAntiguo"]-$_POST["cancelarMonto2"];
 				if($saldoNuevo>0){
 					$estado=ModeloCuentas::mdlActualizarUnDato($tabla,"estado","PENDIENTE",$idOrigen);
 				}

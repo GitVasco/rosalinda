@@ -982,6 +982,7 @@ MODAL MODIFICAR ARTICULOS
 
         <div class="modal-content">
 
+            <!-- <form role="form" method="post" class="formularioPedido"> -->
             <form role="form" method="post" class="formularioPedido" onkeypress="return anular(event)">
 
                 <!--=====================================
@@ -1053,6 +1054,15 @@ MODAL MODIFICAR ARTICULOS
                                     <input type="hidden" class="form-control input-sm" id="nLista" name="nLista" readonly>
 
                                     <input type="hidden" class="form-control input-sm" id="usuario" name="usuario" value="<?php echo $_SESSION["id"]; ?>">
+
+                                    <!-- <input type="hidden" class="form-control input-sm" id="tal1" name="tal1">
+                                    <input type="hidden" class="form-control input-sm" id="tal2" name="tal2">
+                                    <input type="hidden" class="form-control input-sm" id="tal3" name="tal3">
+                                    <input type="hidden" class="form-control input-sm" id="tal4" name="tal4">
+                                    <input type="hidden" class="form-control input-sm" id="tal5" name="tal5">
+                                    <input type="hidden" class="form-control input-sm" id="tal6" name="tal6">
+                                    <input type="hidden" class="form-control input-sm" id="tal7" name="tal7">
+                                    <input type="hidden" class="form-control input-sm" id="tal8" name="tal8"> -->
 
                                 </div>
 
@@ -1136,9 +1146,6 @@ MODAL MODIFICAR ARTICULOS
                             </div>
 
                         </div>
-
-
-
 
                     </div>
 
@@ -1486,5 +1493,40 @@ $('.nuevoProductoPedido').ready(function(){
     return (tecla != 13);
 
   }
+
+   /*  function pressEnter() {
+
+        if ((event.keyCode == 13)) {
+        document.getElementById("RL250012").focus({preventScroll:false});
+      }
+    }
+
+    function pressEnter2() {
+      if ((event.keyCode == 13)) {
+        document.getElementById("RL250013").focus({preventScroll:false});
+      }
+    } */
+
+    /* $("modalModificarClienteP").ready(function(){   
+        var inputs = $("form :text"),
+        length = inputs.length,
+        i = 0;
+
+        console.log(inputs);
+        console.log(length);
+ 
+        // El resto del código
+
+        inputs.on("keypress", function(event){
+    var code = event.keyCode || event.which;    
+    if (code == 13){
+        event.preventDefault();
+        i = i == length - 1 ? 0 : ++i;
+        inputs[i].focus();
+    }
+
+        })
+
+    }); */
 
 </script>

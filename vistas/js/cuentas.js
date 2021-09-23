@@ -689,16 +689,20 @@ $(".tablaVerCuentas").on("click", ".btnEditarCancelacion", function () {
       processData: false,
       dataType: "json",
       success: function (respuesta) {
+        console.log(respuesta);
           $("#idCuenta2").val(respuesta["id"]);
           $("#cancelarDocumento").val(respuesta["num_cta"]);
+          $("#docEditar").val(respuesta["num_cta"]);
           $("#cancelarNota").val(respuesta["notas"]);
-          $("#cancelarCodigo").val(respuesta["tipo_doc"]);
+          $("#cancelarCodigo").val(respuesta["cod_pago"]);
+          $("#tipEditar").val(respuesta["tipo_doc"]);
           $("#cancelarCodigo").selectpicker('refresh');
           $("#cancelarVendedor").val(respuesta["vendedor"]);
           $("#cancelarCliente").val(respuesta["cliente"]);
           $("#cancelarFechaUltima").val(respuesta["fecha"]);
           $("#cancelarMonto2").val(respuesta["monto"]);
           $("#cancelarMontoAntiguo").val(respuesta["monto"]);
+          $("#cliEditar").val(respuesta["cliente"]);
       }
 
   })
@@ -706,7 +710,7 @@ $(".tablaVerCuentas").on("click", ".btnEditarCancelacion", function () {
 })
 $("#cancelarMonto2").change(function(){
   var saldo = $(this).val();
-  var saldoAntiguo = $("#cancelarMontoAntiguo").val();
+  var saldoAntiguo = $("#cancelarSaldoAntiguo").val();
   if(Number(saldo)>Number(saldoAntiguo)){
     swal({
       title: "La cantidad supera el Saldo de la cuenta ",
@@ -940,6 +944,7 @@ $(".btnCancelarCuenta2").click(function(){
           $("#idCuenta3").val(respuesta["id"]);
           $("#cancelarTipoDocumento2").val(respuesta["tipo_doc"]);
           $("#cancelarDocumentoOriginal2").val(respuesta["num_cta"]);
+          $("#cancelarDocumento2").val(respuesta["num_cta"]);
           $("#cancelarVendedor2").val(respuesta["vendedor"]);
           $("#cancelarFechaOrigen2").val(respuesta["fecha"]);
           $("#cancelarVencimientoOrigen2").val(respuesta["fecha_ven"]);
