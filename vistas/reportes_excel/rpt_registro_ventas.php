@@ -362,7 +362,7 @@ $sqlDetalle = mysql_query("SELECT
               ventajf v 
               LEFT JOIN clientesjf c 
                 ON v.cliente = c.codigo 
-              WHERE MONTH(v.fecha) = '8' 
+              WHERE MONTH(v.fecha) = $mes
               AND YEAR(v.fecha) = YEAR(NOW()) 
               AND v.tipo NOT IN ('S70') 
               ORDER BY v.tipo ASC,
@@ -401,7 +401,7 @@ $sqlDetalleTotal = mysql_query("SELECT
             ventajf v 
             LEFT JOIN clientesjf c 
               ON v.cliente = c.codigo 
-            WHERE MONTH(v.fecha) = '8' 
+            WHERE MONTH(v.fecha) = $mes 
             AND YEAR(v.fecha) = YEAR(NOW()) 
             AND v.tipo NOT IN ('S70') 
             GROUP BY MONTH(v.fecha) 
