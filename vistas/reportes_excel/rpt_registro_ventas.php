@@ -362,9 +362,13 @@ $sqlDetalle = mysql_query("SELECT
               ventajf v 
               LEFT JOIN clientesjf c 
                 ON v.cliente = c.codigo 
-              WHERE MONTH(v.fecha) = '8' 
+              WHERE MONTH(v.fecha) = $mes 
               AND YEAR(v.fecha) = YEAR(NOW()) 
               AND v.tipo NOT IN ('S70') 
+              AND (
+                LEFT(v.documento, 2)= 'B0'
+                OR LEFT(v.documento, 2) = 'F0'
+              ) 
               ORDER BY v.tipo ASC,
               v.fecha") or die(mysql_error());
 
@@ -375,7 +379,8 @@ while($respDetalle = mysql_fetch_array($sqlDetalle)){
   $objPHPExcel->getActiveSheet()->SetCellValue("A$fila", $respDetalle["fecha"]);
   $objPHPExcel->getActiveSheet()->SetCellValue("B$fila", $respDetalle["tipo_doc"]);
   $objPHPExcel->getActiveSheet()->SetCellValue("C$fila", $respDetalle["doc"]);
-  $objPHPExcel->getActiveSheet()->SetCellValue("D$fila", $respDetalle["documento"]);
+  //$objPHPExcel->getActiveSheet()->SetCellValue("D$fila", $respDetalle["documento"]);
+  $objPHPExcel->getActiveSheet()->setCellValueExplicit("D$fila", utf8_encode($respDetalle["documento"]), PHPExcel_Cell_DataType::TYPE_STRING); 
   $objPHPExcel->getActiveSheet()->SetCellValue("E$fila", utf8_encode($respDetalle["nombre"]));
   $objPHPExcel->getActiveSheet()->SetCellValue("F$fila", "0");
   $objPHPExcel->getActiveSheet()->SetCellValue("G$fila", "0");
@@ -401,9 +406,13 @@ $sqlDetalleTotal = mysql_query("SELECT
             ventajf v 
             LEFT JOIN clientesjf c 
               ON v.cliente = c.codigo 
-            WHERE MONTH(v.fecha) = '8' 
+            WHERE MONTH(v.fecha) = $mes 
             AND YEAR(v.fecha) = YEAR(NOW()) 
             AND v.tipo NOT IN ('S70') 
+            AND (
+              LEFT(v.documento, 2)= 'B0'
+              OR LEFT(v.documento, 2) = 'F0'
+            ) 
             GROUP BY MONTH(v.fecha) 
             ORDER BY v.tipo ASC,
             v.fecha") or die(mysql_error());

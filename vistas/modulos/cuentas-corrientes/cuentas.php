@@ -1575,5 +1575,5 @@ MODAL DIVIDIR LETRA
 ?>
 
 <script>
-window.document.title = "Cuentas"
+window.document.title = "Cuentas Gral"
 </script>

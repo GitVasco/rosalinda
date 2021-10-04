@@ -46,7 +46,7 @@ function cargarTablaCuentas(ano){
     "deferRender": true,
     "retrieve": true,
     "processing": true,
-    "order": [[0, "asc"]],
+    "order": [[5, "desc"]],
     "pageLength": 20,
 	  "lengthMenu": [[20, 40, 60, -1], [20, 40, 60, 'Todos']],
     "language": {
@@ -92,7 +92,7 @@ function cargarTablaCuentasPendientes(ano){
     "deferRender": true,
     "retrieve": true,
     "processing": true,
-    "order": [[0, "asc"]],
+    "order": [[5, "desc"]],
     "pageLength": 20,
 	  "lengthMenu": [[20, 40, 60, -1], [20, 40, 60, 'Todos']],
     "language": {
@@ -139,7 +139,7 @@ function cargarTablaCuentasAprobadas(ano){
     "deferRender": true,
     "retrieve": true,
     "processing": true,
-    "order": [[0, "asc"]],
+    "order": [[5, "desc"]],
     "pageLength": 20,
 	  "lengthMenu": [[20, 40, 60, -1], [20, 40, 60, 'Todos']],
     "language": {
@@ -1999,30 +1999,50 @@ $(".btnGenerarReporteCuenta").click(function(){
  var inicio = $(this).attr("inicio");
  var fin = $(this).attr("fin");
  var impresion = $(this).attr("impresion");
- if(impresion == "pantalla"){
-   if(consulta=='pendiente' || consulta=='pendienteVencidoMenor'|| consulta=='pendienteVencidoMayor'|| consulta=='protestado'){
-    if(orden1 == "cliente"){
-      window.open("extensiones/tcpdf/pdf/reporte_cliente_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2+"&cli="+cli,"_blank");
-    }else if (orden1 == "tipo"){
-      window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2,"_blank");
-    }else if(orden1 == "vendedor"){
-      if(vend== ''){
-        window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2+"&vend="+vend,"_blank");
-      }else{
-        window.open("extensiones/tcpdf/pdf/reporte_vendedor_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2+"&vend="+vend,"_blank");
-      }
-    }else if(orden1 == "fecha_ven"){
-      window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2,"_blank");
+ 
+if (impresion == "pantalla") {
+
+    if (consulta == 'pendiente' || consulta == 'pendienteVencidoMenor' || consulta == 'pendienteVencidoMayor' || consulta == 'protestado') {
+
+        if (orden1 == "cliente") {
+
+            window.open("extensiones/tcpdf/pdf/reporte_cliente_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&cli=" + cli, "_blank");
+
+        } else if (orden1 == "tipo") {
+
+            window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2, "_blank");
+
+        } else if (orden1 == "vendedor") {
+
+            if (vend == '') {
+
+                window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&vend=" + vend, "_blank");
+
+            } else {
+
+                window.open("extensiones/tcpdf/pdf/reporte_vendedor_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&vend=" + vend, "_blank");
+
+            }
+
+        } else if (orden1 == "fecha_ven") {
+            window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2, "_blank");
+        }
+
+    } else if (consulta == "pagos") {
+
+        window.open("extensiones/tcpdf/pdf/reporte_pago_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&canc=" + canc + "&vend=" + vend + "&inicio=" + inicio + "&fin=" + fin, "_blank");
+
+    } else if (consulta == "fechaActualSaldo") {
+
+        window.open("extensiones/tcpdf/pdf/reporte_estado_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&canc=" + canc + "&vend=" + vend + "&inicio=" + inicio + "&fin=" + fin, "_blank");
+
     }
 
-  }else if(consulta== "pagos"){
-    window.open("extensiones/tcpdf/pdf/reporte_pago_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2+"&canc="+canc+"&vend="+vend+"&inicio="+inicio+"&fin="+fin,"_blank");
-  }else if(consulta== "fechaActualSaldo"){
-    window.open("extensiones/tcpdf/pdf/reporte_estado_cuentas.php?consulta="+consulta+"&orden1="+orden1+"&orden2="+orden2+"&canc="+canc+"&vend="+vend+"&inicio="+inicio+"&fin="+fin,"_blank");
-  }
-  
- }else{
-  alert("hola");
- }
+} else {
+
+    alert("hola");
+
+}
+
   
 })

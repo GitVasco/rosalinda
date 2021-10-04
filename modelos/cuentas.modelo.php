@@ -648,7 +648,9 @@ class ModeloCuentas{
 
 		if($ano == "null"){
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+'  AND YEAR(c.fecha) = YEAR(NOW()) ORDER BY c.id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+'  AND YEAR(c.fecha) = YEAR(NOW()) ORDER BY fecha_ven DESC,
+			tipo_doc ASC,
+			num_cta DESC");
 
 			$stmt -> execute();
 
@@ -657,9 +659,11 @@ class ModeloCuentas{
 
 		}else {
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE YEAR(c.fecha) = '".$ano."' AND c.tip_mov ='+'");
+			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE YEAR(c.fecha) = :ano AND c.tip_mov ='+' ORDER BY fecha_ven DESC,
+			tipo_doc ASC,
+			num_cta DESC");
 
-			$stmt -> bindParam(":fecha", $fechaFinal, PDO::PARAM_STR);
+			$stmt -> bindParam(":ano", $ano, PDO::PARAM_STR);
 
 			$stmt -> execute();
 
@@ -677,7 +681,9 @@ class ModeloCuentas{
 
 		if($ano == "null"){
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+'  AND c.estado='PENDIENTE' ORDER BY c.id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+'  AND c.estado='PENDIENTE' ORDER BY fecha_ven DESC,
+			tipo_doc ASC,
+			num_cta DESC");
 
 			$stmt -> execute();
 
@@ -686,9 +692,11 @@ class ModeloCuentas{
 
 		}else {
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE YEAR(c.fecha) = '".$ano."' AND c.tip_mov ='+' AND c.estado='PENDIENTE' ");
+			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE YEAR(c.fecha) = :ano AND c.tip_mov ='+' AND c.estado='PENDIENTE' ORDER BY fecha_ven DESC,
+			tipo_doc ASC,
+			num_cta DESC");
 
-			$stmt -> bindParam(":fecha", $fechaFinal, PDO::PARAM_STR);
+			$stmt -> bindParam(":ani", $ano, PDO::PARAM_STR);
 
 			$stmt -> execute();
 
@@ -706,7 +714,9 @@ class ModeloCuentas{
 
 		if($ano == "null"){
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+' AND c.estado='CANCELADO' AND YEAR(c.fecha) = YEAR(NOW())  ORDER BY id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+' AND c.estado='CANCELADO' AND YEAR(c.fecha) = YEAR(NOW())  ORDER BY fecha_ven DESC,
+			tipo_doc ASC,
+			num_cta DESC");
 
 			$stmt -> execute();
 
@@ -715,9 +725,11 @@ class ModeloCuentas{
 
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE YEAR(c.fecha) = '".$ano."' AND c.tip_mov ='+' AND c.estado='CANCELADO' ");
+			$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE YEAR(c.fecha) = :ano AND c.tip_mov ='+' AND c.estado='CANCELADO' ORDER BY fecha_ven DESC,
+			tipo_doc ASC,
+			num_cta DESC");
 
-			$stmt -> bindParam(":fecha", $fechaFinal, PDO::PARAM_STR);
+			$stmt -> bindParam(":ano", $ano, PDO::PARAM_STR);
 
 			$stmt -> execute();
 

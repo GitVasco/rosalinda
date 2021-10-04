@@ -30,7 +30,7 @@ class TablaCuentasAprobadas{
             }
             if($cuenta[$i]["saldo"]==0){
                 
-                $botones =  "<div class='btn-group'><button class='btn btm-xs btn-primary btnVisualizarCuenta' numCta='".$cuenta[$i]["num_cta"]."'  title='Visualizar cuenta' ><i class='fa fa-eye'></i></button><button class='btn btn-xs btn-warning btnEditarCuenta' idCuenta='".$cuenta[$i]["id"]."' data-toggle='modal' data-target='#modalEditarCuenta' title='Editar cuenta'><i class='fa fa-pencil'></i></button><button class='btn btn-xs btn-danger btnEliminarCuenta' idCuenta='".$cuenta[$i]["id"]."' title='Eliminar cuenta'><i class='fa fa-times'></i></button></div>";
+                $botones =  "<div class='btn-group'><button class='btn btn-xs btn-primary btnVisualizarCuenta' numCta='".$cuenta[$i]["num_cta"]."'  title='Visualizar cuenta' ><i class='fa fa-eye'></i></button><button class='btn btn-xs btn-warning btnEditarCuenta' idCuenta='".$cuenta[$i]["id"]."' data-toggle='modal' data-target='#modalEditarCuenta' title='Editar cuenta'><i class='fa fa-pencil'></i></button><button class='btn btn-xs btn-danger btnEliminarCuenta' idCuenta='".$cuenta[$i]["id"]."' title='Eliminar cuenta'><i class='fa fa-times'></i></button></div>";
                 
             }else{
                 if($cuenta[$i]["tipo_doc"]=="01" || $cuenta[$i]["tipo_doc"]=="03" ){

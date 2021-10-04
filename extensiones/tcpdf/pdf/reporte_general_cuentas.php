@@ -55,11 +55,67 @@ $pdf->setPage(1, true);
 $consulta= $_GET["consulta"];
 $orden1= $_GET["orden1"];
 $orden2= $_GET["orden2"];
-$tip_doc= $_GET["tip_doc"];
-$cli= $_GET["cli"];
-$banco= $_GET["banco"];
-$inicio= $_GET["inicio"];
-$fin= $_GET["fin"];
+
+if(isset($_GET["tip_doc"])){
+
+    $tip_doc= $_GET["tip_doc"];
+
+}else{
+
+    $tip_doc= '';
+
+}
+
+if(isset($_GET["cli"])){
+
+    $cli= $_GET["cli"];
+
+}else{
+
+    $cli= "";
+
+}
+
+if(isset($_GET["banco"])){
+
+    $banco= $_GET["banco"];
+
+}else{
+
+    $banco= "";
+
+}
+
+if(isset($_GET["inicio"])){
+
+    $inicio= $_GET["inicio"];
+
+}else{
+
+    $inicio= "";
+
+}
+
+if(isset($_GET["fin"])){
+
+    $fin= $_GET["fin"];
+
+}else{
+
+    $fin= "";
+
+}
+
+if(isset($_GET["vend"])){
+
+    $vend= $_GET["vend"];
+
+}else{
+
+    $vend= "";
+
+}
+
 
 // convert TTF font to TCPDF format and store it on the fonts folder
 $fontname = TCPDF_FONTS::addTTFfont('../../lucida-console.ttf', 'TrueTypeUnicode', '', 96);
