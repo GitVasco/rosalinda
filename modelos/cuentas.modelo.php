@@ -942,6 +942,8 @@ class ModeloCuentas{
 			CASE
 			  WHEN cc.protesta = 0 
 			  THEN '' 
+			  WHEN cc.protesta IS NULL 
+			THEN '' 
 			  ELSE 'Si' 
 			END AS protesta,
 			IFNULL(cc.num_unico, '') AS num_unico 

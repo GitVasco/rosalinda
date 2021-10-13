@@ -449,7 +449,7 @@ class ModeloPedidos{
     */
 	static public function mdlPedidoImpresionCab($valor){
 
-		$sql="SELECT
+		$sql="SELECT 
 					t.codigo AS pedido,
 					DATE(t.fecha) AS fecha,
 					c.codigo,
@@ -457,17 +457,26 @@ class ModeloPedidos{
 					c.direccion,
 					c.ubigeo,
 					u.nom_ubi,
+					CONCAT(
 					t.vendedor,
+					'-',
+					(SELECT 
+						m.descripcion 
+					FROM
+						maestrajf m 
+					WHERE m.tipo_dato = 'TVEND' 
+						AND t.vendedor = m.codigo)
+					) AS vendedor,
 					td.tipo_doc,
-					c.documento
+					c.documento 
 				FROM
-					temporaljf t
-					LEFT JOIN clientesjf c
-					ON t.cliente = c.codigo
-					LEFT JOIN ubigeojf u
-					ON c.ubigeo = u.cod_ubi
-					LEFT JOIN tipo_documentojf td
-    				ON td.cod_doc = c.tipo_documento
+					temporaljf t 
+					LEFT JOIN clientesjf c 
+					ON t.cliente = c.codigo 
+					LEFT JOIN ubigeojf u 
+					ON c.ubigeo = u.cod_ubi 
+					LEFT JOIN tipo_documentojf td 
+					ON td.cod_doc = c.tipo_documento
 				WHERE t.codigo = $valor";
 
 		$stmt=Conexion::conectar()->prepare($sql);

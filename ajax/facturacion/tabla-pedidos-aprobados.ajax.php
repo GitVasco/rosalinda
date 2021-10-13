@@ -31,15 +31,15 @@ class TablaPedidosCV{
 
             }else if($pedidos[$i]["estado"] == "APROBADO"){
 
-                $estado = "<button class='btn btn-warning btn-xs btnAptear' codigo='".$pedidos[$i]["codigo"]."' estadoPedido='APT'>APROBADO</button>";
+                $estado = "<button class='btn btn-warning btn-xs' codigo='".$pedidos[$i]["codigo"]."' estadoPedido='APT'>APROBADO</button>";
 
             }else if($pedidos[$i]["estado"] == "APT"){
 
-                $estado = "<button class='btn btn-default btn-xs btn  btnConfirmar' codigo='".$pedidos[$i]["codigo"]."' estadoPedido='CONFIRMADO'>APT</button>";
+                $estado = "<button class='btn btn-default btn-xs btn ' codigo='".$pedidos[$i]["codigo"]."' estadoPedido='CONFIRMADO'>APT</button>";
 
             }else if($pedidos[$i]["estado"] == "CONFIRMADO"){
 
-                $estado = "<button class='btn btn-info btn-xs btn btnFacturar' codigo='".$pedidos[$i]["codigo"]."' estadoPedido='FACTURADO'>CONFIRMADO</button>";
+                $estado = "<button class='btn btn-info btn-xs btn' codigo='".$pedidos[$i]["codigo"]."' estadoPedido='FACTURADO'>CONFIRMADO</button>";
 
             }else{
 
