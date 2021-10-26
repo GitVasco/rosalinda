@@ -99,7 +99,7 @@ class MYPDF extends TCPDF {
         $this->Cell(35, 10, $venta["fecha"], 0, false, 'C', 0, '', 0, false, false, false );
         $this->Cell(37, 10, $venta["descripcion"], 0, false, 'C', 0, '', 0, false, false, false );
         $this->Cell(40, 10, '', 0, false, 'C', 0, '', 0, false, false, false );
-        $this->Cell(34, 10, '', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(34, 10, $venta["fecha_vencimiento"], 0, false, 'C', 0, '', 0, false, false, false );
         $this->Cell(40, 10, $destino, 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(2);
         $image_file = K_PATH_IMAGES.'borde6.png';
