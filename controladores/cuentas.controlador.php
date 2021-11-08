@@ -541,7 +541,7 @@ class ControladorCuentas{
 							"tipo_doc"=>$_POST["tipEditar"],
 							"cod_pago"=>$_POST["cancelarCodigo"],
 						   	"num_cta"=>$_POST["docEditar"],
-							"doc_prigen"=>$_POST["docEditar"],
+							"doc_origen"=>$_POST["cancelarDocumento"],
 							"cliente"=>$_POST["cliEditar"],
 						   	"vendedor"=>$_POST["cancelarVendedor"],
 						   	"fecha"=>$_POST["cancelarCliente"],

@@ -689,7 +689,7 @@ $(".tablaVerCuentas").on("click", ".btnEditarCancelacion", function () {
       processData: false,
       dataType: "json",
       success: function (respuesta) {
-        console.log(respuesta);
+        //console.log(respuesta);
           $("#idCuenta2").val(respuesta["id"]);
           $("#cancelarDocumento").val(respuesta["num_cta"]);
           $("#docEditar").val(respuesta["num_cta"]);
@@ -709,18 +709,32 @@ $(".tablaVerCuentas").on("click", ".btnEditarCancelacion", function () {
 
 })
 $("#cancelarMonto2").change(function(){
-  var saldo = $(this).val();
-  var saldoAntiguo = $("#cancelarSaldoAntiguo").val();
-  if(Number(saldo)>Number(saldoAntiguo)){
-    swal({
-      title: "La cantidad supera el Saldo de la cuenta ",
-      text: "¡Sólo hay S/. " + saldoAntiguo + " de saldo!",
-      type: "error",
-      confirmButtonText: "¡Cerrar!"
-    });
 
-    return;
-  }
+    var montoNuevo = $(this).val();
+    var saldoAntiguo = $("#cancelarSaldoAntiguo").val();
+    var montoAntiguo = $("#cancelarMontoAntiguo").val();
+
+    var disponible = Number(saldoAntiguo) + Number(montoAntiguo);
+
+    var validar = Number(saldoAntiguo) + Number(montoAntiguo) - Number(montoNuevo);
+
+    //console.log(validar);  
+
+    if(validar >= 0){
+
+    }else{
+
+      swal({
+        title: "La cantidad supera el Saldo de la cuenta ",
+        text: "¡Sólo hay S/. " + disponible + " de saldo!",
+        type: "error",
+        confirmButtonText: "¡Cerrar!"
+      });
+  
+      return;
+
+    }
+
 });
 
 

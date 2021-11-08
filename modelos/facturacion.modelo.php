@@ -757,7 +757,7 @@ class ModeloFacturacion{
         ven.descripcion AS nom_vendedor,
         cv.dias,
         DATE_FORMAT(
-    DATE_ADD(NOW(), INTERVAL cv.dias DAY),
+    DATE_ADD(v.fecha, INTERVAL cv.dias DAY),
     '%d/%m/%Y'
   ) AS fecha_vencimiento,
         v.doc_destino
