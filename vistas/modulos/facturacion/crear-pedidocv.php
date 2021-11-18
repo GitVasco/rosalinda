@@ -908,7 +908,7 @@
 
                                 //var_dump("hola 1");
 
-                                echo '<button type="button" class="btn btn-primary pull-right crearPedido" id="modalito" name="modalito" data-toggle="modal" data-target="#modalGenerarPedido">Crear Pedido
+                                echo '<button type="button" class="btn btn-primary pull-right crearPedido" id="modalito" name="modalito" data-toggle="modal" data-target="#modalGenerarPedido" disabled>Crear Pedido
                                 </button>';
 
                             }else{

@@ -367,6 +367,7 @@ $(".tablaPedidosCV").DataTable({
     deferRender: true,
     retrieve: true,
     processing: true,
+    "order": [[9, "desc"]],
     "pageLength": 20,
 	"lengthMenu": [[20, 40, 60, -1], [20, 40, 60, 'Todos']],
     language: {
