@@ -20,7 +20,8 @@ class ModeloFacturacion{
                                                     dscto1,
                                                     dscto2,
                                                     total,
-                                                    nombre_tipo
+                                                    nombre_tipo,
+                                                    almacen
                                                 )
                                                 VALUES
                                                     (
@@ -35,7 +36,8 @@ class ModeloFacturacion{
                                                     '0',
                                                     :dscto2,
                                                     :total,
-                                                    :nombre_tipo
+                                                    :nombre_tipo,
+                                                    :almacen
                                                     )");
 
         $stmt->bindParam(":tipo", $datos["tipo"], PDO::PARAM_STR);
@@ -48,6 +50,7 @@ class ModeloFacturacion{
         $stmt->bindParam(":dscto2", $datos["dscto2"], PDO::PARAM_STR);
         $stmt->bindParam(":total", $datos["total"], PDO::PARAM_STR);
         $stmt->bindParam(":nombre_tipo", $datos["nombre_tipo"], PDO::PARAM_STR);
+        $stmt->bindParam(":almacen", $datos["almacen"], PDO::PARAM_STR);
 
 		if ($stmt->execute()) {
 
@@ -84,7 +87,9 @@ class ModeloFacturacion{
                                                         condicion_venta,
                                                         doc_destino,
                                                         doc_origen,
-                                                        usuario
+                                                        usuario,
+                                                        usureg,
+                                                        pcreg
                                                     )
                                                     VALUES
                                                         (
@@ -103,7 +108,9 @@ class ModeloFacturacion{
                                                         :condicion_venta,
                                                         :doc_destino,
                                                         :doc_origen,
-                                                        :usuario
+                                                        :usuario,
+                                                        :usureg,
+                                                        :pcreg
                                                         )");
 
         $stmt->bindParam(":tipo", $datos["tipo"], PDO::PARAM_STR);
@@ -121,6 +128,8 @@ class ModeloFacturacion{
         $stmt->bindParam(":doc_origen", $datos["doc_origen"], PDO::PARAM_STR);
         $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
         $stmt->bindParam(":tipo_documento", $datos["tipo_documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":usureg", $datos["usureg"], PDO::PARAM_STR);
+        $stmt->bindParam(":pcreg", $datos["pcreg"], PDO::PARAM_STR);
 
 
 		if ($stmt->execute()) {

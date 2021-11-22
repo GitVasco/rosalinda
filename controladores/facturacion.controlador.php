@@ -93,6 +93,9 @@ class ControladorFacturacion{
                         $docDest = str_replace ( '-', '', $docDestino);
                         //var_dump($docDest);
 
+                        $usureg = $_SESSION["nombre"];
+                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);
+
                         $datosD = array("tipo" => "S01",
                                         "documento" => $doc,
                                         "neto" => $respuestaDoc["op_gravada"],
@@ -107,7 +110,9 @@ class ControladorFacturacion{
                                         "doc_destino" => $docDest,
                                         "doc_origen" => $docOrigen,
                                         "usuario" => $usuario,
-                                        "tipo_documento" => "GUIA REMISION");
+                                        "tipo_documento" => "GUIA REMISION",
+                                        "usureg" => $usureg,
+                                        "pcreg" => $pcreg);
                         //var_dump($datosD);
 
                         $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
@@ -252,6 +257,9 @@ class ControladorFacturacion{
                         $docDest = "";
                         //var_dump($docDest);
 
+                        $usureg = $_SESSION["nombre"];
+                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                        
+
                         $datosD = array("tipo" => "S03",
                                         "documento" => $doc,
                                         "neto" => $respuestaDoc["op_gravada"],
@@ -266,7 +274,9 @@ class ControladorFacturacion{
                                         "doc_destino" => $docDest,
                                         "doc_origen" => $docOrigen,
                                         "usuario" => $usuario,
-                                        "tipo_documento" => "FACTURA");
+                                        "tipo_documento" => "FACTURA",
+                                        "usureg" => $usureg,
+                                        "pcreg" => $pcreg);
                         //var_dump($datosD);
 
                         $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
@@ -469,6 +479,9 @@ class ControladorFacturacion{
                         $docDest = "";
                         //var_dump($docDest);
 
+                        $usureg = $_SESSION["nombre"];
+                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);
+
                         $datosD = array("tipo" => "S02",
                                         "documento" => $doc,
                                         "neto" => $respuestaDoc["op_gravada"],
@@ -483,7 +496,9 @@ class ControladorFacturacion{
                                         "doc_destino" => $docDest,
                                         "doc_origen" => $docOrigen,
                                         "usuario" => $usuario,
-                                        "tipo_documento" => "BOLETA");
+                                        "tipo_documento" => "BOLETA",
+                                        "usureg" => $usureg,
+                                        "pcreg" => $pcreg);
                         //var_dump($datosD);
 
                         $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
@@ -686,6 +701,9 @@ class ControladorFacturacion{
                         $docDest = "";
                         //var_dump($docDest);
 
+                        $usureg = $_SESSION["nombre"];
+                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                        
+
                         $datosD = array("tipo" => "S70",
                                         "documento" => $doc,
                                         "neto" => $respuestaDoc["op_gravada"],
@@ -700,7 +718,9 @@ class ControladorFacturacion{
                                         "doc_destino" => $docDest,
                                         "doc_origen" => $docOrigen,
                                         "usuario" => $usuario,
-                                        "tipo_documento" => "PROFORMA");
+                                        "tipo_documento" => "PROFORMA",
+                                        "usureg" => $usureg,
+                                        "pcreg" => $pcreg);
                         //var_dump($datosD);
 
                         $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
@@ -900,6 +920,9 @@ class ControladorFacturacion{
                         $docDest = "";
                         //var_dump($docDest);
 
+                        $usureg = $_SESSION["nombre"];
+                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                        
+
                         $datosD = array("tipo" => "E05",
                                         "documento" => $doc,
                                         "neto" => "-".$respuestaDoc["op_gravada"],
@@ -914,7 +937,9 @@ class ControladorFacturacion{
                                         "doc_destino" => $docDest,
                                         "doc_origen" => $docOrigen,
                                         "usuario" => $usuario,
-                                        "tipo_documento" => "NC");
+                                        "tipo_documento" => "NC",
+                                        "usureg" => $usureg,
+                                        "pcreg" => $pcreg);
                         //var_dump($datosD);
 
                         $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
@@ -1541,6 +1566,17 @@ class ControladorFacturacion{
                         $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
                         //var_dump($total);
 
+                        if($tipo == "S16"){
+
+                            $almacen = "02";
+
+
+                        }else{
+                        
+                            $almacen = "01";
+
+                        }
+
                         $datosM = array("tipo" => $tipo,
                                         "documento" => $doc,
                                         "articulo" => $value["articulo"],
@@ -1550,7 +1586,8 @@ class ControladorFacturacion{
                                         "precio" => $value["precio"],
                                         "dscto2" => $dscto,
                                         "total" => $total,
-                                        "nombre_tipo" => $_POST["nomTipo"]);
+                                        "nombre_tipo" => $_POST["nomTipo"],
+                                        "almacen" => $almacen);
                         //var_dump($datosM);
 
                         $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($datosM);
