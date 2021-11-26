@@ -929,6 +929,7 @@ class ModeloCuentas{
 	static public function mdlMostrarReporteCobrar($tabla,$orden1,$orden2,$tip_doc,$cli,$vend,$banco){
 
 		if($orden1 == 'tipo' && $orden2 == 'ordNumCuenta' ){
+
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			cc.tipo_doc,
 			cc.num_cta,
@@ -975,6 +976,8 @@ class ModeloCuentas{
 			CASE
 			  WHEN cc.protesta = 0 
 			  THEN '' 
+			  WHEN cc.protesta IS NULL
+    		  THEN ''
 			  ELSE 'Si' 
 			END AS protesta,
 			IFNULL(cc.num_unico, '') AS num_unico 

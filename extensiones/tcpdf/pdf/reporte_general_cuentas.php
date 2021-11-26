@@ -137,6 +137,11 @@ if($consulta== 'pendiente'){
         $cuentas=ControladorCuentas::ctrMostrarReporteCobrar($orden1,$orden2,$tip_doc,$cli,'todo',$banco);
         $total= ControladorCuentas::ctrMostrarReporteTotalCobrar($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
      
+    }else if($orden1 == 'tipo' && $orden1 == 'ordVencimiento' ){
+
+        $cuentas=ControladorCuentas::ctrMostrarReporteCobrar($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
+        $total= ControladorCuentas::ctrMostrarReporteTotalCobrar($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
+     
     }
    
 }else if($consulta== 'pendienteVencidoMenor'){
@@ -199,7 +204,7 @@ $bloque3 = <<<EOF
          <td style="width:42px">$value[fecha]</td>
          <td style="width:42px">$value[fecha_ven]</td>
          <td style="width:27px">$value[vendedor]</td>
-         <td style="width:40px">$value[cliente]</td>
+         <td style="width:45px">$value[cliente]</td>
          <td style="width:142px">$nomCliente</td>
          <td style="width:40px;text-align:right">$value[saldo]</td>
          <td style="width:27px">$value[protesta]</td>

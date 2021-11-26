@@ -5,7 +5,7 @@
   <link href="css/ticket_v2.css" target="_blank" rel="stylesheet" type="text/css">
 </head>
 
-<body>
+<body onload="window.print();">
   <?php
 
     require_once "../../controladores/pedidos.controlador.php";
