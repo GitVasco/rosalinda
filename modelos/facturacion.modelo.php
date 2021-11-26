@@ -2478,7 +2478,7 @@ class ModeloFacturacion{
 
   }  
 
-  static public function mdlAnularCabecera($tipo, $documento, $usuario){
+  static public function mdlAnularCabecera($tipo, $documento, $usuario, $usureg, $pcreg){
 
     $sql="UPDATE 
                 ventajf 
@@ -2495,7 +2495,9 @@ class ModeloFacturacion{
                 usuario = :usuario,
                 fecha_creacion = NOW(),
                 estado = 'ANULADO',
-                facturacion = '4' 
+                facturacion = '4',
+                usureg = :usureg,
+                pcreg = :pcreg 
               WHERE tipo = :tipo 
                 AND documento = :documento";
 
@@ -2504,6 +2506,8 @@ class ModeloFacturacion{
     $stmt->bindParam(":tipo", $tipo, PDO::PARAM_STR);
     $stmt->bindParam(":documento", $documento, PDO::PARAM_STR);
     $stmt->bindParam(":usuario", $usuario, PDO::PARAM_STR);
+    $stmt->bindParam(":usureg", $usureg, PDO::PARAM_STR);
+    $stmt->bindParam(":pcreg", $pcreg, PDO::PARAM_STR);
 
     if ($stmt->execute()) {
 

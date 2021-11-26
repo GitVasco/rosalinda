@@ -60,6 +60,44 @@ class ModeloPedidos{
 	}
 
     /*
+    * MOSTRAR DETALLE DE TEMPORAL B
+    */
+	static public function mdlMostraDetallesTemporalB($valor){
+
+		$stmt = Conexion::conectar()->prepare("SELECT 
+					t.codigo,
+					t.articulo,
+					t.cantidad,
+					t.precio,
+					t.total,
+					CONCAT(
+					modelo,
+					' - ',
+					nombre,
+					' - ',
+					color,
+					' - T',
+					talla
+					) AS packing,
+					a.pedidos 
+				FROM
+					detalle_temporal t 
+					LEFT JOIN articulojf a 
+					ON t.articulo = a.articulo 
+				WHERE t.codigo = :codigo 
+				ORDER BY t.articulo");
+
+		$stmt->bindParam(":codigo", $valor, PDO::PARAM_STR);
+
+		$stmt->execute();
+
+		return $stmt->fetchAll();
+
+		$stmt=null;
+
+	}	
+
+    /*
 	* GUARDAR DETALLE DE TEMPORAL
 	*/
 	static public function mdlGuardarTemporal($tabla, $datos){
@@ -109,6 +147,39 @@ class ModeloPedidos{
 		$stmt->close();
 		$stmt = null;
 	}
+
+	/*
+	* GUARDAR DETALLE DE TEMPORAL
+	*/
+	static public function mdlGuardarTemporalDetalleB($detalle){
+
+
+		$stmt = Conexion::conectar()->prepare("INSERT INTO detalle_temporal (
+													codigo,
+													articulo,
+													cantidad,
+													precio,
+													total
+												) 
+												VALUES 
+												$detalle");
+
+		//$stmt->bindParam(":detalle", $detalle, PDO::PARAM_STR);
+
+		if ($stmt->execute()) {
+
+			return "ok";
+
+		} else {
+
+			//return $detalle;
+			return $stmt->errorInfo();
+
+		}
+
+		$stmt->close();
+		$stmt = null;
+	}	
 
     /*
     * ELIMINAR ARTICULO REPETIDO
@@ -416,6 +487,118 @@ class ModeloPedidos{
 
 	}	
 
+    /*
+    * MOSTRAR LOS DATOS PARA LA IMPRESION
+    */
+	static public function mdlPedidoImpresionB($codigo, $ini, $fin){
+
+		$sql="SELECT 
+						dt.codigo,
+						a.modelo,
+						a.cod_color,
+						a.color,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '1' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t1,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '2' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t2,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '3' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t3,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '4' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t4,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '5' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t5,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '6' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t6,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '7' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t7,
+						SUM(
+						CASE
+							WHEN a.cod_talla = '8' 
+							THEN dt.cantidad 
+							ELSE 0 
+						END
+						) AS t8,
+						SUM(dt.cantidad) AS total 
+					FROM
+						detalle_temporal dt 
+						LEFT JOIN articulojf a 
+						ON dt.articulo = a.articulo 
+					WHERE codigo = $codigo 
+					GROUP BY dt.codigo,
+						a.modelo,
+						a.cod_color,
+						a.color 
+					UNION
+					SELECT 
+						dt.codigo,
+						a.modelo,
+						'99',
+						'',
+						'',
+						'',
+						'',
+						'',
+						'',
+						'',
+						'',
+						'',
+						'' 
+					FROM
+						detalle_temporal dt 
+						LEFT JOIN articulojf a 
+						ON dt.articulo = a.articulo 
+					WHERE codigo = $codigo 
+					GROUP BY dt.codigo,
+						a.modelo 
+					ORDER BY modelo,
+						cod_color
+					LIMIT $ini, $fin";
+
+		$stmt=Conexion::conectar()->prepare($sql);
+
+		$stmt->execute();
+
+		return $stmt->fetchAll();
+
+		$stmt=null;
+
+	}	
+
 	/*
     * MOSTRAR LOS DATOS PARA LA IMPRESION
     */
@@ -456,27 +639,27 @@ class ModeloPedidos{
 					c.nombre,
 					c.direccion,
 					c.ubigeo,
-					u.nom_ubi,
+					u.nombre AS nom_ubi,
 					CONCAT(
-					t.vendedor,
-					'-',
-					(SELECT 
+						t.vendedor,
+						'-',
+						(SELECT 
 						m.descripcion 
-					FROM
+						FROM
 						maestrajf m 
-					WHERE m.tipo_dato = 'TVEND' 
+						WHERE m.tipo_dato = 'TVEND' 
 						AND t.vendedor = m.codigo)
 					) AS vendedor,
 					td.tipo_doc,
 					c.documento 
-				FROM
+					FROM
 					temporaljf t 
 					LEFT JOIN clientesjf c 
-					ON t.cliente = c.codigo 
-					LEFT JOIN ubigeojf u 
-					ON c.ubigeo = u.cod_ubi 
+						ON t.cliente = c.codigo 
+					LEFT JOIN ubigeo u 
+						ON c.ubigeo = u.codigo 
 					LEFT JOIN tipo_documentojf td 
-					ON td.cod_doc = c.tipo_documento
+						ON td.cod_doc = c.tipo_documento
 				WHERE t.codigo = $valor";
 
 		$stmt=Conexion::conectar()->prepare($sql);

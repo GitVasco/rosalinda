@@ -26,7 +26,7 @@ class MYPDF extends TCPDF {
         $this->Ln(2);
         $this->Cell(0, 15, 'DOCUMENTOS POR COBRAR - '.$fechaActual, 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(7);
-        $this->Cell(0, 9, 'Tipo             Nro. doc.            Fecha        Vencimien  Vend.       Cliente               Razon social / Nombre cliente               Tot. S/.    Prot.      Unico           Banco  ', 0, 1, 'C', 0, '', 0, false, false, false );
+        $this->Cell(0, 9, 'Tipo             Nro. doc.            Fecha        Vencimien  Cliente               Razon social / Nombre cliente                     Tot. S/.                                                                 ', 0, 1, 'C', 0, '', 0, false, false, false );
         
         $this->Cell(0, 0, '=================================================================================================================================', 0, 1, 'L', 0, '', 0, false, 'M', 'M' );
 
@@ -79,36 +79,10 @@ if($consulta== 'pendiente'){
         $cuentas=ControladorCuentas::ctrMostrarReporteCobrar($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
         
         $vendedor=ControladorCuentas::ctrMostrarReporteNombre($cli,$vend);
+        //var_dump($vendedor);
         
-     
-  
-   
-}else if($consulta== 'pendienteVencidoMenor'){
-    $cuentas=ControladorCuentas::ctrMostrarReporteVencidos($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
-        
-    $vendedor=ControladorCuentas::ctrMostrarReporteNombreVencidos($cli,$vend);
-    
-}else if($consulta== 'pendienteVencidoMayor'){
-    $cuentas=ControladorCuentas::ctrMostrarReporteNoVencidos($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
-        
-    $vendedor=ControladorCuentas::ctrMostrarReporteNombreNoVencidos($cli,$vend);
-}else if($consulta== 'protestado'){
-    $cuentas=ControladorCuentas::ctrMostrarReporteProtestados($orden1,$orden2,$tip_doc,$cli,$vend,$banco);
-        
-    $vendedor=ControladorCuentas::ctrMostrarReporteNombreProtestados($cli,$vend);
-}else if($consulta== 'estadoEnvioVacio'){
-    
-}else if($consulta== 'unicoCartera'){
-    
-}else if($consulta== 'cancelado'){
-    
-}else if($consulta== 'fechaSaldo'){
-    
-}else if($consulta== 'pagos'){
-    
-}else if($consulta== 'fechaActualSaldo'){
-    
 }
+
 
 $bloque1 = <<<EOF
 
@@ -122,7 +96,31 @@ $bloque1 = <<<EOF
     </tbody>
 </table>
 EOF;
-$pdf->writeHTML($bloque1, false, false, false, false, '');
+
+$bloque1A = <<<EOF
+
+<table  style="text-align:right">
+    <tbody>
+        <tr>
+         <td style="width:136px;"></td>
+         <td style="width:35px"></td>
+         <td style="width:145px"></td>
+        </tr>
+    </tbody>
+</table>
+EOF;
+
+if($vend != ''){
+
+    $pdf->writeHTML($bloque1, false, false, false, false, '');
+
+}else{
+
+    $pdf->writeHTML($bloque1A, false, false, false, false, '');
+
+}
+
+
 
 foreach ($cuentas as $key => $value) {
 $tamCliente=strlen($value["nombre"]);
@@ -132,27 +130,46 @@ if($tamCliente > 36){
     $nomCliente=$value["nombre"];
 }
 
+if($value["tipo_doc"] == '00' || $value["tipo_doc"] == '98' || $value["tipo_doc"] == '99'){
+
+    $value["tipo_doc"] = '';
+
+}else{
+
+    $value["tipo_doc"];
+
+}
+
+if($value["fecha"] == '1999-01-01' || $value["fecha"] == '9999-01-01' || $value["fecha"] == '9999-01-02'){
+
+    $value["fecha"] = '';
+
+}else{
+
+    $value["fecha"];
+
+}
+
 $bloque3 = <<<EOF
 
 <table style="text-center" >
     <tbody>
         <tr>
-         <td style="width:26px">$value[tipo_doc]</td>
-         <td style="width:60px">$value[num_cta]</td>
-         <td style="width:42px">$value[fecha]</td>
-         <td style="width:42px">$value[fecha_ven]</td>
-         <td style="width:27px">$value[vendedor]</td>
-         <td style="width:40px">$value[cliente]</td>
-         <td style="width:142px">$nomCliente</td>
-         <td style="width:40px;text-align:right">$value[saldo]</td>
-         <td style="width:27px">$value[protesta]</td>
-         <td style="width:50px">$value[num_unico]</td>
-         <td style="width:35px">$value[banco]</td>
+            <td style="width:26px">$value[tipo_doc]</td>
+            <td style="width:60px">$value[num_cta]</td>
+            <td style="width:42px">$value[fecha]</td>
+            <td style="width:42px">$value[fecha_ven]</td>
+            <td style="width:45px">$value[cliente]</td>
+            <td style="width:142px">$nomCliente</td>
+            <td style="width:40px;text-align:right">$value[saldo]</td>
         </tr>
     </tbody>
 </table>
+
 EOF;
+
 $pdf->writeHTML($bloque3, false, false, false, false, '');
+
 }
 
 $bloque4 = <<<EOF
@@ -162,7 +179,7 @@ $bloque4 = <<<EOF
     <tbody>
         <tr >
         
-         <td  style="width:350px;" ><b>Total General:</b></td>   
+         <td  style="width:320px;" ><b>Total General:</b></td>   
          <td  style="width:80px; ">$vendedor[total_general]</td>
         </tr>
     </tbody>
@@ -174,5 +191,3 @@ $pdf->writeHTML($bloque4, false, false, false, false, '');
 
 //$pdf->Output('factura.pdf', 'D');
 $pdf->Output('reporte_cuenta.pdf');
-
-

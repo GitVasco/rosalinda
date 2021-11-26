@@ -38,6 +38,17 @@ class ControladorPedidos{
 		return $respuesta;
 
     }
+
+    /*
+    *MOSTRAR DETALLE DE TAMPOERAL B
+    */
+	static public function ctrMostrarDetallesTemporalB($valor){
+
+		$respuesta = ModeloPedidos::mdlMostraDetallesTemporalB($valor);
+
+		return $respuesta;
+
+    }    
     
     /* 
     * CREAR ARTICULOS EN EL PEDIDO
@@ -62,7 +73,7 @@ class ControladorPedidos{
                 todo: GUARDAR EL DETALLE TEMPORAL - CUANDO YA EXISTE EL TEMPORAL
                 */
                 $valor = $_POST["modeloModalA"];
-                $respuesta = controladorArticulos::ctrVerArticulos($valor);
+                $respuesta = controladorArticulos::ctrVerArticulosB($valor);
 
                 foreach($respuesta as $value){
 
@@ -92,20 +103,22 @@ class ControladorPedidos{
                                         "precio"    => $val4);
                         #var_dump("datos", $datos);
 
-                        $respuesta = ModeloPedidos::mdlGuardarTemporalDetalle($tabla, $datos);
+                        $respuestaB = ModeloPedidos::mdlGuardarTemporalDetalle($tabla, $datos);
                         #var_dump("respuesta", $respuesta);
 
-                        if($respuesta = "ok"){
-
-                            echo '  <script>
-
-                                        window.location="index.php?ruta=crear-pedidocv&pedido='.$_POST["pedido"].'";
-
-                                    </script>';
-
-                        }
-
                     }
+
+                }
+
+                if($respuestaB = "ok"){
+
+                    echo '  <script>                                        
+
+                                Command: toastr["success"]("El modelo fue registrado");
+                                $("#updDiv").load(" #updDiv");//actualizas el div
+                                $("#updDivB").load(" #updDivB");//actualizas el div
+
+                            </script>';
 
                 }
 
@@ -164,6 +177,7 @@ class ControladorPedidos{
 
                             echo '  <script>
 
+                                        Command: toastr["success"]("El modelo fue registrado");
                                         window.location="index.php?ruta=crear-pedidocv&pedido='.$talonarioN.'";
 
                                     </script>';
@@ -205,64 +219,45 @@ class ControladorPedidos{
             //var_dump($datos);
 
             $respuesta = ModeloPedidos::mdlActualizarTotalesPedido($datos);
+            $respuesta = ModeloPedidos::mdlEliminarDetalleTemporalTotal($datos);
             //var_dump($respuesta);
+
             if($respuesta == "ok"){
 
                 $articulosM=json_decode($_POST["articulosM"],true);
                 //var_dump($articulosM);
 
-                /* 
-                *ACTUALIZAMOS LAS CANTIDADES EN PEDIDOS
-                */
-                foreach($articulosM as $key => $value){
-
-                    $articulo = $value["articulo"];
-
-                    $verArticulos = ModeloArticulos::mdlMostrarArticulos($articulo);
-                    //var_dump($verArticulos["pedidos"]);
-
-                    $cantidad = $value["cantidad"];
-                    //var_dump($cantidad);
-
-                    $pedidos = $verArticulos["pedidos"] + $cantidad;
-                    //var_dump($pedidos);
-
-                    //ModeloArticulos::mdlActualizarCantPedidos($articulo, $pedidos);
-
-                }
-
-                $respuesta = ModeloPedidos::mdlEliminarDetalleTemporalTotal($datos);
-
-                //var_dump($respuesta);
-
+                $intoA = "";
+                $intoB = "";
                 foreach($articulosM as $key=>$value){
 
-                    $datos=array(   "codigo"=>$_POST["codigoM"],
-                                    "articulo"=>$value["articulo"],
-                                    "cantidad"=>$value["cantidad"],
-                                    "precio"=>$value["precio"],
-                                    "total"=>$value["total"]);
+                    if($key < count($articulosM)-1){
+                        
+                        $intoA .= "(".$_POST["codigoM"].",'".$value["articulo"]."',".$value["cantidad"].",".$value["precio"].",".$value["total"]."),";
+                        
+                    }else{
 
-                    //var_dump($datos);
+                        $intoB .= "(".$_POST["codigoM"].",'".$value["articulo"]."',".$value["cantidad"].",".$value["precio"].",".$value["total"].")";
 
-                    $resp = ModeloPedidos::mdlGuardarTemporalDetalle("detalle_temporal", $datos);
+                    }
+
+                    //var_dump("intoA", $intoA.$intoB);                    
 
                 }
+
+                $detalle = $intoA.$intoB;
+                //var_dump("intoB", $detalle);
+              
+                $resp = ModeloPedidos::mdlGuardarTemporalDetalleB($detalle);
+                //$resp = "no";
+                //var_dump($resp);
 
                 if($resp == "ok"){
 
                     # Mostramos una alerta suave
                     echo '<script>
-                            swal({
-                                type: "success",
-                                title: "Felicitaciones",
-                                text: "¡La información fue registrada con éxito!",
-                                showConfirmButton: true,
-                                confirmButtonText: "Cerrar"
-                            }).then((result)=>{
-                                if(result.value){
-                                    window.location="pedidoscv";}
-                            });
+                             Command: toastr["success"]("El pedido fue registrado");
+                                    window.location="pedidoscv";
                         </script>';
 
                 }else{
@@ -270,8 +265,6 @@ class ControladorPedidos{
                     var_dump("no llego aqui");
 
                 }
-
-
 
             }else{
 
@@ -326,6 +319,17 @@ class ControladorPedidos{
 		return $respuesta;
 
     }
+
+    /*
+    * MOSTRAR PEDIDO CON FORMATO DE IMRPESION
+    */
+	static public function ctrPedidoImpresionB($codigo, $ini, $fin){
+
+		$respuesta = ModeloPedidos::mdlPedidoImpresionB($codigo, $ini, $fin);
+
+		return $respuesta;
+
+    }    
 
     /*
     * MOSTRAR PEDIDO CON FORMATO DE IMRPESION - MODELOS

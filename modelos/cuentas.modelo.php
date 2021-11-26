@@ -1020,6 +1020,7 @@ class ModeloCuentas{
 		  $stmt -> execute();
 
 		  return $stmt -> fetchAll();
+
 		}else if ($orden1 == 'cliente' && $orden2 == 'ordNumCuenta' && $cli != 'todo'){
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			cc.tipo_doc,
@@ -1122,35 +1123,104 @@ class ModeloCuentas{
 		  $stmt -> execute();
 
 		  return $stmt -> fetchAll();
-		}else if ($orden1 == 'vendedor' && $orden2 == 'ordNumCuenta' && $vend == 'todo'){
+
+		}else if ($orden1 == 'vendedor' && $orden2 == 'ordNumCuenta' && $vend == ''){
+
 			$stmt = Conexion::conectar()->prepare("SELECT 
-			cc.tipo_doc,
-			cc.num_cta,
-			cc.banco,
-			cc.fecha,
-			cc.vendedor,
-			cc.fecha_ven,
-			cc.cliente,
-			c.nombre,
-			FORMAT(cc.saldo, 2) AS saldo,
-			CASE
-			  WHEN cc.protesta = 0 
-			  THEN '' 
-			  ELSE 'Si' 
-			END AS protesta,
-			IFNULL(cc.num_unico, '') AS num_unico 
-		  FROM
-			cuenta_ctejf cc 
-			LEFT JOIN clientesjf c 
-			  ON cc.cliente = c.codigo 
-		  WHERE cc.tip_mov = '+' 
-			AND cc.estado = 'Pendiente' 
-		  ORDER BY cc.tipo_doc,
-			cc.num_cta ");
+									cc.tipo_doc,
+									cc.num_cta,
+									cc.fecha,
+									cc.vendedor,
+									cc.fecha_ven,
+									cc.cliente,
+									c.nombre,
+									FORMAT(cc.saldo, 2) AS saldo 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'Pendiente' 
+								UNION
+								SELECT 
+									'00',
+									'',
+									'1999-01-01' AS fecha,
+									cc.vendedor,
+									'',
+									'Vendedor:',
+									v.descripcion,
+									'' AS total_general 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+									LEFT JOIN 
+									(SELECT 
+										* 
+									FROM
+										maestrajf 
+									WHERE tipo_dato = 'tvend') v 
+									ON cc.vendedor = v.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'Pendiente' 
+								GROUP BY cc.vendedor 
+								UNION
+								SELECT 
+									'98',
+									'',
+									'9999-01-01' AS fecha,
+									cc.vendedor,
+									'',
+									'Total:',
+									v.descripcion,
+									FORMAT(SUM(cc.saldo), 2) AS total_general 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+									LEFT JOIN 
+									(SELECT 
+										* 
+									FROM
+										maestrajf 
+									WHERE tipo_dato = 'tvend') v 
+									ON cc.vendedor = v.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'Pendiente' 
+								GROUP BY cc.vendedor 
+								UNION
+								SELECT 
+									'99',
+									'',
+									'9999-01-02' AS fecha,
+									cc.vendedor,
+									'',
+									'',
+									'',
+									'' 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+									LEFT JOIN 
+									(SELECT 
+										* 
+									FROM
+										maestrajf 
+									WHERE tipo_dato = 'tvend') v 
+									ON cc.vendedor = v.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'Pendiente' 
+								GROUP BY cc.vendedor 
+								ORDER BY vendedor,
+									tipo_doc,
+									fecha");
 			
 		  $stmt -> execute();
 
 		  return $stmt -> fetchAll();
+
 		}else if ($orden1 == 'vendedor' && $orden2 == 'ordNumCuenta' && $vend != 'todo'){
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			cc.tipo_doc,
@@ -2793,7 +2863,7 @@ class ModeloCuentas{
 
 	static public function mdlMostrarReporteNombre($tabla,$cli,$vend){	
 
-		if(isset($cli)){
+		if($cli != ''){
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			cc.cliente,
 			c.nombre,
@@ -2813,7 +2883,8 @@ class ModeloCuentas{
 			$stmt -> execute();
 	
 			return $stmt -> fetch();
-		}else{
+		}else if($vend != ''){
+
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			cc.vendedor,
 			v.descripcion,
@@ -2840,6 +2911,33 @@ class ModeloCuentas{
 			$stmt -> execute();
 	
 			return $stmt -> fetch();
+
+		}else if($vend == ''){
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+						'todos' as vendedor,
+						'' as descripcion,
+						FORMAT(SUM(cc.saldo), 2) AS total_general 
+					FROM
+						cuenta_ctejf cc 
+						LEFT JOIN clientesjf c 
+						ON cc.cliente = c.codigo 
+						LEFT JOIN 
+						(SELECT 
+							* 
+						FROM
+							maestrajf 
+						WHERE tipo_dato = 'tvend') v 
+						ON cc.vendedor = v.codigo 
+					WHERE cc.tip_mov = '+' 
+						AND cc.estado = 'Pendiente'");
+	
+			// $stmt -> bindParam(":cliente", $valor, PDO::PARAM_STR);
+	
+			$stmt -> execute();
+	
+			return $stmt -> fetch();
+
 		}
 		
 

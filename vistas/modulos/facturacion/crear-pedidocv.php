@@ -26,7 +26,7 @@
             EL FORMULARIO
             ======================================-->
 
-            <div class="col-lg-8 col-xs-12">
+            <div class="col-lg-7 col-xs-12">
 
                 <div class="box box-success">
 
@@ -281,63 +281,64 @@
 
                                 <div class="form-group row nuevoProductoPedido" style="height:500px; overflow: scroll;">
 
-                                <!--=====================================
-                                        TITULOS
-                                ======================================-->
+                                    <!--=====================================
+                                            TITULOS
+                                    ======================================-->
 
-                                <div class="box box-primary">
+                                    <div class="box box-primary">
 
-                                    <div class="row">
+                                        <div class="row">
 
-                                        <div class="col-xs-5">
+                                            <div class="col-xs-5">
 
-                                            <label>Item</label>
+                                                <label>Item</label>
+
+                                            </div>
+
+                                            <div class="col-xs-2">
+
+                                                <label for="">Cantidad</label>
+
+                                            </div>
+
+                                            <div class="col-xs-2">
+
+                                                <label for="">P. Unit</label>
+
+                                            </div>                                        
+
+                                            <div class="col-xs-1">
+
+                                                <label for="">Total</label>
+
+                                            </div>
+
+                                            <div class="col-xs-1">
+
+                                                <label for="">U. IGV</label>
+
+                                            </div>                                        
+
+                                            <div class="col-xs-1">
+
+                                                <label for="">T. IGV</label>
+
+                                            </div>                                        
 
                                         </div>
-
-                                        <div class="col-xs-2">
-
-                                            <label for="">Cantidad</label>
-
-                                        </div>
-
-                                        <div class="col-xs-2">
-
-                                            <label for="">P. Unit</label>
-
-                                        </div>                                        
-
-                                        <div class="col-xs-1">
-
-                                            <label for="">Total</label>
-
-                                        </div>
-
-                                        <div class="col-xs-1">
-
-                                            <label for="">U. IGV</label>
-
-                                        </div>                                        
-
-                                        <div class="col-xs-1">
-
-                                            <label for="">T. IGV</label>
-
-                                        </div>                                        
 
                                     </div>
 
-                                </div>
-
+                                    <div class="box box-primary"  id="updDiv">
                                     <?php
 
                                     #tremos la lista de items
-                                    $listaArtPed = ControladorPedidos::ctrMostrarDetallesTemporal($_GET["pedido"]);
-                                    #var_dump("listaArtPed", $listaArtPed);
+                                    $listaArtPed = ControladorPedidos::ctrMostrarDetallesTemporalB($_GET["pedido"]);
+                                    //var_dump("listaArtPed", $listaArtPed);
 
                                     foreach ($listaArtPed as $key => $value) {
 
-                                        $infoArtPed = controladorArticulos::ctrMostrarArticulos($value["articulo"]);
+                                        //$infoArtPed = controladorArticulos::ctrMostrarArticulos($value["articulo"]);
 
                                         $total_detalle = $value["cantidad"] * $value["precio"];
                                         #var_dump("infoArtPed", $infoArtPed);
@@ -350,11 +351,11 @@
 
                                                         <span class="input-group-addon">
 
-                                                            <button type="button" class="btn btn-danger btn-xs quitarArtPed" articulo="' . $infoArtPed["articulo"] . '"><i class="fa fa-times"></i></button>
+                                                            <button type="button" class="btn btn-danger btn-xs quitarArtPed" articulo="' . $value["articulo"] . '"><i class="fa fa-times"></i></button>
 
                                                         </span>
 
-                                                        <input type="text" class="form-control nuevaDescripcionArticulo input-sm" articulo="' . $infoArtPed["articulo"] . '" name="agregarProducto" value="' . $infoArtPed["packing"] . '" articuloP="' . $infoArtPed["articulo"] . '" readonly required>
+                                                        <input type="text" class="form-control nuevaDescripcionArticulo input-sm" articulo="' . $value["articulo"] . '" name="agregarProducto" value="' . $value["packing"] . '" articuloP="' . $value["articulo"] . '" readonly required>
 
                                                     </div>
 
@@ -362,7 +363,7 @@
 
                                                 <div class="col-xs-2">
 
-                                                    <input type="number" class="form-control nuevaCantidadArtPed input-sm" name="nuevaCantidadArtPed" min="1" value="' . $value["cantidad"] . '" artPed="'.$infoArtPed["pedidos"].'" nuevoArtPed="0" required>
+                                                    <input type="number" class="form-control nuevaCantidadArtPed input-sm" name="nuevaCantidadArtPed" min="1" value="' . $value["cantidad"] . '" artPed="'.$value["pedidos"].'" nuevoArtPed="0" required>
 
                                                 </div>
 
@@ -399,6 +400,7 @@
 
                                     ?>
 
+                                    </div>
                                 </div>
 
                                 <input type="hidden" id="listaProductosPedidos" name="listaProductosPedidos">
@@ -935,30 +937,252 @@
             LA TABLA DE PRODUCTOS
             ======================================-->
 
-            <div class="col-lg-4 hidden-md hidden-sm hidden-xs">
+            <div class="col-lg-5 hidden-md hidden-sm hidden-xs">
 
                 <div class="box box-warning">
 
                     <div class="box-header with-border"></div>
 
-                    <div class="box-body">
+                        <div class="box-body">
+                            
+                            <label for="" class="col-form-label col-lg-2">Modelo</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control input-md" id='modelo' name='modelo'>
+                            </div>
+                            <div class="form-group col-lg-2">
+                                <button class='btn btn-primary btn-md modificarArtPedB' data-toggle='modal' data-target='#modalModificarClienteP'>Agregar</button>
+                            </div>                            
+                        
+                        </div>                    
 
-                        <table class="table table-bordered table-striped dt-responsive tablaArticulosPedidos" width="100%"> 
+                    <div class="box-body" id="updDivB">
 
-                            <thead>
+                    <body>
+                    <?php
 
-                                <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th>Modelo</th>
-                                    <th>Nombre</th>
-                                    <th>Color</th>
-                                    <th>Talla</th>
-                                    <th>Acciones</th>
-                                </tr>
+                        require_once "controladores/pedidos.controlador.php";
+                        require_once "modelos/pedidos.modelo.php";
 
-                            </thead>
+                        /* 
+                        * TRAEMOS LOS DATOS DEL PEDIDO
+                        */
+                        $codigo = $_GET["pedido"];
+                        //var_dump($codigo);
+
+                        $respuesta = ControladorPedidos::ctrPedidoImpresionCab($codigo);
+                        //var_dump($respuesta["pedido"]);
+                        //var_dump($respuesta);
+
+                        $totales = ControladorPedidos::ctrPedidoImpresionTotales($codigo);
+                        //var_dump($totales);
+
+                        date_default_timezone_set("America/Lima");
+
+                        //var_dump($respuesta["fecha"]);
+
+                        $originalDate = $respuesta["fecha"];
+                        $newDate = date("d/m/Y", strtotime($originalDate));
+                        //var_dump($newDate);
+
+                    ?>
+
+                        <div class="zona_impresion">
+
+                        <table border="1" align="left" width="700px">
+
+                        <thead>
+                        <tr>
+                        <th style="width:10%"></th>
+                        <th style="width:20%"></th>
+                        <th style="width:6%">S</th>
+                        <th style="width:6%">M</th>
+                        <th style="width:6%">L</th>
+                        <th style="width:6%">XL</th>
+                        <th style="width:6%">XXL</th>
+                        <th style="width:6%">XS</th>
+                        <th style="width:6%"></th>
+                        <th style="width:6%"></th>
+                        <th style="width:6%"></th>
+                        </tr>
+
+                        <tr>
+                        <th style="width:10%"></th>
+                        <th style="width:20%"></th>
+                        <th style="width:6%">28</th>
+                        <th style="width:6%">30</th>
+                        <th style="width:6%">32</th>
+                        <th style="width:6%">34</th>
+                        <th style="width:6%">36</th>
+                        <th style="width:6%">38</th>
+                        <th style="width:6%">40</th>
+                        <th style="width:6%">42</th>
+                        <th style="width:6%"></th>
+                        </tr>
+
+                        <tr>
+                        <th style="width:10%;text-align:left;">Modelo</th>
+                        <th style="width:20%">Color</th>
+                        <th style="width:6%">3</th>
+                        <th style="width:6%">4</th>
+                        <th style="width:6%">6</th>
+                        <th style="width:6%">8</th>
+                        <th style="width:6%">10</th>
+                        <th style="width:6%">12</th>
+                        <th style="width:6%">14</th>
+                        <th style="width:6%">16</th>
+                        <th style="width:6%">TOTAL</th>
+                        </tr>
+                        </thead>
 
                         </table>
+
+                        <?php
+
+                        $modelo = ControladorPedidos::ctrPedidoImpresionMod($codigo);
+                        //var_dump($modelo);
+
+                        foreach($modelo as $key => $value){
+
+                        echo '<table border="1" style="border:dashed" align="left" width="700px">';
+
+                        $respuesta = ControladorPedidos::ctrPedidoImpresion($codigo, $value["modelo"]);
+
+                        foreach($respuesta as $key => $value2){
+
+                        if($value2["t1"] <= 0){
+
+                        $value2["t1"] = " ";
+
+                        }else{
+
+                        $value2["t1"];
+
+                        }
+
+                        if($value2["t2"] <= 0){
+
+                        $value2["t2"] = " ";
+
+                        }else{
+
+                        $value2["t2"];
+
+                        }
+
+                        if($value2["t3"] <= 0){
+
+                        $value2["t3"] = " ";
+
+                        }else{
+
+                        $value2["t3"];
+
+                        }
+
+                        if($value2["t4"] <= 0){
+
+                        $value2["t4"] = " ";
+
+                        }else{
+
+                        $value2["t4"];
+
+                        }
+
+                        if($value2["t5"] <= 0){
+
+                        $value2["t5"] = " ";
+
+                        }else{
+
+                        $value2["t5"];
+
+                        }
+
+                        if($value2["t6"] <= 0){
+
+                        $value2["t6"] = " ";
+
+                        }else{
+
+                        $value2["t6"];
+
+                        }
+
+                        if($value2["t7"] <= 0){
+
+                        $value2["t7"] = " ";
+
+                        }else{
+
+                        $value2["t7"];
+
+                        }
+
+                        if($value2["t8"] <= 0){
+
+                        $value2["t8"] = " ";
+
+                        }else{
+
+                        $value2["t8"];
+
+                        }
+
+                        echo '<tr>
+                        <th style="width:10%;font-weight: normal;text-align:left;">'.$value2["modelo"].'</th>
+                        <th style="width:20%;text-align:left;">'.$value2["color"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t1"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t2"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t3"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t4"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t5"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t6"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t7"].'</th>
+                        <th style="width:6%;font-weight: normal;">'.$value2["t8"].'</th>
+                        <th style="width:6%">'.$value2["total"].'</th>
+                        </tr>';
+
+                        }
+
+                        echo '</table>';
+
+                        }
+
+                        ?>
+
+                        <table border="1" align="left" width="700px">
+
+                        </thead>
+
+                        <tr>
+
+                        <th style="width:10%;text-align:left;">TOTALES</th>
+                        <th style="width:20%;text-align:left;">PEDIDO</th>
+                        <th style="width:6%"><?php echo $totales["t1"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t2"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t3"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t4"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t5"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t6"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t7"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["t8"]; ?></th>
+                        <th style="width:6%"><?php echo $totales["total"]; ?></th>
+
+                        </tr>
+
+                        </thead>
+
+                        </table>
+
+                        <br>
+
+
+
+                        </div>
+                        <p>&nbsp;</p>
+
+                    </body>
 
                     </div>
 

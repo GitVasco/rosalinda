@@ -623,6 +623,14 @@ class controladorArticulos{
 		return $respuesta;
 		
 	}
+
+	static public function ctrListaArticulosPedidosB($valor){
+
+		$respuesta = ModeloArticulos::mdlListaArticulosPedidosB($valor);
+
+		return $respuesta;
+		
+	}	
 	
 	/* 
 	* MOSTRAR  COLORES
@@ -641,6 +649,17 @@ class controladorArticulos{
 	static public function ctrVerArticulos($valor){
 
 		$respuesta = ModeloArticulos::mdlVerArticulos($valor);
+
+		return $respuesta;
+		
+	}	
+
+	/* 
+	* MOSTRAR  ARTICULOS
+	*/	
+	static public function ctrVerArticulosB($valor){
+
+		$respuesta = ModeloArticulos::mdlVerArticulosB($valor);
 
 		return $respuesta;
 		

@@ -1024,7 +1024,7 @@ $(".formularioPedidoCV").on("click", ".btnCargarCliente", function () {
 
 })
 
-
+//*OPCION A GENERAR PEDIDO
 $(".tablaArticulosPedidos").on("click", ".modificarArtPed", function () {
 
     //console.log("hola mundo");
@@ -1256,13 +1256,245 @@ $(".tablaArticulosPedidos").on("click", ".modificarArtPed", function () {
 
     })
 
-
-
-
-
 })
 
+//*OPCION B GENERAR PEDIDO
+$(".modificarArtPedB").click(function () {
 
+    //console.log("hola mundo");
+
+    var cliente = document.getElementById("seleccionarCliente").value;
+    var vendedor = document.getElementById("seleccionarVendedor").value;
+    var pedido = document.getElementById("nuevoCodigo").value;
+    var modLista = document.getElementById("lista").value;
+
+    // console.log(pedido);
+
+    if(modLista == ''){
+
+        var modLista1 = document.getElementById("seleccionarLista").value;
+        $("#nLista").val(modLista1);
+        var datos = new FormData();
+        datos.append("modLista", modLista1);
+        //console.log('lista',modLista1);
+
+    }else{
+
+        $("#nLista").val(modLista);
+        var datos = new FormData();
+        datos.append("modLista", modLista);
+        //console.log('lista',modLista);
+
+    }
+
+    
+    //ver para q sirve
+    $("#clienteA").val(cliente);
+    $("#vendedorA").val(vendedor);
+
+    
+
+    /*
+    *datos para la cabecera
+    */
+
+    var mod = document.getElementById("modelo").value; 
+    //var mod = $(this).attr("modelo");
+    //console.log(mod);
+
+    $("#modeloModalA").val(mod);
+
+    //var datos = new FormData();
+    datos.append("mod", mod);
+    //datos.append("modLista", modLista);
+
+    $.ajax({
+
+		url:"ajax/pedidos.ajax.php",
+		method: "POST",
+		data: datos,
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType:"json",
+		success:function(respuestaLista){
+
+            //console.log("respuesta",respuestaLista["precio"]);
+
+            $("#precioA").val(respuestaLista["precio"]);
+
+		}
+
+	})
+
+    /*
+    * datos para la tabla
+    */
+
+    var modelo = document.getElementById("modelo").value; 
+    // console.log(modelo);
+
+	var datosPedido = new FormData();
+	datosPedido.append("modeloA", modelo);
+    datosPedido.append("pedido", pedido);
+    // console.log(datosPedido);
+
+	$.ajax({
+
+		url:"ajax/pedidos.ajax.php",
+		method: "POST",
+		data: datosPedido,
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType:"json",
+		success:function(respuestaA){ 
+
+            //console.log("respuestaA", respuestaA);
+
+            $(".detalleCT").remove();
+
+			for(var id of respuestaA){
+
+                /* TALLA 1 */
+                if(id.t1 == 1){
+
+                    var talla1 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +1 +'" id="'+ id.modelo + id.cod_color +1 +'" value="'+id.v1+'" min="0"></td>'
+
+                }else{
+
+                    var talla1 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +1 +'" id="'+ id.modelo + id.cod_color +1 +'" readonly></td>'
+
+                }
+
+                /* TALLA 2 */
+                if(id.t2 == 1){
+
+                    var talla2 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +2 +'" id="'+ id.modelo + id.cod_color +2 +'" value="'+id.v2+'" min="0"></td>'
+
+                }else{
+
+                    var talla2 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +2 +'" id="'+ id.modelo + id.cod_color +2 +'" readonly></td>'
+
+                }
+
+                /* TALLA 3 */
+                if(id.t3 == 1){
+
+                    var talla3 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +3 +'" id="'+ id.modelo + id.cod_color +3 +'" value="'+id.v3+'" min="0"></td>'
+
+                }else{
+
+                    var talla3 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +3 +'" id="'+ id.modelo + id.cod_color +3 +'" readonly></td>'
+
+                }
+
+                /* TALLA 4 */
+                if(id.t4 == 1){
+
+                    var talla4 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +4 +'" id="'+ id.modelo + id.cod_color +4 +'" value="'+id.v4+'" min="0" ></td>'
+
+                }else{
+
+                    var talla4 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +4 +'" id="'+ id.modelo + id.cod_color +4 +'" readonly></td>'
+
+                }
+
+                /* TALLA 5 */
+                if(id.t5 == 1){
+
+                    var talla5 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +5 +'" id="'+ id.modelo + id.cod_color +5 +'" value="'+id.v5+'" min="0" ></td>'
+
+                }else{
+
+                    var talla5 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +5 +'" id="'+ id.modelo + id.cod_color +5 +'" readonly></td>'
+
+                }
+
+                /* TALLA 6 */
+                if(id.t6 == 1){
+
+                    var talla6 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +6 +'" id="'+ id.modelo + id.cod_color +6 +'" value="'+id.v6+'" min="0" ></td>'
+
+                }else{
+
+                    var talla6 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +6 +'" id="'+ id.modelo + id.cod_color +6 +'" readonly></td>'
+
+                }
+
+                /* TALLA 7*/
+                if(id.t7 == 1){
+
+                    var talla7 = '<td><input style="width:100%" class="pruebaA" type="text" name="'+ id.modelo + id.cod_color +7 +'" id="'+ id.modelo + id.cod_color +7 +'" value="'+id.v7+'" min="0" ></td>'
+
+                }else{
+
+                    var talla7 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +7 +'" id="'+ id.modelo + id.cod_color +7 +'" readonly></td>'
+
+                }
+
+                /* TALLA 8 */
+                if(id.t8 == 1){
+
+                    var talla8 = '<td><input style="width:100%" class="cantidad" type="text" name="'+ id.modelo + id.cod_color +8 +'" id="'+ id.modelo + id.cod_color +8 +'"value="'+id.v8+'" min="0" ></td>'
+
+                }else{
+
+                    var talla8 = '<td><input style="width:100%" type="text" name="'+ id.modelo + id.cod_color +8 +'" id="'+ id.modelo + id.cod_color +8 +'" readonly></td>'
+
+                }
+
+                var fila ='<tr class="detalleCT">' +
+                                '<td>' + id.modelo + ' </td>' +
+                                '<td>' + id.color + ' </td>' +
+                                talla1 +
+                                talla2 +
+                                talla3 +
+                                talla4 +
+                                talla5 +
+                                talla6 +
+                                talla7 +
+                                talla8 +
+
+                            '</tr>'
+
+				$('.tablaColTal').append(
+
+                    fila
+
+
+                )
+			}
+
+            var inputs = $("form :text"),
+            length = inputs.length,
+            i = 25;
+            //console.log(inputs);
+            //console.log(length);
+
+
+            inputs.on("keypress", function(event){
+
+                var code = event.keyCode || event.which;    
+                if (code == 13){
+
+                    event.preventDefault();
+                    i = i == length - 12 ? 26 : ++i;
+                    console.log(i);
+                    inputs[i].focus();
+                    inputs[i].select();
+                    
+                }
+
+
+            
+            })
+
+		}        
+
+    })
+
+})
 
 $(".btnCalCantA").click(function () {
 
@@ -1292,6 +1524,36 @@ $(".btnCalCantA").click(function () {
 *ANULAR PEDIDOS
 */
 $(".tablaPedidosCV").on("click",".btnAnularPedidoCV",function(){
+	
+    var codigo = $(this).attr("codigo");
+    var estado = $(this).attr("estado");
+    //console.log(codigo,estado);
+ 
+	// Capturamos el id de la orden de compra
+	swal({
+        title: '¿Está seguro de anular el pedido?',
+        text: "¡Si no lo está puede cancelar la acción!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Si, anular pedido!'
+    }).then(function (result) {
+
+	if (result.value) {
+
+		window.location = "index.php?ruta=pedidoscv&codigoP="+codigo;
+
+	}
+	})
+
+});
+
+/* 
+*ANULAR PEDIDOS
+*/
+$(".tablaPedidosAprobados").on("click",".btnAnularPedidoCV",function(){
 	
     var codigo = $(this).attr("codigo");
     var estado = $(this).attr("estado");

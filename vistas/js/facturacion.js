@@ -2127,3 +2127,17 @@ $("#formularioRegistro").on("click","button.btnGenerarReg",function(){
   window.location = "vistas/reportes_excel/rpt_registro_ventas.php?mes="+mes;
 
 })
+
+/* 
+* BOTON  IMPRIMIR TICKET
+*/
+$(".tablaBoletas, .tablaFacturas").on("click", ".btnImprimirTicketFacBol", function () {
+
+  var tipo = $(this).attr("tipo");
+	var documento = $(this).attr("documento");
+
+  //console.log(tipo + "-" + documento);
+	
+	window.open("vistas/reportes_ticket/fac_bol_ticket.php?tipo=" +tipo + "&documento=" + documento,"_blank");
+	
+})

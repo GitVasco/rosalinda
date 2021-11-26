@@ -49,11 +49,11 @@ class TablaGuiasRemision{
 
             if($factura[$i]["facturacion"] == "0"){
 
-                $botones =  "<div class='btn-group'><button title='Editar Documento' class='btn btn-xs  btn-warning btnEditarDocumentoCV' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$factura[$i]["documento"]."' tipo='".$factura[$i]["tipo"]."' pagina='facturas'><i class='fa fa-close'></i></button></div>";
+                $botones =  "<div class='btn-group'><button title='Editar Documento' class='btn btn-xs  btn-warning btnEditarDocumentoCV' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-pencil-square-o'></i></button><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button><button class='btn btn-xs btn-primary btnImprimirTicketFacBol' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-file-word-o'></i></button><button title='Anular Documento' class='btn btn-xs  btn-danger btnAnularDocumento' documento='".$factura[$i]["documento"]."' tipo='".$factura[$i]["tipo"]."' pagina='facturas'><i class='fa fa-close'></i></button></div>";
 
             }else{
 
-                $botones =  "<div class='btn-group'><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button></div>";
+                $botones =  "<div class='btn-group'><button title='Imprimir Factura' class='btn btn-xs btn-success btnImprimirFactura' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-print'></i></button><button class='btn btn-xs btn-primary btnImprimirTicketFacBol' tipo='".$factura[$i]["tipo"]."' documento='".$factura[$i]["documento"]."'><i class='fa fa-file-word-o'></i></button></div>";
 
             }
 

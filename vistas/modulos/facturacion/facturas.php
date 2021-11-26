@@ -68,7 +68,7 @@
                             <th>Doc. Destino</th>
                             <th>Estado</th>
                             <th>Agencia</th>
-                            <th width="120px">Acciones</th>
+                            <th width="150px">Acciones</th>
 
                         </tr>
 

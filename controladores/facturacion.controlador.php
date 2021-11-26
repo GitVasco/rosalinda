@@ -3151,26 +3151,33 @@ class ControladorFacturacion{
             $detalle = ModeloFacturacion::mdlEliminarDetalle($tipo, $documento);
             #var_dump($detalle);   
 
+            $usureg = $_SESSION["nombre"];
+            $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+
             #anular cabecera
-            $cabecera = ModeloFacturacion::mdlAnularCabecera($tipo, $documento,$_SESSION["id"]);
+            $cabecera = ModeloFacturacion::mdlAnularCabecera($tipo, $documento,$_SESSION["id"], $usureg, $pcreg);
             #var_dump($cabecera); 
 
             #eliminar cta cte
             if($tipo == "S03"){
 
                 $tip = "01";
+                $pagina = "facturas";
 
             }else if($tipo == "S02"){
 
                 $tip = "03";
+                $pagina = "boletas";
 
             }else if($tipo == "E05"){
 
                 $tip = "07";
+                $pagina = "ver-nota-credito";
 
             }else if($tipo = "S70"){
 
                 $tip = "09";
+                $pagina = "proformas";
 
             }
 
@@ -3190,7 +3197,7 @@ class ControladorFacturacion{
                     }).then(function(result){
                         if (result.value) {
 
-                        window.location = "'.$_GET["pagina"].'";
+                        window.location = "'.$pagina.'";
 
                         }
                     })

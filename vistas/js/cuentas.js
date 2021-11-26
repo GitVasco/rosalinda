@@ -2013,6 +2013,8 @@ $(".btnGenerarReporteCuenta").click(function(){
  var inicio = $(this).attr("inicio");
  var fin = $(this).attr("fin");
  var impresion = $(this).attr("impresion");
+
+ //console.log(vend);
  
 if (impresion == "pantalla") {
 
@@ -2030,11 +2032,11 @@ if (impresion == "pantalla") {
 
             if (vend == '') {
 
-                window.open("extensiones/tcpdf/pdf/reporte_general_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&vend=" + vend, "_blank");
+                window.open("extensiones/tcpdf/pdf/reporte_vendedor_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&tip_doc=" + tip_doc + "&cli=" + cli + "&banco=" + banco + "&inicio=" + inicio + "&fin=" + fin + "&vend=" + vend, "_blank");
 
             } else {
 
-                window.open("extensiones/tcpdf/pdf/reporte_vendedor_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&vend=" + vend, "_blank");
+                window.open("extensiones/tcpdf/pdf/reporte_vendedor_cuentas.php?consulta=" + consulta + "&orden1=" + orden1 + "&orden2=" + orden2 + "&tip_doc=" + tip_doc + "&cli=" + cli + "&banco=" + banco + "&inicio=" + inicio + "&fin=" + fin + "&vend=" + vend, "_blank");
 
             }
 
