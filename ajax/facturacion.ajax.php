@@ -194,15 +194,7 @@ class AjaxFacturacion{
 
             ModeloPedidos::mdlCantAprobados();
 
-            /* $detalle = ControladorPedidos::ctrMostrarDetallesTemporal($valor);
 
-                foreach ($detalle as $key => $value) {
-
-                    $articulo = ModeloFacturacion::mdlActualizarArticuloPedido($value["articulo"],$value["cantidad"]);
-
-                }
-
-            } */
 
             if($_SESSION["datos"] == 1){
             $datos2= array( "usuario" => $nom_user,

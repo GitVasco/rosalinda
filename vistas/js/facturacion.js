@@ -2141,3 +2141,16 @@ $(".tablaBoletas, .tablaFacturas").on("click", ".btnImprimirTicketFacBol", funct
 	window.open("vistas/reportes_ticket/fac_bol_ticket.php?tipo=" +tipo + "&documento=" + documento,"_blank");
 	
 })
+
+/* 
+* BOTON  IMPRIMIR TICKET
+*/
+$(".tablaGuiasRemision").on("click", ".btnImprimirGuia", function () {
+
+  var codigo = $(this).attr("codigo");
+  var tipo = $(this).attr("tip_doc");
+  //console.log(tipo);
+
+  window.open("vistas/reportes_ticket/guia_remision.php?codigo=" +codigo + "&tipo=" + tipo,"_blank");
+
+})

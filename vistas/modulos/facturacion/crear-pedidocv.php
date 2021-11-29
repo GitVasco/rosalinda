@@ -1718,39 +1718,5 @@ $('.nuevoProductoPedido').ready(function(){
 
   }
 
-   /*  function pressEnter() {
-
-        if ((event.keyCode == 13)) {
-        document.getElementById("RL250012").focus({preventScroll:false});
-      }
-    }
-
-    function pressEnter2() {
-      if ((event.keyCode == 13)) {
-        document.getElementById("RL250013").focus({preventScroll:false});
-      }
-    } */
-
-    /* $("modalModificarClienteP").ready(function(){   
-        var inputs = $("form :text"),
-        length = inputs.length,
-        i = 0;
-
-        console.log(inputs);
-        console.log(length);
- 
-        // El resto del código
-
-        inputs.on("keypress", function(event){
-    var code = event.keyCode || event.which;    
-    if (code == 13){
-        event.preventDefault();
-        i = i == length - 1 ? 0 : ++i;
-        inputs[i].focus();
-    }
-
-        })
-
-    }); */
 
 </script>
