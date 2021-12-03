@@ -1302,7 +1302,7 @@ $(".modificarArtPedB").click(function () {
     //var mod = $(this).attr("modelo");
     //console.log(mod);
 
-    $("#modeloModalA").val(mod);
+    
 
     //var datos = new FormData();
     datos.append("mod", mod);
@@ -1319,7 +1319,9 @@ $(".modificarArtPedB").click(function () {
 		dataType:"json",
 		success:function(respuestaLista){
 
-            //console.log("respuesta",respuestaLista["precio"]);
+            //console.log(respuestaLista);
+
+            $("#modeloModalA").val(respuestaLista["modelo"]);
 
             $("#precioA").val(respuestaLista["precio"]);
 

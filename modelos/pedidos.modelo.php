@@ -651,7 +651,13 @@ class ModeloPedidos{
 						AND t.vendedor = m.codigo)
 					) AS vendedor,
 					td.tipo_doc,
-					c.documento 
+					c.documento,
+					t.agencia,
+					(SELECT 
+						nombre 
+					FROM
+						agenciasjf a 
+					WHERE a.id = t.agencia) AS nom_agencia  
 					FROM
 					temporaljf t 
 					LEFT JOIN clientesjf c 
