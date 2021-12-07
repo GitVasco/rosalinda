@@ -2154,3 +2154,92 @@ $(".tablaGuiasRemision").on("click", ".btnImprimirGuia", function () {
   window.open("vistas/reportes_ticket/guia_remision.php?codigo=" +codigo + "&tipo=" + tipo,"_blank");
 
 })
+
+  // GENERAR REPORTE POR RADIO BUTTON DE TIPO VENTA
+  $(".box").on("change", ".radioTipoV", function () {
+    var optipo = $(this).val();
+    $(".btnGenerarReporteVenta").attr("optipo",optipo);
+  
+  })
+
+  //GENERAR REPORTE POR RADIO BUTTON DE DOCUMENTO DE VENTA
+  $(".box").on("change", ".radioDocumento", function () {
+    var opdocumento = $(this).val();
+    $(".btnGenerarReporteVenta").attr("opdocumento",opdocumento);
+  
+  })
+
+  //GENERAR REPORTE POR RADIO BUTTON DE IMPUESTO VENTA
+  $(".box").on("change", ".radioImpuesto", function () {
+    if(this.checked == false){
+		$(".btnGenerarReporteVenta").attr("impuesto",'0');
+	}else{
+		$(".btnGenerarReporteVenta").attr("impuesto",'1');
+	}
+    
+  })
+
+  //GENERAR REPORTE POR SELECT DE VENDEDOR VENTA
+  $(".box").on("change", "#tipoVendedorReporteVenta", function () {
+    var vend = $(this).val();
+    $(".btnGenerarReporteVenta").attr("vend",vend);
+  
+  })
+
+  //GENERAR REPORTE POR FECHA DE INICIO DE VENTA
+  $(".box").on("change", "#fechaVentaInicio", function () {
+    var inicio = $(this).val();
+    $(".btnGenerarReporteVenta").attr("inicio",inicio);
+  
+  })
+  
+  //GENERAR REPORTE POR FECHA FINAL DE VENTA
+  $(".box").on("change", "#fechaVentaFin", function () {
+    var fin = $(this).val();
+    $(".btnGenerarReporteVenta").attr("fin",fin);
+  
+  })
+
+  //GENERAR REPORTE POR RADIO BUTTON DE IMPRESION DE VENTA
+  $(".box").on("change", ".radioImpresionV", function () {
+    var impresion = $(this).val();
+    $(".btnGenerarReporteVenta").attr("impresion",impresion);
+  
+  })
+
+
+  $(".btnGenerarReporteVenta").click(function(){ 
+    var optipo = $(this).attr("optipo");
+    var opdocumento = $(this).attr("opdocumento");
+    var impuesto = $(this).attr("impuesto");
+    var vend = $(this).attr("vend");
+    var inicio = $(this).attr("inicio");
+    var fin = $(this).attr("fin");
+    var impresion = $(this).attr("impresion");
+    if(impresion == "pantalla"){
+
+       if(optipo == "resumen"){
+
+        window.open("extensiones/tcpdf/pdf/reporte_resumen_venta.php?optipo="+optipo+"&opdocumento="+opdocumento+"&impuesto="+impuesto+"&vend="+vend+"&inicio="+inicio+"&fin="+fin,"_blank");
+
+       }else if (optipo == "detallado"){
+
+        window.open("extensiones/tcpdf/pdf/reporte_detalle_venta.php?optipo="+optipo+"&opdocumento="+opdocumento+"&impuesto="+impuesto+"&vend="+vend+"&inicio="+inicio+"&fin="+fin,"_blank");
+       
+        }else if(optipo == "postalResumen"){
+        
+        window.open("extensiones/tcpdf/pdf/reporte_postalrsm_venta.php?optipo="+optipo+"&opdocumento="+opdocumento+"&impuesto="+impuesto+"&vend="+vend+"&inicio="+inicio+"&fin="+fin,"_blank")
+
+       }else if(optipo == "postalDetalle"){
+
+        window.open("extensiones/tcpdf/pdf/reporte_postaldet_venta.php?optipo="+optipo+"&opdocumento="+opdocumento+"&impuesto="+impuesto+"&vend="+vend+"&inicio="+inicio+"&fin="+fin,"_blank");
+
+       }
+     
+    }else{
+
+        window.location = "vistas/reportes_excel/reporte_ventas.xlsx";
+
+    }
+     
+})

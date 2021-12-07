@@ -3266,6 +3266,25 @@ class ControladorFacturacion{
 
     }    
 
+    /*
+    * MOSTRAR REPORTE DE VENTA POR RESUMEN
+    */
+	static public function ctrMostrarVentaResumen($optipo, $opdocumento, $impuesto , $vend, $inicio, $fin){
+		$respuesta = ModeloFacturacion::mdlMostrarVentaResumen( $optipo, $opdocumento, $impuesto, $vend, $inicio, $fin);
+
+		return $respuesta;
+
+    }
+
+    /*
+    * MOSTRAR REPORTE DE VENTA DETALLADO
+    */
+	static public function ctrMostrarVentaDetalle($optipo, $opdocumento, $impuesto , $vend, $inicio, $fin){
+		$respuesta = ModeloFacturacion::mdlMostrarVentaDetalle( $optipo, $opdocumento, $impuesto, $vend, $inicio, $fin);
+
+		return $respuesta;
+
+    }    
 
 }
 

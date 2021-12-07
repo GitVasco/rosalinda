@@ -1001,6 +1001,17 @@
 
                     </li>
 
+                    <li class="<?php if($_GET["ruta"] == "reportes-ventas") echo 'active';?>">
+
+                        <a href="reportes-ventas">
+
+                            <i class="fa fa-file-text"></i>
+                            <span>Reportes Ventas</span>
+
+                        </a>
+
+                    </li>                    
+
 
                     <li class="<?php if($_GET["ruta"] == "procesar-ce") echo 'active';?>">
 
