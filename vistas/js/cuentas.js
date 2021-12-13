@@ -708,6 +708,8 @@ $(".tablaVerCuentas").on("click", ".btnEditarCancelacion", function () {
   })
 
 })
+
+
 $("#cancelarMonto2").change(function(){
 
     var montoNuevo = $(this).val();
@@ -973,6 +975,7 @@ $(".btnCancelarCuenta2").click(function(){
 
   })
 });
+
 $("#cancelarMonto3").change(function(){
   var saldo = $(this).val();
   var saldoAntiguo = $("#cancelarSaldoAntiguo2").val();

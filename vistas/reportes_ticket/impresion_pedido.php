@@ -57,7 +57,7 @@
                     
                             <tr>
                         
-                                <th style="text-align:left;" colspan="11">CORPORACION VASCO S.A.C.</th>
+                                <th style="text-align:left;" colspan="11">LENCERIA ROSALINDA</th>
                         
                             </tr>
                         
@@ -385,7 +385,7 @@
                 
                         <tr>
                     
-                            <th style="text-align:left;" colspan="11">CORPORACION VASCO S.A.C.</th>
+                            <th style="text-align:left;" colspan="11">LENCERIA ROSALINDA</th>
                     
                         </tr>
                     
@@ -654,7 +654,7 @@
                 
                         <tr>
                     
-                            <th style="text-align:left;" colspan="11">CORPORACION VASCO S.A.C.</th>
+                            <th style="text-align:left;" colspan="11">LENCERIA ROSALINDA</th>
                     
                         </tr>
                     
@@ -783,7 +783,7 @@
                 //*Cuerpo PAG 2
                 echo '<table border="1" style="border:dashed" align="left" width="900px">';
 
-                    $articulosP1 = ControladorPedidos::ctrPedidoImpresionB($codigo, 51, 100);
+                    $articulosP1 = ControladorPedidos::ctrPedidoImpresionB($codigo, 50, 100);
 
                     foreach($articulosP1 as $key => $value){
 
@@ -984,7 +984,7 @@
                 
                         <tr>
                     
-                            <th style="text-align:left;" colspan="11">CORPORACION VASCO S.A.C.</th>
+                            <th style="text-align:left;" colspan="11">LENCERIA ROSALINDA</th>
                     
                         </tr>
                     
@@ -1253,7 +1253,7 @@
                 
                         <tr>
                     
-                            <th style="text-align:left;" colspan="11">CORPORACION VASCO S.A.C.</th>
+                            <th style="text-align:left;" colspan="11">LENCERIA ROSALINDA</th>
                     
                         </tr>
                     
@@ -1382,7 +1382,7 @@
                 //*Cuerpo PAG 2
                 echo '<table border="1" style="border:dashed" align="left" width="900px">';
 
-                    $articulosP1 = ControladorPedidos::ctrPedidoImpresionB($codigo, 51, 50);
+                    $articulosP1 = ControladorPedidos::ctrPedidoImpresionB($codigo, 50, 50);
 
                     foreach($articulosP1 as $key => $value){
 
@@ -1522,7 +1522,7 @@
                 
                         <tr>
                     
-                            <th style="text-align:left;" colspan="11">CORPORACION VASCO S.A.C.</th>
+                            <th style="text-align:left;" colspan="11">LENCERIA ROSALINDA</th>
                     
                         </tr>
                     
@@ -1651,7 +1651,7 @@
                 //*Cuerpo PAG 3
                 echo '<table border="1" style="border:dashed" align="left" width="900px">';
 
-                    $articulosP1 = ControladorPedidos::ctrPedidoImpresionB($codigo, 101, 50);
+                    $articulosP1 = ControladorPedidos::ctrPedidoImpresionB($codigo, 100, 50);
 
                     foreach($articulosP1 as $key => $value){
 

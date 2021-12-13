@@ -144,7 +144,7 @@ class ModeloFacturacion{
 
 		$stmt = null;
 
-    }
+  }
 
     /*
     * ACTUALIZAR TALONARIO + 1 GUIA
