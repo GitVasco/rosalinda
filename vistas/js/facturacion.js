@@ -2046,7 +2046,7 @@ $(".btnVerToken").click(function(){
 /* 
 *ANULAR PEDIDOS
 */
-$(".tablaFacturas, .tablaBoletas, .tablaProformas").on("click",".btnAnularDocumento",function(){
+$(".tablaFacturas, .tablaBoletas, .tablaProformas, .tablaGuiasRemision").on("click",".btnAnularDocumento",function(){
 	
   var documento = $(this).attr("documento");
   var tipo = $(this).attr("tipo");

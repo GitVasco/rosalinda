@@ -413,7 +413,7 @@ MODAL FACTURAR
 
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
-          <button type="submit" class="btn btn-primary">Generar Documento</button>
+          <button type="submit" class="btn btn-primary" id="btn-only1click" name="btn-only1click">Generar Documento</button>
 
         </div>
 
@@ -433,5 +433,25 @@ MODAL FACTURAR
 </div>
 
 <script>
-window.document.title = "Pedidos"
+
+    window.document.title = "Pedidos"
+
+    // Variable global que nos dirá si hemos dado un click al botón
+    var clicando= false;
+
+    // Evento del segundo boton
+/*     $("#btn-only1click").click(function() {
+        // Si ha sido clicado
+        if (clicando){
+            // Mostramos que ya se ha clicado, y no puede clicarse de nuevo
+            alert( "Que ya he realizado un click." );
+        // Si no ha sido clicado
+        } else {
+            // Le decimos que ha sido clicado
+            clicando= true;
+            // Mostramos el mensaje de que ha sido clicado
+            alert( "Se esta procesando la operacion" );
+        }
+    });  */   
+
 </script>

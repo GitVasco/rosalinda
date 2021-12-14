@@ -23,7 +23,7 @@
     //var_dump($guiaC);
     $guiaD = ControladorFacturacion::ctrMostrarModeloImpresion($nguia,$tipo);
     //var_dump($guiaD);
-    $pPartida = "Calle Santo Toribio Nro 259 Urb Santa Luisa - SMP";
+    $pPartida = "Jr. Bulgaria Mz. O Lt 10 - Urb. San Elias - Los Olivos - Lima";
 
 ?>
     <div class="zona_impresion">

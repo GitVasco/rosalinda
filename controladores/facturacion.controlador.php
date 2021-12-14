@@ -3179,6 +3179,11 @@ class ControladorFacturacion{
                 $tip = "09";
                 $pagina = "proformas";
 
+            }else if($tipo = "S01"){
+
+                $tip = "AA";
+                $pagina = "guias-remision";
+
             }
 
             $cta = ModeloFacturacion::mdlEliminarCta($tip, $documento);
