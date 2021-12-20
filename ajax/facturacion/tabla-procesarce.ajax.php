@@ -14,12 +14,16 @@ class TablaProcesarCE{
 
         $factura = ControladorFacturacion::ctrRangoFechasProcesarCE($_GET["fechaInicial"],$_GET["fechaFinal"],$_GET["tipo"]);
 
+        $ruta = "../../vistas/generar_xml/cdr/";
+
         if(count($factura)>0){
 
         $datosJson = '{
         "data": [';
 
         for($i = 0; $i < count($factura); $i++){
+
+
 
             //VALIDAMOS EL TIPO PARA GENERAR EL NOMBRE DEL ARCHIVO
 
@@ -44,6 +48,21 @@ class TablaProcesarCE{
                 $origen = $factura[$i]["doc_origen"];
                 
             }
+            
+
+            //*probamos si buscar archivo
+            $archivoB = 'R-10094806777-'.$tipo.'-'.substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12).'.XML';
+            $ruta_archivo = $ruta.$archivoB;
+
+            if(file_exists($ruta_archivo)){
+
+                $cdr = "<a class='btn btn-xs btn-info' href='vistas/generar_xml/cdr/R-".$archivo.".XML' download title='Descargar CDR' >CDR</a>";
+
+            }else{
+
+                $cdr = "";
+
+            }
 
             //NOMBRE DEL ARCHIVO DEL XML
             $archivo = "10094806777"."-".$tipo."-".substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12);
@@ -55,7 +74,7 @@ class TablaProcesarCE{
 
                 $envio = "<span style='font-size:85%' class='label label-success'>ENVIADO</span>";
 
-                $botones =  "<div class='btn-group' ><a class='btn btn-xs btn-success' href='vistas/generar_xml/archivos_xml/".$archivo.".XML' download title='Descargar XML'>XML</a><a class='btn btn-xs btn-info' href='vistas/generar_xml/cdr/R-".$archivo.".XML' download title='Descargar CDR' >CDR</a></div>"; 
+                $botones =  "<div class='btn-group' ><a class='btn btn-xs btn-success' href='vistas/generar_xml/archivos_xml/".$archivo.".XML' download title='Descargar XML'>XML</a>".$cdr."</div>"; 
 
             }else if($factura[$i]["facturacion"] == "1"){
 

@@ -144,7 +144,7 @@ class ControladorAlmacenCorte{
 
                         ModeloAlmacenCorte::mdlActualizarOrdCorte($valor, $valor1);
 
-                        ModeloAlmacenCorte::mdlIngresarCantCorte($valor, $valor1);
+                        #ModeloAlmacenCorte::mdlIngresarCantCorte($valor, $valor1);
 
                     }
 
