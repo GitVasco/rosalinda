@@ -54,6 +54,9 @@ class TablaProcesarCE{
             $archivoB = 'R-10094806777-'.$tipo.'-'.substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12).'.XML';
             $ruta_archivo = $ruta.$archivoB;
 
+            //NOMBRE DEL ARCHIVO DEL XML
+            $archivo = "10094806777"."-".$tipo."-".substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12);
+
             if(file_exists($ruta_archivo)){
 
                 $cdr = "<a class='btn btn-xs btn-info' href='vistas/generar_xml/cdr/R-".$archivo.".XML' download title='Descargar CDR' >CDR</a>";
@@ -63,9 +66,6 @@ class TablaProcesarCE{
                 $cdr = "";
 
             }
-
-            //NOMBRE DEL ARCHIVO DEL XML
-            $archivo = "10094806777"."-".$tipo."-".substr($factura[$i]["documento"],0,4)."-".substr($factura[$i]["documento"],4,12);
 
             /* 
             todo: TIPO DE ENVIO
