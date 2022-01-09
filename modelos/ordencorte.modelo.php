@@ -653,7 +653,8 @@ class ModeloOrdenCorte{
 		FROM
 			ordencortejf oc 
 			LEFT JOIN usuariosjf u 
-				ON oc.usuario = u.id ORDER BY oc.id ASC");
+				ON oc.usuario = u.id 
+				ORDER BY oc.id ASC");
 
 			$stmt -> execute();
 

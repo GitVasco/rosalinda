@@ -383,7 +383,7 @@ class ModeloIngresos{
 
 		if($fechaInicial == "null"){
 
-			$stmt = Conexion::conectar()->prepare("SELECT mc.*,u.nombre,s.nom_sector FROM movimientos_cabecerajf mc LEFT JOIN usuariosjf u ON mc.usuario=u.id LEFT JOIN sectorjf s ON mc.taller = s.cod_sector ORDER BY mc.id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT mc.*,u.nombre,s.nom_sector FROM movimientos_cabecerajf mc LEFT JOIN usuariosjf u ON mc.usuario=u.id LEFT JOIN sectorjf s ON mc.taller = s.cod_sector where YEAR(m.fecha)=YEAR(NOW()) ORDER BY mc.id ASC");
 
 			$stmt -> execute();
 

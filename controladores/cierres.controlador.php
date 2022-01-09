@@ -78,7 +78,7 @@ class ControladorCierres{
 					$respuestaProducto=ModeloArticulos::mdlMostrarArticulos($valor);
 					$item1 = "servicio";
 					$valor1 = $respuestaProducto["servicio"]-$value["cantidad"];
-					ModeloArticulos::mdlActualizarUnDato($tabla, $item1, $valor1, $valor);
+					//ModeloArticulos::mdlActualizarUnDato($tabla, $item1, $valor1, $valor);
 					$tabla2="servicios_detallejf";
 					$item2 = "saldo";
 					$valor2 = $value["saldo"] - $value["cantidad"];

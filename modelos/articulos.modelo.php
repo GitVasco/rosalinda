@@ -498,7 +498,8 @@ class ModeloArticulos
 				AND DATEDIFF(DATE(NOW()), m.fecha) <= 30 
 			  GROUP BY m.articulo) AS v 
 			  ON a.articulo = v.articulo 
-		  WHERE  a.estado = 'Activo'");
+		  WHERE  a.estado = 'Activo'
+		  AND a.marca = 'ROSALINDA'");
 
 			$stmt->bindParam(":modelo", $modelo, PDO::PARAM_STR);
 
