@@ -375,7 +375,8 @@ class ModeloFacturacion{
                     LEFT JOIN ubigeojf u
                     ON c.ubigeo = u.cod_ubi
                 WHERE v.tipo = :tipo
-                    AND v.estado = :estado";
+                    AND v.estado = :estado
+                    and YEAR(v.fecha)='2022'";
 
         $stmt=Conexion::conectar()->prepare($sql);
 
@@ -1508,7 +1509,7 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S03'
-          AND YEAR(v.fecha) = 2021
+          AND YEAR(v.fecha) = 2022
           ORDER BY v.fecha DESC,
   LEFT(v.documento, 4) ASC,
   v.documento DESC";
@@ -1727,7 +1728,7 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S02'
-          AND YEAR(v.fecha) = 2021
+          AND YEAR(v.fecha) = 2022
           ORDER BY v.fecha DESC,
   LEFT(v.documento, 4) ASC,
   v.documento DESC";
@@ -1925,7 +1926,7 @@ class ModeloFacturacion{
           LEFT JOIN ubigeojf u
           ON c.ubigeo = u.cod_ubi
       WHERE v.tipo = 'S70'
-          AND YEAR(v.fecha) = 2021
+          AND YEAR(v.fecha) = 2022
           ORDER BY v.fecha DESC,
   LEFT(v.documento, 4) ASC,
   v.documento DESC";
