@@ -374,6 +374,14 @@ class ControladorCuentas{
 		}
 
     }
+
+	static public function ctrValidarCuenta($item,$valor,$item2,$valor2){
+		$tabla="cuenta_ctejf";
+		$respuesta = ModeloCuentas::mdlValidarCuenta($tabla,$item,$valor,$item2,$valor2);
+
+		return $respuesta;
+
+    }
 	
 	/*=============================================
 	CANCELAR CUENTAS

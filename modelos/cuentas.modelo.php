@@ -54,6 +54,29 @@ class ModeloCuentas{
 
 	}    
 
+	/*=============================================
+	VALIDAR CUENTA
+	=============================================*/
+
+	static public function mdlValidarCuenta($tabla,$item,$valor,$item2,$valor2){
+		
+
+		$stmt = Conexion::conectar()->prepare("SELECT c.*,cli.nombre FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+' AND c.$item = :$item AND c.$item2 = :$item2 ");
+
+		$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
+		$stmt -> bindParam(":".$item2, $valor2, PDO::PARAM_STR);
+
+		$stmt -> execute();
+
+		return $stmt -> fetch();
+
+		
+		$stmt -> close();
+
+		$stmt = null;
+
+	}
+
 	static public function mdlIngresarCuentaBckp($tabla,$datos){
 
 		$stmt = Conexion::conectar()->prepare("INSERT INTO cuenta_cte_bkpjf 

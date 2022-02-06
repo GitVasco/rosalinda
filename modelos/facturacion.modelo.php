@@ -1297,8 +1297,8 @@ class ModeloFacturacion{
             ON v.cliente = c.codigo 
           LEFT JOIN usuariosjf u 
             ON v.usuario = u.id 
-        WHERE v.tipo IN ('E05', 'E23') 
-          AND YEAR(v.fecha) = 2021";
+        WHERE v.tipo IN ('E05', 'S99') 
+          AND YEAR(v.fecha) = 2022";
     
           $stmt=Conexion::conectar()->prepare($sql);
           
@@ -1325,7 +1325,7 @@ class ModeloFacturacion{
             ON v.cliente = c.codigo 
           LEFT JOIN usuariosjf u 
             ON v.usuario = u.id 
-        WHERE v.tipo IN ('E05', 'E23') 
+        WHERE v.tipo IN ('E05', 'S99') 
           AND DATE(v.fecha)  like '%$fechaFinal%' ";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1363,7 +1363,7 @@ class ModeloFacturacion{
               ON v.cliente = c.codigo 
             LEFT JOIN usuariosjf u 
               ON v.usuario = u.id 
-          WHERE v.tipo IN ('E05', 'E23') 
+          WHERE v.tipo IN ('E05', 'S99') 
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
           $stmt=Conexion::conectar()->prepare($sql);
@@ -1393,7 +1393,7 @@ class ModeloFacturacion{
               ON v.cliente = c.codigo 
             LEFT JOIN usuariosjf u 
               ON v.usuario = u.id 
-          WHERE v.tipo IN ('E05', 'E23') 
+          WHERE v.tipo IN ('E05', 'S99') 
             AND DATE(v.fecha) BETWEEN '$fechaInicial' AND '$fechaFinal'";
     
             $stmt=Conexion::conectar()->prepare($sql);
@@ -2133,7 +2133,7 @@ class ModeloFacturacion{
             ON v.tipo = n.tipo 
             AND v.documento = n.documento 
         WHERE v.tipo = :tipo 
-          AND YEAR(v.fecha) = 2021
+          AND YEAR(v.fecha) = 2022
           AND LEFT(v.documento, 1) NOT IN ('E','0') 
           ORDER BY v.fecha DESC,
   LEFT(v.documento, 4) DESC,
