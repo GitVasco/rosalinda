@@ -849,8 +849,9 @@ class ControladorFacturacion{
 
                 foreach($respuesta as $value){
 
+                    $cantidad = $value["cantidad"]*-1;
 
-                    $respuestaNota = ModeloArticulos::mdlActualizarStockIngreso($value["articulo"],$value["cantidad"]);//sube
+                    $respuestaNota = ModeloArticulos::mdlActualizarStockIngreso($value["articulo"],$cantidad);//sube
                     // $respuestaGuia = ModeloArticulos::mdlActualizarPedido($datos);
                     //var_dump($respuestaNota);
 

@@ -371,7 +371,7 @@ ventajf v
 LEFT JOIN clientesjf c 
   ON v.cliente = c.codigo 
 WHERE MONTH(v.fecha) = $mes
-AND YEAR(v.fecha) = YEAR(NOW())-1
+AND YEAR(v.fecha) = YEAR(NOW())
 AND v.tipo NOT IN ('S70') 
 AND (
   LEFT(v.documento, 2) = 'B0' 
@@ -416,7 +416,7 @@ $sqlDetalleTotal = mysql_query("SELECT
             LEFT JOIN clientesjf c 
               ON v.cliente = c.codigo 
             WHERE MONTH(v.fecha) = $mes 
-            AND YEAR(v.fecha) = YEAR(NOW()) -1
+            AND YEAR(v.fecha) = YEAR(NOW())
             AND v.tipo NOT IN ('S70') 
             AND (
               LEFT(v.documento, 2)= 'B0'
