@@ -375,7 +375,16 @@ $(".tablaNotaCredito").on("click", ".btnImprimirNC", function () {
   var tipo = $(this).attr("tipo");
   var documento = $(this).attr("documento");
 
-  window.open("extensiones/tcpdf/pdf/reporte_credito.php?tipo="+tipo+"&documento="+documento,"_blank");
+  if(tipo == "E05"){
+
+    window.open("extensiones/tcpdf/pdf/reporte_credito.php?tipo="+tipo+"&documento="+documento,"_blank");
+
+    }else{
+
+        window.open("extensiones/tcpdf/pdf/reporte_debito.php?tipo="+tipo+"&documento="+documento,"_blank");
+
+    }
+
 })
 
 /*=============================================
@@ -915,9 +924,23 @@ $(".tablaNotaCredito").on("click", ".btnEditarNotaCD", function () {
 })
 
 $(".btnImprimirNotaCredito").click(function(){
+
+
     var tipo = $(this).attr("tipo");
     var documento = $(this).attr("documento");
-    window.open("extensiones/tcpdf/pdf/reporte_credito.php?tipo="+tipo+"&documento="+documento,"_blank");
+
+    if(tipo == "E05"){
+
+        window.open("extensiones/tcpdf/pdf/reporte_credito.php?tipo="+tipo+"&documento="+documento,"_blank");
+
+    }else{
+
+        window.open("extensiones/tcpdf/pdf/reporte_debito.php?tipo="+tipo+"&documento="+documento,"_blank");
+
+    }
+
+    
+
 })
 
 $(".btnTerminarNotaCredito").click(function(){

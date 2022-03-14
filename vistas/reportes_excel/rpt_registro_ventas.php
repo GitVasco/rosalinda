@@ -338,48 +338,59 @@ $objPHPExcel->getActiveSheet()->SetCellValue("M$fila", 'TOTAL');
 $objPHPExcel->getActiveSheet()->setSharedStyle($borde3, "M$fila");
 
 $sqlDetalle = mysql_query("SELECT 
-DATE_FORMAT(v.fecha, '%d-%m-%Y') AS fecha,
-CASE
-  WHEN v.tipo = 's03' 
-  THEN '1' 
-  WHEN v.tipo = 's02' 
-  THEN '3' 
-  ELSE '7' 
-END AS tipo_doc,
-CONCAT(
-  LEFT(v.documento, 4),
-  '-',
-  RIGHT(v.documento, 8)
-) AS doc,
-CASE
-  WHEN v.estado = 'ANULADO' 
-  THEN '00000000000' 
-  ELSE c.documento 
-END AS documento,
-CASE
-  WHEN v.estado = 'ANULADO' 
-  THEN 'ANULADO' 
-  ELSE c.nombre 
-END AS nombre,
-v.neto,
-v.dscto,
-v.neto - v.dscto AS subtotal,
-ROUND((v.neto - v.dscto) * 0.18, 2) AS igv,
-v.total 
-FROM
-ventajf v 
-LEFT JOIN clientesjf c 
-  ON v.cliente = c.codigo 
-WHERE MONTH(v.fecha) = $mes
-AND YEAR(v.fecha) = YEAR(NOW())
-AND v.tipo NOT IN ('S70') 
-AND (
-  LEFT(v.documento, 2) = 'B0' 
-  OR LEFT(v.documento, 2) = 'F0'
-) 
-ORDER BY v.tipo ASC,
-v.fecha,
-v.documento") or die(mysql_error());
+          DATE_FORMAT(v.fecha, '%d-%m-%Y') AS fecha,
+          CASE
+            WHEN v.tipo = 's03' 
+            THEN '1' 
+            WHEN v.tipo = 's02' 
+            THEN '3' 
+            WHEN v.tipo = 'e05' 
+            THEN '7' 
+            ELSE '8' 
+          END AS tipo_doc,
+          CONCAT(
+            LEFT(v.documento, 4),
+            '-',
+            RIGHT(v.documento, 8)
+          ) AS doc,
+          CASE
+            WHEN v.estado = 'ANULADO' 
+            THEN '00000000000' 
+            ELSE c.documento 
+          END AS documento,
+          CASE
+            WHEN v.estado = 'ANULADO' 
+            THEN 'ANULADO' 
+            ELSE c.nombre 
+          END AS nombre,
+          v.neto,
+          v.dscto,
+          v.neto - v.dscto AS subtotal,
+          ROUND((v.neto - v.dscto) * 0.18, 2) AS igv,
+          v.total 
+          FROM
+          ventajf v 
+          LEFT JOIN clientesjf c 
+            ON v.cliente = c.codigo 
+          WHERE MONTH(v.fecha) = $mes 
+          AND YEAR(v.fecha) = YEAR(NOW()) 
+          AND v.tipo NOT IN ('S70') 
+          AND (
+            LEFT(v.documento, 2) = 'B0' 
+            OR LEFT(v.documento, 2) = 'F0'
+          ) 
+          ORDER BY 
+          CASE
+            WHEN v.tipo = 's03' 
+            THEN '1' 
+            WHEN v.tipo = 's02' 
+            THEN '3' 
+            WHEN v.tipo = 'e05' 
+            THEN '7' 
+            ELSE '8' 
+          END ASC,
+          v.fecha,
+          v.documento") or die(mysql_error());
 
 while($respDetalle = mysql_fetch_array($sqlDetalle)){
 
