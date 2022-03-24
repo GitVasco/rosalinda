@@ -207,6 +207,7 @@ class ControladorPedidos{
             */
             $datos = array( "cliente" => $_POST["codClienteM"],
                             "codigo" => $_POST["codigoM"],
+                            "vendedor" => $_POST["vendedorM"],
                             "op_gravada" => $_POST["opGravadaM"],
                             "descuento_total" => $_POST["descuentoM"],
                             "sub_total" => $_POST["subTotalM"],
@@ -411,5 +412,16 @@ class ControladorPedidos{
         }
 
     }    
+
+    /*
+    * Pedidos pendentes reporte
+    */
+	static public function ctrPedidosPendientes($vendedor){
+
+		$respuesta = ModeloPedidos::mdlPedidosPendientes($vendedor);
+
+		return $respuesta;
+
+    }
 
 }

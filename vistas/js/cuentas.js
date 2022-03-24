@@ -2065,3 +2065,68 @@ if (impresion == "pantalla") {
 
   
 })
+
+
+$(".btnRptResVtas").click(function(){
+
+  window.open("vistas/reportes_excel/rpt_resumen_vtas.php","_blank");
+
+})
+
+$(".btnRptResVtaMes").click(function(){
+
+  var mes = $(this).attr("mes");
+  console.log(mes);
+
+  window.open("vistas/reportes_ticket/reporte_resumen_vtas.php?mes="+ mes,"_blank");
+
+})
+
+
+/* 
+* BOTON  IMPRIMIR TICKET
+*/
+$(".tablaVtasGerenciaVdor").on("click", ".btnRptPeds", function () {
+
+  var vendedor = $(this).attr("vendedor");
+  //console.log(vendedor);
+
+
+window.open("vistas/reportes_ticket/pedidos_vendedor.php?vendedor=" +vendedor,"_blank");
+
+})
+
+$(".btnRptPeds").click(function(){
+
+  var vendedor = $(this).attr("vendedor");
+  //console.log(vendedor);
+
+  window.open("vistas/reportes_ticket/pedidos_vendedor.php?vendedor=" +vendedor,"_blank");
+
+})
+
+/* 
+* BOTON  IMPRIMIR TICKET
+*/
+$(".tablaCtasVdor").on("click", ".btnEstadoCtaVdor", function () {
+
+  var vendedor = $(this).attr("vendedor");
+  //console.log(codigo);
+
+
+window.open("extensiones/tcpdf/pdf/reporte_estado_cuenta_vdor.php?vendedor=" +vendedor,"_blank");
+
+})
+
+/* 
+* BOTON  IMPRIMIR TICKET
+*/
+$(".tablaCtasVdor").on("click", ".btnEstadoCtaVdorVdos", function () {
+
+  var vendedor = $(this).attr("vendedor");
+  //console.log(codigo);
+
+
+window.open("extensiones/tcpdf/pdf/reporte_estado_cuenta_vdor_vdos.php?vendedor=" +vendedor,"_blank");
+
+})

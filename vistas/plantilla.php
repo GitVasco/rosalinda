@@ -214,6 +214,7 @@ CUERPO DOCUMENTO
         }else if( $_GET["ruta"] == "backupDB" ||
                   $_GET["ruta"] == "bkplista" ||
                   $_GET["ruta"] == "movimientos" ||
+                  $_GET["ruta"] == "datos-dia" ||
                   $_GET["ruta"] == "conexionjf"){
 
               include "modulos/backend/".$_GET["ruta"].".php";
@@ -286,7 +287,9 @@ CUERPO DOCUMENTO
                   $_GET["ruta"] == "crear-salidas-varios"||
                   $_GET["ruta"] == "precio-servicio"||
                   $_GET["ruta"] == "listar-documento"||
-                  $_GET["ruta"] == "pago-servicio"){
+                  $_GET["ruta"] == "pago-servicio" ||
+                  $_GET["ruta"] == "seguimiento" ||
+                  $_GET["ruta"] == "enviados-taller"){
 
               include "modulos/produccion/".$_GET["ruta"].".php";
 

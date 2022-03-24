@@ -2332,4 +2332,1008 @@ class ModeloMovimientos{
 		$stmt=null;
    }      
 
+	/*
+	* MOSTRAR TOTALES DEL MES
+	*/
+	static public function mdlTotalesSoles($mes){
+
+      if( $mes == null || $mes == "TODO" ){
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+         t.año,
+         SUM(total_ventas_soles) AS vtas_soles,
+         SUM(total_pagos_soles) AS pagos_soles 
+       FROM
+         totalesjf t 
+       WHERE t.año = YEAR(NOW()) 
+       GROUP BY t.año");
+
+         $stmt -> execute();
+
+         return $stmt -> fetch();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+      }else{
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+                        t.año,
+                        t.mes,
+                        SUM(total_ventas_soles) AS vtas_soles,
+                        SUM(total_pagos_soles) AS pagos_soles 
+                     FROM
+                        totalesjf t 
+                     WHERE t.año = YEAR(NOW()) 
+                        AND t.mes = $mes
+                     GROUP BY t.año,
+                        t.mes ;");
+
+         $stmt -> execute();
+
+         return $stmt -> fetch();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+      }
+
+	}	   
+
+	static public function mdlTotalesSolesPedidos($mes){
+
+      if( $mes == null || $mes == "TODO"){
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+         MONTH(t.fecha) AS mes,
+         SUM(op_gravada) AS total 
+      FROM
+         temporaljf t 
+      WHERE YEAR(t.fecha) = YEAR(NOW()) 
+         AND t.estado IN ('APROBADO', 'APT', 'CONFIRMADO')");
+
+         $stmt -> execute();
+
+         return $stmt -> fetch();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+      }else{
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+                                                MONTH(t.fecha) AS mes,
+                                                SUM(op_gravada) AS total 
+                                             FROM
+                                                temporaljf t 
+                                             WHERE YEAR(t.fecha) = YEAR(NOW()) 
+                                                AND t.estado IN ('APROBADO', 'APT', 'CONFIRMADO')");
+
+         $stmt -> execute();
+
+         return $stmt -> fetch();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+      }
+
+	}   
+   
+	static public function mdlTotalVencidos(){
+
+      $stmt = Conexion::conectar()->prepare("SELECT 
+                                          c.tip_mov,
+                                          SUM(c.saldo) AS saldo
+                                       FROM
+                                          cuenta_ctejf c 
+                                       WHERE c.tip_mov = '+' 
+                                          AND c.estado = 'PENDIENTE' 
+                                          AND c.fecha_ven < DATE(NOW())
+                                          GROUP BY c.tip_mov");
+
+      $stmt -> execute();
+
+      return $stmt -> fetch();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+
+	}    
+
+  static public function mdlFacturas($mes){
+
+   if( $mes == null){
+
+      $stmt = Conexion::conectar()->prepare("SELECT 
+                                 IFNULL(SUM(neto), 0) AS neto 
+                              FROM
+                                 ventajf v 
+                              WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                                 AND v.tipo IN ('S02', 'S03', 'E05', 'S05') 
+                                 AND v.vendedor <> '99' 
+                              GROUP BY YEAR(NOW())");
+
+      $stmt -> execute();
+
+      return $stmt -> fetch();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+   }else{
+
+      $stmt = Conexion::conectar()->prepare("SELECT 
+                              IFNULL(SUM(neto), 0) AS neto 
+                           FROM
+                              ventajf v 
+                           WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                              AND MONTH(v.fecha) = $mes 
+                              AND v.tipo IN ('S02', 'S03', 'E05', 'S05')
+                              AND v.vendedor <> '99' 
+                           GROUP BY MONTH(v.fecha)");
+
+      $stmt -> execute();
+
+      return $stmt -> fetch();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+   }
+
+ }      
+
+ static public function mdlProformas($mes){
+
+   if( $mes == null){
+
+      $stmt = Conexion::conectar()->prepare("SELECT 
+                                 IFNULL(SUM(neto), 0) AS neto 
+                              FROM
+                                 ventajf v 
+                              WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                                 AND v.tipo IN ('S70') 
+                                 AND v.vendedor <> '99' 
+                              GROUP BY YEAR(NOW())");
+
+      $stmt -> execute();
+
+      return $stmt -> fetch();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+   }else{
+
+      $stmt = Conexion::conectar()->prepare("SELECT 
+                              IFNULL(SUM(neto), 0) AS neto 
+                           FROM
+                              ventajf v 
+                           WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                              AND MONTH(v.fecha) = $mes 
+                              AND v.tipo IN ('S70')
+                              AND v.vendedor <> '99' 
+                           GROUP BY MONTH(v.fecha)");
+
+      $stmt -> execute();
+
+      return $stmt -> fetch();
+
+      $stmt -> close();
+
+      $stmt = null;
+
+   }
+
+    }   
+
+
+   /* 
+   * sacamos los totales vencidos por vendedor
+   */
+  static public function mdlTotalesVencidosVendedor($inicio, $lineas){
+
+   $stmt = Conexion::conectar()->prepare("SELECT 
+                                       c.vendedor,
+                                       (SELECT 
+                                       descripcion 
+                                       FROM
+                                       maestrajf m 
+                                       WHERE m.tipo_dato = 'tvend' 
+                                       AND m.codigo = c.vendedor) AS nom_vendedor,
+                                       SUM(c.saldo) AS saldo 
+                                    FROM
+                                       cuenta_ctejf c 
+                                    WHERE c.tip_mov = '+' 
+                                       AND c.estado = 'PENDIENTE' 
+                                       AND c.fecha_ven < DATE(NOW()) 
+                                    GROUP BY c.vendedor 
+                                    ORDER BY c.vendedor
+                                    LIMIT $inicio, $lineas");
+
+   $stmt -> execute();
+
+   return $stmt -> fetchall();
+
+    }
+
+	static public function mldMostrarCtasVdor(){
+
+        $stmt = Conexion::conectar()->prepare("SELECT 
+                                            c.vendedor,
+                                            (SELECT 
+                                            descripcion 
+                                            FROM
+                                            maestrajf m 
+                                            WHERE c.vendedor = m.codigo 
+                                            AND tipo_dato = 'tvend') AS nom_vendedor,
+                                            SUM(
+                                            CASE
+                                                WHEN c.tipo_doc IN ('01', '03', '07', '08') 
+                                                THEN c.saldo 
+                                                ELSE 0 
+                                            END
+                                            ) AS 'facturas',
+                                            SUM(
+                                            CASE
+                                                WHEN c.tipo_doc IN ('09') 
+                                                THEN c.saldo 
+                                                ELSE 0 
+                                            END
+                                            ) AS 'guias',
+                                            SUM(
+                                            CASE
+                                                WHEN c.tipo_doc IN ('85') 
+                                                THEN c.saldo 
+                                                ELSE 0 
+                                            END
+                                            ) AS 'letras',
+                                            SUM(c.saldo) AS total 
+                                        FROM
+                                            cuenta_ctejf c 
+                                        WHERE c.tip_mov = '+' 
+                                            AND c.estado = 'PENDIENTE' 
+                                        GROUP BY c.vendedor 
+                                        UNION
+                                        SELECT 
+                                            'ZZ' AS tip_mov,
+                                            '' AS nom_vendedor,
+                                            SUM(
+                                            CASE
+                                                WHEN c.tipo_doc IN ('01', '03', '07', '08') 
+                                                THEN c.saldo 
+                                                ELSE 0 
+                                            END
+                                            ) AS 'facturas',
+                                            SUM(
+                                            CASE
+                                                WHEN c.tipo_doc IN ('09') 
+                                                THEN c.saldo 
+                                                ELSE 0 
+                                            END
+                                            ) AS 'guias',
+                                            SUM(
+                                            CASE
+                                                WHEN c.tipo_doc IN ('85') 
+                                                THEN c.saldo 
+                                                ELSE 0 
+                                            END
+                                            ) AS 'letras',
+                                            SUM(c.saldo) AS total 
+                                        FROM
+                                            cuenta_ctejf c 
+                                        WHERE c.tip_mov = '+' 
+                                            AND c.estado = 'PENDIENTE' 
+                                        GROUP BY c.tip_mov");
+
+        $stmt -> execute();
+
+        return $stmt -> fetchAll();
+
+        $stmt -> close();
+
+        $stmt = null;
+
+	} 
+    
+	static public function mldMostrarRangosDias(){
+
+        $stmt = Conexion::conectar()->prepare("SELECT 
+                             c.vendedor,
+                             (SELECT 
+                             descripcion 
+                             FROM
+                             maestrajf m 
+                             WHERE m.tipo_dato = 'TVEND' 
+                             AND m.codigo = c.vendedor) AS nombre,
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) >= 1 
+                                AND TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) <= 30 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '1a30',
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) > 30 
+                                AND TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) <= 60 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '31a60',
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) > 60 
+                                AND TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) <= 90 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '61a90',
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) > 90 
+                                AND TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) <= 120 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '91a120',
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) > 120 
+                                AND TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) <= 150 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '121a150',
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) > 150 
+                                AND TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) <= 180 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '151a180',
+                             SUM(
+                             CASE
+                                WHEN TIMESTAMPDIFF(DAY, c.fecha_ven, DATE(NOW())) > 180 
+                                THEN c.saldo 
+                                ELSE 0 
+                             END
+                             ) AS '180amas' ,
+                             SUM(c.saldo) AS total
+                          FROM
+                             cuenta_ctejf c 
+                          WHERE c.tip_mov = '+' 
+                             AND c.estado = 'PENDIENTE' 
+                             AND c.fecha_ven < DATE(NOW()) 
+                          GROUP BY c.vendedor");
+  
+        $stmt -> execute();
+  
+        return $stmt -> fetchAll();
+  
+        $stmt -> close();
+  
+        $stmt = null;
+  
+     }  
+     
+     static public function mdlMostrarRangos($mes){
+
+        if( $mes == "null" || $mes == "TODO"){
+  
+           $stmt = Conexion::conectar()->prepare("SELECT 
+                                      m.codigo,
+                                      m.descripcion,
+                                      IFNULL(v.ventas, 0) AS ventas,
+                                      IFNULL(c.cobranza, 0) AS cobranza,
+                                      IFNULL(ve.saldo, 0) AS saldo,
+                                      IFNULL(p.a2015, 0) AS 'p15',
+                                      IFNULL(p.a2016, 0) AS 'p16',
+                                      IFNULL(p.a2017, 0) AS 'p17',
+                                      IFNULL(p.a2018, 0) AS 'p18',
+                                      IFNULL(p.a2019, 0) AS 'p19',
+                                      IFNULL(p.a2020, 0) AS 'p20',
+                                      IFNULL(p.a2021, 0) AS 'p21',
+                                      IFNULL(p.a2022, 0) AS 'p22',
+                                      IFNULL(p.total,0) AS 'total' 
+                                   FROM
+                                      maestrajf m 
+                                      LEFT JOIN 
+                                      (SELECT 
+                                         v.vendedor,
+                                         SUM(v.neto) AS ventas 
+                                      FROM
+                                         ventajf v 
+                                      WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                                         AND v.estado <> 'ANULADO' 
+                                         AND v.tipo IN ('S02', 'S03', 'S70', 'E05', 'S05') 
+                                         AND v.vendedor <> '99' 
+                                      GROUP BY v.vendedor, YEAR(v.fecha)) AS v 
+                                      ON m.codigo = v.vendedor 
+                                      LEFT JOIN 
+                                      (SELECT 
+                                         cc.vendedor,
+                                         SUM(cc.monto) AS cobranza 
+                                      FROM
+                                         cuenta_ctejf cc 
+                                      WHERE YEAR(cc.fecha) = YEAR(NOW()) 
+                                         AND cc.tip_mov = '-' 
+                                         AND cc.cod_pago IN ('00', '05', '06', '14', '80', '82', 'TR') 
+                                      GROUP BY cc.vendedor) AS c 
+                                      ON m.codigo = c.vendedor 
+                                      LEFT JOIN 
+                                      (SELECT 
+                                         c.vendedor,
+                                         SUM(c.saldo) AS saldo 
+                                      FROM
+                                         cuenta_ctejf c 
+                                      WHERE c.tip_mov = '+' 
+                                         AND c.estado = 'PENDIENTE' 
+                                         AND c.fecha_ven < DATE(NOW()) 
+                                      GROUP BY c.vendedor) AS ve 
+                                      ON m.codigo = ve.vendedor 
+                                      LEFT JOIN 
+                                      (SELECT 
+                                         c.vendedor,
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2015' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2015',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2016' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2016',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2017' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2017',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2018' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2018',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2019' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2019',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2020' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2020',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2021' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2021',
+                                         SUM(
+                                            CASE
+                                            WHEN YEAR(c.fecha_ven) = '2022' 
+                                            THEN c.saldo 
+                                            ELSE 0 
+                                            END
+                                         ) AS 'a2022',
+                                         SUM(c.saldo) AS total 
+                                      FROM
+                                         cuenta_ctejf c 
+                                      WHERE c.tip_mov = '+' 
+                                         AND c.estado = 'PENDIENTE' 
+                                         AND c.fecha_ven < DATE(NOW()) 
+                                      GROUP BY c.vendedor) AS p 
+                                      ON m.codigo = p.vendedor 
+                                   WHERE m.tipo_dato = 'TVEND' 
+                                      AND (
+                                      IFNULL(v.ventas, 0) + IFNULL(c.cobranza, 0) + IFNULL(ve.saldo, 0)
+                                      ) > 0 
+                                   ORDER BY m.codigo");
+  
+           $stmt -> execute();
+  
+           return $stmt -> fetchAll();
+  
+           $stmt -> close();
+  
+           $stmt = null;
+  
+        }else{
+  
+           $stmt = Conexion::conectar()->prepare("SELECT 
+                                            m.codigo,
+                                            m.descripcion,
+                                            IFNULL(v.ventas, 0) AS ventas,
+                                            IFNULL(c.cobranza, 0) AS cobranza,
+                                            IFNULL(ve.saldo, 0) AS saldo,
+                                            IFNULL(p.a2015, 0) AS 'p15',
+                                            IFNULL(p.a2016, 0) AS 'p16',
+                                            IFNULL(p.a2017, 0) AS 'p17',
+                                            IFNULL(p.a2018, 0) AS 'p18',
+                                            IFNULL(p.a2019, 0) AS 'p19',
+                                            IFNULL(p.a2020, 0) AS 'p20',
+                                            IFNULL(p.a2021, 0) AS 'p21',
+                                            IFNULL(p.a2022, 0) AS 'p22',
+                                            IFNULL(p.total,0) AS 'total' 
+                                         FROM
+                                            maestrajf m 
+                                            LEFT JOIN 
+                                            (SELECT 
+                                               v.vendedor,
+                                               SUM(v.neto) AS ventas 
+                                            FROM
+                                               ventajf v 
+                                            WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                                               AND MONTH(v.fecha) = $mes 
+                                               AND v.estado <> 'ANULADO' 
+                                               AND v.tipo IN ('S02', 'S03', 'S70', 'E05', 'S05') 
+                                               AND v.vendedor <> '99' 
+                                            GROUP BY v.vendedor) AS v 
+                                            ON m.codigo = v.vendedor 
+                                            LEFT JOIN 
+                                            (SELECT 
+                                               cc.vendedor,
+                                               SUM(cc.monto) AS cobranza 
+                                            FROM
+                                               cuenta_ctejf cc 
+                                            WHERE YEAR(cc.fecha) = YEAR(NOW()) 
+                                               AND MONTH(cc.fecha) = $mes 
+                                               AND cc.tip_mov = '-' 
+                                               AND cc.cod_pago IN ('00', '05', '06', '14', '80', '82', 'TR') 
+                                            GROUP BY cc.vendedor) AS c 
+                                            ON m.codigo = c.vendedor 
+                                            LEFT JOIN 
+                                            (SELECT 
+                                               c.vendedor,
+                                               SUM(c.saldo) AS saldo 
+                                            FROM
+                                               cuenta_ctejf c 
+                                            WHERE c.tip_mov = '+' 
+                                               AND c.estado = 'PENDIENTE' 
+                                               AND c.fecha_ven < DATE(NOW()) 
+                                            GROUP BY c.vendedor) AS ve 
+                                            ON m.codigo = ve.vendedor 
+                                            LEFT JOIN 
+                                            (SELECT 
+                                               c.vendedor,
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2015' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2015',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2016' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2016',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2017' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2017',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2018' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2018',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2019' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2019',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2020' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2020',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2021' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2021',
+                                               SUM(
+                                                  CASE
+                                                  WHEN YEAR(c.fecha_ven) = '2022' 
+                                                  THEN c.saldo 
+                                                  ELSE 0 
+                                                  END
+                                               ) AS 'a2022',
+                                               SUM(c.saldo) AS total 
+                                            FROM
+                                               cuenta_ctejf c 
+                                            WHERE c.tip_mov = '+' 
+                                               AND c.estado = 'PENDIENTE' 
+                                               AND c.fecha_ven < DATE(NOW()) 
+                                            GROUP BY c.vendedor) AS p 
+                                            ON m.codigo = p.vendedor 
+                                         WHERE m.tipo_dato = 'TVEND' 
+                                            AND (
+                                            IFNULL(v.ventas, 0) + IFNULL(c.cobranza, 0) + IFNULL(ve.saldo, 0)
+                                            ) > 0 
+                                         ORDER BY m.codigo");
+  
+           $stmt -> execute();
+  
+           return $stmt -> fetchAll();
+  
+           $stmt -> close();
+  
+           $stmt = null;
+  
+        }
+  
+      }  
+      
+      static public function mdlMostrarResumenVtas($mes){
+
+        if( $mes == "null" || $mes == "TODO"){
+  
+           $stmt = Conexion::conectar()->prepare("SELECT 
+           v.tipo,
+           v.tipo_documento,
+           SUM(v.neto) AS neto,
+           SUM(v.igv) AS igv,
+           SUM(v.dscto) AS dscto,
+           SUM(v.total) AS total 
+         FROM
+           ventajf v 
+         WHERE YEAR(v.fecha) = YEAR(NOW()) 
+         AND v.tipo IN ('E05', 'S02', 'S03', 'S70','S05') 
+         AND v.vendedor <> '99' 
+         GROUP BY v.tipo,
+           v.tipo_documento 
+         UNION
+         SELECT 
+           YEAR(v.fecha) AS anno,
+           '' AS mes,
+           SUM(v.neto) AS neto,
+           SUM(v.igv) AS igv,
+           SUM(v.dscto) AS dscto,
+           SUM(v.total) AS total 
+         FROM
+           ventajf v 
+         WHERE YEAR(v.fecha) = YEAR(NOW()) 
+         AND v.tipo IN ('E05', 'S02', 'S03', 'S70','S05') 
+         AND v.vendedor <> '99' 
+         GROUP BY YEAR(v.fecha)");
+  
+           $stmt -> execute();
+  
+           return $stmt -> fetchAll();
+  
+           $stmt -> close();
+  
+           $stmt = null;
+  
+        }else{
+  
+           $stmt = Conexion::conectar()->prepare("SELECT 
+           v.tipo,
+           v.tipo_documento,
+           SUM(v.neto) AS neto,
+           SUM(v.igv) AS igv,
+           SUM(v.dscto) AS dscto,
+           SUM(v.total) AS total 
+         FROM
+           ventajf v 
+         WHERE YEAR(v.fecha) = YEAR(NOW()) 
+           AND MONTH(v.fecha) = $mes 
+           AND v.tipo IN ('E05', 'S02', 'S03', 'S70','S05') 
+           AND v.vendedor <> '99' 
+         GROUP BY v.tipo,
+           v.tipo_documento 
+         UNION
+         SELECT 
+           YEAR(v.fecha) AS anno,
+           '' AS mes,
+           SUM(v.neto) AS neto,
+           SUM(v.igv) AS igv,
+           SUM(v.dscto) AS dscto,
+           SUM(v.total) AS total 
+         FROM
+           ventajf v 
+         WHERE YEAR(v.fecha) = YEAR(NOW()) 
+           AND MONTH(v.fecha) = $mes 
+           AND v.tipo IN ('E05', 'S02', 'S03', 'S70','S05') 
+           AND v.vendedor <> '99' 
+         GROUP BY YEAR(v.fecha),
+           MONTH(fecha)");
+  
+           $stmt -> execute();
+  
+           return $stmt -> fetchAll();
+  
+           $stmt -> close();
+  
+           $stmt = null;
+  
+        }
+  
+      }          
+
+      static public function mdlMostrarResumenVdor($mes){
+
+        if( $mes == "null" || $mes == "TODO"){
+  
+           $stmt = Conexion::conectar()->prepare("SELECT 
+                          m.codigo,
+                          m.descripcion,
+                          IFNULL(p.pedidos, 0) AS pedidos,
+                          IFNULL(v.ventas, 0) AS ventas,
+                          (
+                          IFNULL(p.pedidos, 0) + IFNULL(v.ventas, 0)
+                          ) AS total 
+                       FROM
+                          maestrajf m 
+                          LEFT JOIN 
+                          (SELECT 
+                             t.vendedor,
+                             SUM(op_gravada) AS pedidos 
+                          FROM
+                             temporaljf t 
+                          WHERE t.estado IN ('APROBADO', 'APT', 'CONFIRMADO') 
+                             AND YEAR(t.fecha) = YEAR(NOW()) 
+                          GROUP BY t.vendedor) AS p 
+                          ON m.codigo = p.vendedor 
+                          LEFT JOIN 
+                          (SELECT 
+                             v.vendedor,
+                             SUM(v.neto) AS ventas 
+                          FROM
+                             ventajf v 
+                          WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                             AND v.tipo IN ('E05', 'S02', 'S03', 'S70', 'S05') 
+                          GROUP BY v.vendedor) AS v 
+                          ON m.codigo = v.vendedor 
+                       WHERE m.tipo_dato = 'TVEND' 
+                          AND (
+                          IFNULL(p.pedidos, 0) + IFNULL(v.ventas, 0)
+                          ) <> 0 
+                          AND m.codigo <> '99'");
+  
+           $stmt -> execute();
+  
+           return $stmt -> fetchAll();
+  
+           $stmt -> close();
+  
+           $stmt = null;
+  
+        }else{
+  
+           $stmt = Conexion::conectar()->prepare("SELECT 
+                             m.codigo,
+                             m.descripcion,
+                             IFNULL(p.pedidos, 0) AS pedidos,
+                             IFNULL(v.ventas, 0) AS ventas,
+                             (
+                             IFNULL(p.pedidos, 0) + IFNULL(v.ventas, 0)
+                             ) AS total 
+                          FROM
+                             maestrajf m 
+                             LEFT JOIN 
+                             (SELECT 
+                                t.vendedor,
+                                SUM(op_gravada) AS pedidos 
+                             FROM
+                                temporaljf t 
+                             WHERE t.estado IN ('APROBADO', 'APT', 'CONFIRMADO') 
+                                AND YEAR(t.fecha) = YEAR(NOW()) 
+                             GROUP BY t.vendedor) AS p 
+                             ON m.codigo = p.vendedor 
+                             LEFT JOIN 
+                             (SELECT 
+                                v.vendedor,
+                                SUM(v.neto) AS ventas 
+                             FROM
+                                ventajf v 
+                             WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                                AND MONTH(v.fecha) =  $mes 
+                                AND v.tipo IN ('E05', 'S02', 'S03', 'S70','S05') 
+                             GROUP BY v.vendedor) AS v 
+                             ON m.codigo = v.vendedor 
+                          WHERE m.tipo_dato = 'TVEND' 
+                             AND (
+                             IFNULL(p.pedidos, 0) + IFNULL(v.ventas, 0)
+                             ) <> 0 
+                             AND m.codigo <> '99'");
+  
+           $stmt -> execute();
+  
+           return $stmt -> fetchAll();
+  
+           $stmt -> close();
+  
+           $stmt = null;
+  
+        }
+  
+      }       
+
+   /* 
+   * sacamos los totales por mes de la  nueva tabla TOTALES
+   */
+  static public function mldMostrarDias(){
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+                                       t.id,
+                                       t.año,
+                                       t.mes,
+                                       CASE
+                                       WHEN t.mes = '1' 
+                                       THEN 'ENERO' 
+                                       WHEN t.mes = '2' 
+                                       THEN 'FEBRERO' 
+                                       WHEN t.mes = '3' 
+                                       THEN 'MARZO' 
+                                       WHEN t.mes = '4' 
+                                       THEN 'ABRIL' 
+                                       WHEN t.mes = '5' 
+                                       THEN 'MAYO' 
+                                       WHEN t.mes = '6' 
+                                       THEN 'JUNIO' 
+                                       WHEN t.mes = '7' 
+                                       THEN 'JULIO' 
+                                       WHEN t.mes = '8' 
+                                       THEN 'AGOSTO' 
+                                       WHEN t.mes = '9' 
+                                       THEN 'SEPTIEMBRE' 
+                                       WHEN t.mes = '10' 
+                                       THEN 'OCTUBRE' 
+                                       WHEN t.mes = '11' 
+                                       THEN 'NOVIEMBRE' 
+                                       ELSE 'DICIEMBRE' 
+                                       END AS nom_mes,
+                                       t.dia,
+                                       t.total_ventas,
+                                       t.total_produccion,
+                                       t.total_ventas_soles,
+                                       t.total_pagos_soles,
+                                       t.cambio_compra,
+                                       t.cambio_venta,
+                                       DATE(t.fecha) AS fecha 
+                                    FROM
+                                       totalesjf t 
+                                    WHERE DATE(t.fecha) <= DATE(NOW()) 
+                                    AND YEAR(t.fecha) = YEAR(NOW())");
+
+         $stmt -> execute();
+
+         return $stmt -> fetchAll();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+   }        
+
+   /* 
+	* Método para actualizar los totales por dia
+	*/
+	static public function mdlActualizarTipoCambio($compra, $venta, $fecha){
+	
+		$sql="UPDATE 
+                    totalesjf 
+                SET
+                    cambio_compra = :compra,
+                    cambio_venta = :venta 
+                WHERE DATE(fecha) = :fecha";
+
+		$stmt=Conexion::conectar()->prepare($sql);
+
+        $stmt->bindParam(":compra", $compra, PDO::PARAM_STR);
+        $stmt->bindParam(":venta", $venta, PDO::PARAM_STR);
+        $stmt->bindParam(":fecha", $fecha, PDO::PARAM_STR);
+
+		if($stmt->execute()){
+
+			return "ok";
+		
+		}else{
+		
+			return $stmt->errorInfo();
+		
+		}
+		
+		$stmt=null;
+
+	}  
+
+	static public function mdlMostrarResumenVtasB($mes){
+
+      if( $mes == "null" || $mes == "TODO"){
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+                        v.tipo,
+                        v.tipo_documento,
+                        SUM(v.neto) AS neto,
+                        SUM(v.igv) AS igv,
+                        SUM(v.dscto) AS dscto,
+                        SUM(v.total) AS total 
+                     FROM
+                        ventajf v 
+                     WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                        AND v.tipo IN ('E05', 'S02', 'S03', 'S05') 
+                     GROUP BY v.tipo,
+                        v.tipo_documento 
+                     ORDER BY v.tipo_documento ");
+
+         $stmt -> execute();
+
+         return $stmt -> fetchAll();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+      }else{
+
+         $stmt = Conexion::conectar()->prepare("SELECT 
+                        v.tipo,
+                        v.tipo_documento,
+                        SUM(v.neto) AS neto,
+                        SUM(v.igv) AS igv,
+                        SUM(v.dscto) AS dscto,
+                        SUM(v.total) AS total 
+                     FROM
+                        ventajf v 
+                     WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                        AND MONTH(v.fecha) = $mes 
+                        AND v.tipo IN ('E05', 'S02', 'S03', 'S05') 
+                     GROUP BY v.tipo,
+                        v.tipo_documento");
+
+         $stmt -> execute();
+
+         return $stmt -> fetchAll();
+
+         $stmt -> close();
+
+         $stmt = null;
+
+      }
+
+	}     
+
 }

@@ -1755,5 +1755,163 @@ class ModeloArticulos
 
 	}	
 
+
+	/* 
+	* MOSTRAR ARTICULOS PARA LA TABLA SEGUIMIENTO
+	*/
+	static public function mdlMostrarSeguimiento($valor){
+
+		if ($valor == "null") {
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+			a.articulo,
+			a.marca,
+			a.modelo,
+			a.nombre,
+			a.cod_color,
+			a.color,
+			a.talla,
+			a.proyeccion,
+			ROUND(IFNULL(a.prod, 0), 0) AS prod,
+			IFNULL(
+			  ROUND(
+				((ROUND(a.prod, 0) / a.proyeccion) * 100),
+				2
+			  ),
+			  0
+			) AS avance,
+			a.stock,
+			a.pedidos,
+			(a.stock - a.pedidos) AS stockB,
+			a.ord_corte,
+			a.alm_corte,
+			a.taller,
+			a.servicio,
+			IFNULL(ROUND(a.ult_mes, 0), 0) AS ventas,
+			a.urgencia,
+			ROUND(
+			  (
+				(
+				  IFNULL((a.stock - a.pedidos) / a.ult_mes, 0)
+				) * 100
+			  ),
+			  2
+			) AS xprog,
+			ROUND(
+			  (
+				IFNULL(a.ult_mes, 0) * a.urgencia / 100
+			  ),
+			  0
+			) AS configuracion,
+			a.mes,
+			ROUND(
+			  ((a.ult_mes + pedidos) * mes) - (
+				a.ord_corte + a.alm_corte + a.taller + a.servicio + (a.stock - a.pedidos)
+			  ),
+			  0
+			) AS faltantes,
+			ROUND(
+			  (
+				(a.stock - a.pedidos) + a.taller + servicio + a.alm_corte + a.ord_corte
+			  ) / (
+				(a.ult_mes + a.pedidos) - ((a.ult_mes + a.pedidos) * 10 / 100)
+			  ),
+			  1
+			) AS dura_tc,
+			a.mp_faltante,
+			a.ult_mes,
+			a.estado,
+			a.alerta  
+		  FROM
+			articulojf a 
+		  WHERE a.estado = 'ACTIVO' 
+		  AND a.marca IN ('ROSALINDA') 
+		  ORDER BY a.articulo ASC");
+
+			$stmt->bindParam(":modelo", $modelo, PDO::PARAM_STR);
+
+			$stmt->execute();
+
+			return $stmt->fetchAll();
+		
+		}else{
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+			a.articulo,
+			a.marca,
+			a.modelo,
+			a.nombre,
+			a.cod_color,
+			a.color,
+			a.talla,
+			a.proyeccion,
+			ROUND(IFNULL(a.prod, 0), 0) AS prod,
+			IFNULL(
+			  ROUND(
+				((ROUND(a.prod, 0) / a.proyeccion) * 100),
+				2
+			  ),
+			  0
+			) AS avance,
+			a.stock,
+			a.pedidos,
+			(a.stock - a.pedidos) AS stockB,
+			a.ord_corte,
+			a.alm_corte,
+			a.taller,
+			a.servicio,
+			IFNULL(ROUND(a.ult_mes, 0), 0) AS ventas,
+			a.urgencia,
+			ROUND(
+			  (
+				(
+				  IFNULL((a.stock - a.pedidos) / a.ult_mes, 0)
+				) * 100
+			  ),
+			  2
+			) AS xprog,
+			ROUND(
+			  (
+				IFNULL(a.ult_mes, 0) * a.urgencia / 100
+			  ),
+			  0
+			) AS configuracion,
+			a.mes,
+			ROUND(
+			  ((a.ult_mes + pedidos) * mes) - (
+				a.ord_corte + a.alm_corte + a.taller + a.servicio + (a.stock - a.pedidos)
+			  ),
+			  0
+			) AS faltantes,
+			ROUND(
+			  (
+				(a.stock - a.pedidos) + a.taller + servicio + a.alm_corte + a.ord_corte
+			  ) / (
+				(a.ult_mes + a.pedidos) - ((a.ult_mes + a.pedidos) * 10 / 100)
+			  ),
+			  1
+			) AS dura_tc,
+			a.mp_faltante,
+			a.ult_mes,
+			a.estado,
+			a.alerta  
+		  FROM
+			articulojf a 
+		  WHERE a.estado = 'ACTIVO' 
+			AND a.marca IN ('ROSALINDA') 
+			AND a.modelo = :valor
+		  ORDER BY a.articulo ASC");
+
+			$stmt->bindParam(":valor", $valor, PDO::PARAM_STR);
+
+			$stmt->execute();
+
+			return $stmt->fetchAll();
+		}
+
+		$stmt->close();
+		$stmt = null;
+	}
+
 }
 

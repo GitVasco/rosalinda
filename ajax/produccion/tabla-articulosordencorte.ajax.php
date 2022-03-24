@@ -24,6 +24,7 @@ class TablaArticulosOrdenCorte{
             $bgplomo = "gray";
             $bglanvanda = "lavender";
             $bgrosado = "pink";
+            $gbverde = "lightgreen";
 
             $blanco = "#FFFFFF";
             $negro = "#000000";
@@ -199,12 +200,6 @@ class TablaArticulosOrdenCorte{
         */
         $ventasG = $articulos[$i]["ventas"] + $articulos[$i]["pedidos"];
         
-        
-        /* 
-        todo: BOTONES
-        */                
-        $botones =  "<div class='btn-group'><button class='btn btn-primary btn-xs agregarArt recuperarBoton' articuloOC='".$articulos[$i]["articulo"]."' ventasG='".$ventasG."' proyeccion='".$articulos[$i]["proyeccion"]."' sumprog='".$sumprog."'><i class='fa fa-plus-circle'></i></button></div>";
-        
         /* 
         todo: PEDIDOS
         */
@@ -283,12 +278,54 @@ class TablaArticulosOrdenCorte{
 
         }
 
+        /* 
+        todo: DURA TC
+        */
+        if( $articulos[$i]["dura_tc"] < 1.5 ){
+
+            $dura_tc = "<center><b><span style='color:".$rojo."; background-color:".$bgrosado." ;'>".$articulos[$i]["dura_tc"]."</span></b></center>";
+
+        }else{
+
+            $dura_tc = "<center><b><span style='color:".$azulino."; background-color:".$bgblanco." ;'>".$articulos[$i]["dura_tc"]."</span></b></center>";
+
+        }    
+        
+        /* 
+        todo: FALTANTE
+        */
+        if( $articulos[$i]["faltantes"] <= 0 ){
+
+            $faltantes = "<center><b><span style='color:".$rojo."; background-color:".$bgrosado." ;'>".$articulos[$i]["faltantes"]."</span></b></center>";
+
+            $cantFaltante= $articulos[$i]["faltantes"];
+
+        }else{
+
+            $faltantes = "<center><b><span style='color:".$azulino."; background-color:".$gbverde." ;'>".$articulos[$i]["faltantes"]."</span></b></center>";
+
+            $cantFaltante= $articulos[$i]["faltantes"];
+
+        }
+        
+        $arriba = ($articulos[$i]["ord_corte"] + $articulos[$i]["alm_corte"] + $articulos[$i]["taller"] + ($articulos[$i]["stock"] - $articulos[$i]["pedidos"] ));
+
+        $abajo = ($articulos[$i]["ventas"] + $articulos[$i]["pedidos"]);
+        
+
+        /* 
+        todo: BOTONES
+        */                
+        //$botones =  "<div class='btn-group'><button class='btn btn-primary btn-xs agregarArt recuperarBoton' articuloOC='".$articulos[$i]["articulo"]."' ventasG='".$ventasG."' proyeccion='".$articulos[$i]["proyeccion"]."' sumprog='".$sumprog."'><i class='fa fa-plus-circle'></i></button></div>";
+
+        $botones =  "<div class='btn-group'><button class='btn btn-primary btn-xs agregarArt recuperarBoton' articuloOC='".$articulos[$i]["articulo"]."' arriba='".$arriba."' abajo='".$abajo."' faltantes='".$cantFaltante."'  mes='".$articulos[$i]["mes"]."'><i class='fa fa-plus-circle'></i></button></div>";
+                
       
 
 
             $datosJson .= '[
             "'.$botones.'",
-            "'.$articulos[$i]["modelo"].'",
+            "'.$articulos[$i]["modelo"].' - '.$articulos[$i]["nombre"].'",
             "'.$colores.'",
             "'.$articulos[$i]["talla"].'",
             "'.$proyeccion.'",
@@ -300,7 +337,8 @@ class TablaArticulosOrdenCorte{
             "'.$alm_corte.'",
             "'.$ord_corte.'",
             "<center>'.$articulos[$i]["ventas"].'</center>",
-            "'.$xprog.'"            
+            "'.$dura_tc.'",
+            "'.$faltantes.'"
             ],';        
             }
 

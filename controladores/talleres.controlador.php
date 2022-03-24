@@ -2287,4 +2287,13 @@ class ControladorTalleres{
         }
 
     }
+
+    static public function ctrMesB($mes){
+
+        $respuesta = ModeloTalleres::mdlMesB($mes);
+
+        return $respuesta;
+
+    }  
+
 }

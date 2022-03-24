@@ -95,12 +95,10 @@ $('.tablaArticulosOrdenCorte').DataTable( {
 $(".tablaArticulosOrdenCorte tbody").on("click", "button.agregarArt", function () {
 
     var articuloOC = $(this).attr("articuloOC");
-    var arriba = $(this).attr("arriba");
-    var abajo = $(this).attr("abajo");
+    var proyeccion = $(this).attr("proyeccion");
+    var sumprog = $(this).attr("sumprog");
     var ventasG = $(this).attr("ventasG");
-    var faltantes = $(this).attr("faltantes");
-    var mes = $(this).attr("mes");
-    //console.log(mes);
+    //console.log(stockG);
 
     /* console.log("articuloOC", articuloOC); */
 
@@ -122,21 +120,21 @@ $(".tablaArticulosOrdenCorte tbody").on("click", "button.agregarArt", function (
         dataType: "json",
         success: function (respuesta) {
 
-            //console.log("respuesta", respuesta);
+            /* console.log("respuesta", respuesta); */
 
             var articulo = respuesta["articulo"];
             var packing = respuesta["packingB"];
             var ord_corte = respuesta["ord_corte"];
             var stockG = respuesta["stockG"];
             
-            //var mes = (Number(stockG) + 50) / (Number(ventasG * 1.3)) ;
+            var mes = (Number(stockG) + 50) / (Number(ventasG * 1.3)) ;
             //console.log(mes.toFixed(2));
 
 
             /* 
             !PENDIENTE DE PRPYECCION 
             */
-            /* if(Number(Number(proyeccion) - Number(sumprog)  - 50 ) > 0){
+            if(Number(Number(proyeccion) - Number(sumprog)  - 50 ) > 0){
 
                 var pen = '<input style="color:#008000; background-color:white;" type="text" class="form-control nuevoPendienteProy input-sm" name="'+ articulo +'" id="'+ articulo +'"  value="' + Number(Number(proyeccion) - Number(sumprog)  - 50 ) + '" pendienteReal="' + Number(Number(proyeccion) - Number(sumprog)) + '" readonly></input>';
 
@@ -145,19 +143,19 @@ $(".tablaArticulosOrdenCorte tbody").on("click", "button.agregarArt", function (
 
                 var pen = '<input style="color:#FF0000; background-color:pink;" type="text" class="form-control nuevoPendienteProy input-sm" name="'+ articulo +'" id="'+ articulo +'"  value="' + Number(Number(proyeccion) - Number(sumprog)  - 50 ) + '" pendienteReal="' + Number(Number(proyeccion) - Number(sumprog)) + '" readonly></input>';
 
-            } */
+            }
 
             /* 
             ! DURACION DEL MES
             */
 
-            if(faltantes <= 0 ){
+            if(mes.toFixed(2) < 2.1 ){
 
-                faltas = '<input type="number" style="color:#8B0000; background-color:pink;" class="form-control nuevaCantidadArticuloOC input-sm" name="nuevaCantidadArticuloOC" id="nuevaCantidadArticuloOC" min="1" value="' + faltantes + '" ord_corte="' + ord_corte + '" articulo="'+ articulo +'" nuevoOrdCorte="' + (Number(ord_corte)+Number(faltantes)) + '" arriba="' + arriba + '" abajo="' + abajo + '" required>';
+                duracion = '<input style="color:#8B0000; background-color:pink;" type="text" class="form-control nuevoMes input-sm" name="'+ articulo +'" id="'+ articulo + 'M' +'" value="' + mes.toFixed(2) + '" mesReal="' + mes.toFixed(2) +'" stockG="' + stockG + '" ventasG="' + (Number(ventasG)) + '" readonly>';
 
             }else{
 
-                faltas = '<input type="number" class="form-control nuevaCantidadArticuloOC input-sm" name="nuevaCantidadArticuloOC" id="nuevaCantidadArticuloOC" min="1" value="' + faltantes + '" ord_corte="' + ord_corte + '" articulo="'+ articulo +'" nuevoOrdCorte="' + (Number(ord_corte)+Number(faltantes)) + '" arriba="' + arriba + '" abajo="' + abajo + '" required>';
+                duracion = '<input style="color:#8B0000; background-color:white;" type="text" class="form-control nuevoMes input-sm" name="'+ articulo +'" id="'+ articulo + 'M' +'" value="' + mes.toFixed(2) + '" mesReal="' + mes.toFixed(2) +'" stockG="' + stockG + '" ventasG="' + (Number(ventasG)) + '" readonly>';
 
             }
 
@@ -172,7 +170,7 @@ $(".tablaArticulosOrdenCorte tbody").on("click", "button.agregarArt", function (
 
                     "<!-- Descripción del Articulo -->" +
 
-                    '<div class="col-xs-8" style="padding-right:0px">' +
+                    '<div class="col-xs-6" style="padding-right:0px">' +
 
                         '<div class="input-group">' +
                         
@@ -188,7 +186,15 @@ $(".tablaArticulosOrdenCorte tbody").on("click", "button.agregarArt", function (
 
                     '<div class="col-xs-2">' +
 
-                        faltas +
+                        '<input type="number" class="form-control nuevaCantidadArticuloOC input-sm" name="nuevaCantidadArticuloOC" id="nuevaCantidadArticuloOC" min="1" value="50" ord_corte="' + ord_corte + '" articulo="'+ articulo +'" nuevoOrdCorte="' + Number(Number(ord_corte) + 50) + '" required>' +
+
+                    "</div>" +
+
+                    "<!-- Cantidad PENDIENTE DE PROYECCION -->" +
+
+                    '<div class="col-xs-2 pendiente">' +
+
+                         pen +
 
                     "</div>" +
 
@@ -196,7 +202,7 @@ $(".tablaArticulosOrdenCorte tbody").on("click", "button.agregarArt", function (
 
                     '<div class="col-xs-2 mes">' +
 
-                        '<input style="color:#8B0000; background-color:white;" type="text" class="form-control nuevoMes input-sm" name="'+ articulo +'" id="'+ articulo + 'M' +'" value="' + mes + '" mesReal="' + mes +'" stockG="' + stockG + '" ventasG="' + (Number(ventasG)) + '" readonly>' +
+                        duracion +
 
                     "</div>" +
                 
@@ -313,26 +319,65 @@ $(".formularioOrdenCorte").on("click", "button.quitarOC", function () {
 */
 $(".formularioOrdenCorte").on("change", "input.nuevaCantidadArticuloOC", function() {
 
+    var nuevoOrdCorte = Number($(this).attr("ord_corte")) + Number($(this).val());
+    var articulo = $(this).attr("articulo");
+    //console.log(articulo);
+    var articuloM = articulo+'M';
+    //console.log(articuloM);
 
-    var articuloM = $(this).attr("articulo")+'M';
+    var pendiente = $(this)
+    .parent()
+    .parent()
+    .children(".pendiente")
+    .children(".nuevoPendienteProy");
+    //console.log(pendiente);
 
-    var arriba = $(this).attr("arriba");
-    //console.log(arriba);
+    var pendienteReal = pendiente.attr("pendienteReal");
+    //console.log(pendiente);
+    //console.log(pendienteReal);
 
-    var abajo = $(this).attr("abajo");
-    //console.log(abajo);
+    var quedaPen = pendienteReal - Number($(this).val());
+    //console.log(quedaPen);
 
-    var ordCor = $(this).val();
-    //console.log(ordCor);
+    pendiente.val(quedaPen);
 
-    var nuevoMes = (Number(ordCor) + Number(arriba)) / Number(abajo);
-    //console.log(nuevoMes);
+    $(this).attr("nuevoOrdCorte", Number(nuevoOrdCorte));
 
-    //mes.val(nuevoMes.toFixed(2));
 
-    $("#"+articuloM).val(nuevoMes.toFixed(2));
+    if (quedaPen > 0){
 
-    /* if(quedaMes < 2.1){
+        inputPositivoPend(articulo);
+
+    }else{
+
+        inputNegativoPend(articulo);
+
+    }
+
+    var mes = $(this)
+    .parent()
+    .parent()
+    .children(".mes")
+    .children(".nuevoMes");
+    //console.log(mes);
+
+    var mesReal = mes.attr("mesReal");
+    //console.log(mesReal);
+
+    var stockG = mes.attr("stockG");
+    //console.log(Number(stockG) +50);
+    var stock = Number(stockG) + Number($(this).val());
+
+    var ventasG = mes.attr("ventasG");
+    //console.log(ventasG * 1.3);
+    var venta = ventasG * 1.3
+ 
+    var quedaMes = stock / venta;
+    //console.log(quedaMes);
+
+    mes.val(quedaMes.toFixed(2));
+
+    if(quedaMes < 2.1){
 
         inputPositivoMes(articuloM);
         //console.log("Hola mundo");
@@ -342,7 +387,7 @@ $(".formularioOrdenCorte").on("change", "input.nuevaCantidadArticuloOC", functio
         inputNegativoMes(articuloM);
         //console.log("Hola no Mundo");
 
-    } */
+    }
 
 
 
@@ -361,7 +406,7 @@ $(".formularioOrdenCorte").on("change", "input.nuevaCantidadArticuloOC", functio
 
   });
 
-  /* function inputPositivoPend(articulo){
+  function inputPositivoPend(articulo){
 
     var input =   document.getElementById(articulo);
     //console.log(input);
@@ -403,7 +448,7 @@ $(".formularioOrdenCorte").on("change", "input.nuevaCantidadArticuloOC", functio
         input.style.color = "#8B0000";
         input.style.background = "white";
 
-  }  */ 
+  }  
   
 
   
@@ -845,8 +890,8 @@ $("#daterange-btnCorte").daterangepicker(
   $(".daterangepicker.opensleft .ranges li").on("click", function() {
     var textoHoy = $(this).attr("data-range-key");
     var ruta = $("#rutaAcceso").val();
+  
     if(ruta == "ordencorte"){
-
       if (textoHoy == "Hoy") {
         var d = new Date();
     
@@ -871,7 +916,7 @@ $("#daterange-btnCorte").daterangepicker(
   });
 
   // EDITAR OPERACIÓN
-$(".tablaEditarDetalleOrdenCorte ").on("click","button.btnEditarDetalleCorte",function(){
+$(".tablas tbody").on("click","button.btnEditarDetalleCorte",function(){
     var idDetalle =$(this).attr("idDetalle");
 	var datos= new FormData();
 	datos.append("idDetalle",idDetalle);
@@ -897,11 +942,10 @@ $(".tablaEditarDetalleOrdenCorte ").on("click","button.btnEditarDetalleCorte",fu
 
 
 // ELIMINAR OPERACIÓN
-$(".tablaEditarDetalleOrdenCorte ").on("click","button.btnEliminarDetalleCorte",function(){
+$(".tablas tbody").on("click","button.btnEliminarDetalleCorte",function(){
     var idDetalle =$(this).attr("idDetalle");
     var codigo =$(this).attr("codigo");
     var cantidad = $(this).attr("cantidad");
-    var id=$(this).attr("idOrdenDetalle");
 
     var ncant = Number(cantidad) *-1;
     console.log(ncant);
@@ -917,7 +961,7 @@ $(".tablaEditarDetalleOrdenCorte ").on("click","button.btnEliminarDetalleCorte",
 		confirmButtonText: "Si, borrar orden de corte!" 
 	}).then((result)=>{
 		if(result.value){
-            window.location = "index.php?ruta=editar-detalle-ordencorte&codigo="+codigo+"&idDetalle="+idDetalle+"&cantidad="+ncant+"&id="+id;
+            window.location = "index.php?ruta=editar-detalle-ordencorte&codigo="+codigo+"&idDetalle="+idDetalle+"&cantidad="+ncant;
 		}
 	})
 	
@@ -1083,8 +1127,8 @@ $("#daterange-btnGeneralCorte").daterangepicker(
   $(".daterangepicker.opensleft .ranges li").on("click", function() {
     var textoHoy = $(this).attr("data-range-key");
     var ruta = $("#rutaAcceso").val();
+  
     if(ruta == "ordencorte"){
-
       if (textoHoy == "Hoy") {
         var d = new Date();
     
@@ -1243,8 +1287,8 @@ function cargarTablaCantidadCortes(fechaInicial, fechaFinal){
     $(".daterangepicker.opensleft .ranges li").on("click", function() {
       var textoHoy = $(this).attr("data-range-key");
       var ruta = $("#rutaAcceso").val();
+  
       if(ruta == "ordencorte"){
-
         if (textoHoy == "Hoy") {
           var d = new Date();
       
@@ -1267,42 +1311,3 @@ function cargarTablaCantidadCortes(fechaInicial, fechaFinal){
         }
       }
     });
-
-/* 
-* tabla de articulos con urgencia para orden de corte
-*/
-$('.tablaEditarDetalleOrdenCorte').DataTable( {
-  "ajax": "ajax/produccion/tabla-editar-detalleordencorte.ajax.php?perfil=" + $("#perfilOculto").val()+"&codigo=" + $("#codigoOrdenCorte").val(),
-  "deferRender": true,
-  "retrieve": true,
-  "processing": true,
-  "pageLength": 20,
- "language": {
-
-    "sProcessing":     "Procesando...",
-    "sLengthMenu":     "Mostrar _MENU_ registros",
-    "sZeroRecords":    "No se encontraron resultados",
-    "sEmptyTable":     "Ningún dato disponible en esta tabla",
-    "sInfo":           "Mostrando del _START_ al _END_ de un total de _TOTAL_",
-    "sInfoEmpty":      "Mostrando del 0 al 0 de un total de 0",
-    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-    "sInfoPostFix":    "",
-    "sSearch":         "Buscar:",
-    "sUrl":            "",
-    "sInfoThousands":  ",",
-    "sLoadingRecords": "Cargando...",
-    "oPaginate": {
-    "sFirst":    "Primero",
-    "sLast":     "Último",
-    "sNext":     "Siguiente",
-    "sPrevious": "Anterior"
-    },
-    "oAria": {
-      "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-    }
-
-}
-} );
-
-

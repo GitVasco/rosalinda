@@ -1320,4 +1320,22 @@ class ControladorCuentas{
 
 	}
    
+	//* ESTADO DE CUENTA GRAL
+	static public function ctrEstadoCtaVdor($vendedor){
+
+		$respuesta = ModeloCuentas::mdlEstadoCtaVdor($vendedor);
+
+		return $respuesta;
+
+    }	
+
+	//DOCUMENTOS VENDIDOS POR ZONA
+	static public function ctrEstadoCtaVdorVdos($vendedor){
+
+		$respuesta = ModeloCuentas::mdlEstadoCtaVdorVdos($vendedor);
+
+		return $respuesta;
+
+    }
+
 }

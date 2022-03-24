@@ -69,7 +69,7 @@ todo: traemmos los meses en letras
   <div class="box-body">
 
     <div class="chart">
-      <canvas id="areaChart" style="height:250px"></canvas>
+      <canvas id="areaChart" style="height:550px"></canvas>
     </div>
 
   </div>

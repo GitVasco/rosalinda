@@ -329,13 +329,15 @@ class ModeloCortes{
 	*/
 	static public function mdlMandarTallerCab($datos){
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO entaller_cabjf (articulo, usuario, cantidad) 
+		$stmt = Conexion::conectar()->prepare("INSERT INTO entaller_cabjf (articulo, usuario, cantidad, estado, taller) 
         VALUES
-          (:articulo, :usuario, :cantidad) ");
+          (:articulo, :usuario, :cantidad, :estado, :taller) ");
 
 		$stmt->bindParam(":articulo", $datos["articulo"], PDO::PARAM_STR);
 		$stmt->bindParam(":cantidad", $datos["cantidad"], PDO::PARAM_INT);
 		$stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
+        $stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
+        $stmt->bindParam(":taller", $datos["taller"], PDO::PARAM_STR);
 
 
 		if ($stmt->execute()) {
@@ -392,6 +394,202 @@ class ModeloCortes{
 		$stmt -> close();
 
 		$stmt = null;
+
+    }    
+
+    //*enviados a taller
+	static public function mdlMostrarEnviadosTaller($modeloTaller){
+
+        if($modeloTaller != "null"){
+		$stmt = Conexion::conectar()->prepare("SELECT 
+                                                DATE(e.fecha) AS fecha,
+                                                e.taller,
+                                                CASE
+                                                WHEN e.taller IS NULL 
+                                                THEN '' 
+                                                WHEN e.taller = 'VC' 
+                                                THEN 'VASCO' 
+                                                ELSE s.nom_sector 
+                                                END AS nombre_taller,
+                                                a.modelo,
+                                                a.nombre,
+                                                a.cod_color,
+                                                a.color,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '1' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t1,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '2' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t2,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '3' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t3,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '4' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t4,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '5' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t5,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '6' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t6,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '7' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t7,
+                                                SUM(
+                                                CASE
+                                                    WHEN a.cod_talla = '8' 
+                                                    THEN e.cantidad 
+                                                    ELSE 0 
+                                                END
+                                                ) AS t8,
+                                                SUM(e.cantidad) AS total 
+                                            FROM
+                                                entaller_cabjf e 
+                                                LEFT JOIN articulojf a 
+                                                ON e.articulo = a.articulo 
+                                                LEFT JOIN sectorjf s 
+                                                ON e.taller = s.cod_sector 
+                                        WHERE e.estado = '0' 
+                                            AND a.modelo = '".$modeloTaller."' 
+                                            AND YEAR(e.fecha) = '2022' 
+                                        GROUP BY DATE(e.fecha),
+                                                    e.taller,
+                                            a.modelo,
+                                            a.cod_color
+                                        ORDER BY e.fecha DESC,
+                                            e.taller,
+                                            a.modelo,
+                                            a.cod_color");
+
+		$stmt -> execute();
+
+        return $stmt -> fetchAll();
+        }else{
+        $stmt = Conexion::conectar()->prepare("SELECT 
+                                        DATE(e.fecha) AS fecha,
+                                        e.taller,
+                                        CASE
+                                        WHEN e.taller IS NULL 
+                                        THEN '' 
+                                        WHEN e.taller = 'VC' 
+                                        THEN 'VASCO' 
+                                        ELSE s.nom_sector 
+                                        END AS nombre_taller,
+                                        a.modelo,
+                                        a.nombre,
+                                        a.cod_color,
+                                        a.color,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '1' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t1,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '2' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t2,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '3' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t3,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '4' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t4,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '5' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t5,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '6' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t6,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '7' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t7,
+                                        SUM(
+                                        CASE
+                                            WHEN a.cod_talla = '8' 
+                                            THEN e.cantidad 
+                                            ELSE 0 
+                                        END
+                                        ) AS t8,
+                                        SUM(e.cantidad) AS total 
+                                    FROM
+                                        entaller_cabjf e 
+                                        LEFT JOIN articulojf a 
+                                        ON e.articulo = a.articulo 
+                                        LEFT JOIN sectorjf s 
+                                        ON e.taller = s.cod_sector 
+                                    WHERE e.estado = '0' 
+                                    AND YEAR(e.fecha) = '2022' 
+                                    GROUP BY DATE(e.fecha),
+                                        e.taller,
+                                        a.modelo,
+                                        a.cod_color
+                                    ORDER BY e.fecha DESC,
+                                        e.taller,
+                                        a.modelo,
+                                        a.cod_color");
+
+            $stmt -> execute();
+
+            return $stmt -> fetchAll();
+        }
+
+            $stmt -> close();
+
+            $stmt = null;
 
     }    
 

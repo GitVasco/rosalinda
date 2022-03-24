@@ -9,7 +9,46 @@ $('.tablaMovimientos').DataTable( {
     "order": [[0, "desc"]],
 	"pageLength": 20,
 	"lengthMenu": [[20, 40, 60, -1], [20, 40, 60, 'Todos']],
-	"language": {
+	 "language": {
+
+			"sProcessing":     "Procesando...",
+			"sLengthMenu":     "Mostrar _MENU_ registros",
+			"sZeroRecords":    "No se encontraron resultados",
+			"sEmptyTable":     "Ningún dato disponible en esta tabla",
+			"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_",
+			"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0",
+			"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			"sInfoPostFix":    "",
+			"sSearch":         "Buscar:",
+			"sUrl":            "",
+			"sInfoThousands":  ",",
+			"sLoadingRecords": "Cargando...",
+			"oPaginate": {
+			"sFirst":    "Primero",
+			"sLast":     "Último",
+			"sNext":     "Siguiente",
+			"sPrevious": "Anterior"
+			},
+			"oAria": {
+				"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+				"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			}
+
+	}
+} );
+
+/* 
+* TABLA DIAS
+*/
+$('.tablaDatosDia').DataTable( {
+    "ajax": "ajax/movimientos/tabla-datos-dia.ajax.php",
+    "deferRender": true,
+	"retrieve": true,
+    "processing": true,
+    "order": [[0, "desc"]],
+	"pageLength": 31,
+	"lengthMenu": [[31, 62, 93, -1], [31, 62, 93, 'Todos']],
+	 "language": {
 
 			"sProcessing":     "Procesando...",
 			"sLengthMenu":     "Mostrar _MENU_ registros",
@@ -437,6 +476,7 @@ function cargarTablaMpSal(lineaMpSal) {
 		}
 	});
 }
+
 //Reporte de Produccion
 $(".box").on("click", ".btnReporteProduccion", function () {
 	var modelo = $(this).attr("modelo");
@@ -464,3 +504,343 @@ $(".box").on("click", ".btnReporteSalida", function () {
     window.location = "vistas/reportes_excel/rpt_movimiento_salida.php?linea="+linea;
   
 })
+
+
+/* 
+* BOTON ACEPTAR
+*/
+$("#mesGerencia").change(function(){
+
+	var mes = $(this).val();
+
+	localStorage.setItem("mesGerencia",mes);
+
+	console.log(mes)
+
+	window.location = "index.php?ruta=inicio-gerencia&mes=" + mes;
+
+	$(".tablaVtasGerencia").DataTable().destroy();
+
+	//cargarVtasGerencia(mes);
+	
+})
+
+
+const urlParams = new URLSearchParams(window.location.search);
+const myParam = urlParams.get('mes');
+
+$(".tablaVtasGerencia").DataTable({
+	"ajax": "ajax/movimientos/tabla-vtasgerencia.ajax.php?mes=" + myParam,
+	"deferRender": true,
+	"retrieve": true,
+	"processing": true,
+	"order": [[4, "asc"]],
+	"searching": false,
+	"paging": false,
+	"language": {
+		"sProcessing": "Procesando...",
+		"sLengthMenu": "Mostrar _MENU_ registros",
+		"sZeroRecords": "No se encontraron resultados",
+		"sEmptyTable": "No hay datos disponibles en esta tabla",
+		"sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_",
+		"sInfoEmpty": "Registros del 0 al 0 de un total de 0",
+		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		"sInfoPostFix": "",
+		"sSearch": "Buscar:",
+		"sUrl": "",
+		"sInfoThousands": ",",
+		"sLoadingRecords": "Cargando...",
+		"oPaginate": {
+			"sFirst": "Primero",
+			"sLast": "Último",
+			"sNext": "Siguiente",
+			"sPrevious": "Anterior"
+		},
+		"oAria": {
+			"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+			"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+		}
+	}
+});
+
+$(".tablaVtasGerenciaVdor").DataTable({
+	"ajax": "ajax/movimientos/tabla-vtasgerenciavdor.ajax.php?mes=" + myParam,
+	"deferRender": true,
+	"retrieve": true,
+	"processing": true,
+	"order": [[0, "asc"]],
+	"searching": false,
+	"paging": false,
+	"language": {
+		"sProcessing": "Procesando...",
+		"sLengthMenu": "Mostrar _MENU_ registros",
+		"sZeroRecords": "No se encontraron resultados",
+		"sEmptyTable": "No hay datos disponibles en esta tabla",
+		"sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_",
+		"sInfoEmpty": "Registros del 0 al 0 de un total de 0",
+		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		"sInfoPostFix": "",
+		"sSearch": "Buscar:",
+		"sUrl": "",
+		"sInfoThousands": ",",
+		"sLoadingRecords": "Cargando...",
+		"oPaginate": {
+			"sFirst": "Primero",
+			"sLast": "Último",
+			"sNext": "Siguiente",
+			"sPrevious": "Anterior"
+		},
+		"oAria": {
+			"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+			"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+		}
+	},
+	"drawCallback":function(){
+		var api=this.api();
+		$(api.column(2).footer()).html(
+			Intl.NumberFormat().format(api.column(2,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(3).footer()).html(
+			Intl.NumberFormat().format(api.column(3,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(4).footer()).html(
+			Intl.NumberFormat().format(api.column(4,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+	}
+});
+
+
+$(".tablaCtasVdor").DataTable({
+	"ajax": "ajax/movimientos/tabla-ctasgerenciavdor.ajax.php",
+	"deferRender": true,
+	"retrieve": true,
+	"processing": true,
+	"order": [[0, "asc"]],
+	"searching": false,
+	"paging": false,
+	"language": {
+		"sProcessing": "Procesando...",
+		"sLengthMenu": "Mostrar _MENU_ registros",
+		"sZeroRecords": "No se encontraron resultados",
+		"sEmptyTable": "No hay datos disponibles en esta tabla",
+		"sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_",
+		"sInfoEmpty": "Registros del 0 al 0 de un total de 0",
+		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		"sInfoPostFix": "",
+		"sSearch": "Buscar:",
+		"sUrl": "",
+		"sInfoThousands": ",",
+		"sLoadingRecords": "Cargando...",
+		"oPaginate": {
+			"sFirst": "Primero",
+			"sLast": "Último",
+			"sNext": "Siguiente",
+			"sPrevious": "Anterior"
+		},
+		"oAria": {
+			"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+			"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+		}
+	}
+});
+
+
+$(".tablaRangos").DataTable({
+	"ajax": "ajax/movimientos/tabla-rangos.ajax.php?mes=" + myParam,
+	"deferRender": true,
+	"retrieve": true,
+	"processing": true,
+	"order": [[0, "asc"]],
+	"searching": false,
+	"paging": false,
+	"language": {
+		"sProcessing": "Procesando...",
+		"sLengthMenu": "Mostrar _MENU_ registros",
+		"sZeroRecords": "No se encontraron resultados",
+		"sEmptyTable": "No hay datos disponibles en esta tabla",
+		"sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_",
+		"sInfoEmpty": "Registros del 0 al 0 de un total de 0",
+		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		"sInfoPostFix": "",
+		"sSearch": "Buscar:",
+		"sUrl": "",
+		"sInfoThousands": ",",
+		"sLoadingRecords": "Cargando...",
+		"oPaginate": {
+			"sFirst": "Primero",
+			"sLast": "Último",
+			"sNext": "Siguiente",
+			"sPrevious": "Anterior"
+		},
+		"oAria": {
+			"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+			"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+		}
+	},
+	"drawCallback":function(){
+		var api=this.api();
+		$(api.column(2).footer()).html(
+			Intl.NumberFormat().format(api.column(2,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(3).footer()).html(
+			Intl.NumberFormat().format(api.column(3,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(4).footer()).html(
+			Intl.NumberFormat().format(api.column(4,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(5).footer()).html(
+			Intl.NumberFormat().format(api.column(5,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(6).footer()).html(
+			Intl.NumberFormat().format(api.column(6,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(7).footer()).html(
+			Intl.NumberFormat().format(api.column(7,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(8).footer()).html(
+			Intl.NumberFormat().format(api.column(8,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(9).footer()).html(
+			Intl.NumberFormat().format(api.column(9,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(10).footer()).html(
+			Intl.NumberFormat().format(api.column(10,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(11).footer()).html(
+			Intl.NumberFormat().format(api.column(11,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+		
+		$(api.column(12).footer()).html(
+
+			Intl.NumberFormat().format(api.column(12,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+
+	} 
+});
+
+
+
+/* 
+* ACTUALIZAR TIPO DE CAMBIO
+*/
+$(".tablaDatosDia").on("click", ".btnActualizarMes", function () {
+
+	var fecha = $(this).attr("fecha");
+    console.log(fecha);
+
+	var datos = new FormData();
+    datos.append("fecha", fecha);
+
+    $.ajax({
+
+		url: "ajax/movimientos.ajax.php",
+		method: "POST",
+		data: datos,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function (respuesta) {
+
+			if (respuesta == "ok") {
+				swal({
+					type: "success",
+					title: "¡Ok!",
+					text: "¡La información fue Actualizada con éxito!",
+					showConfirmButton: true,
+					confirmButtonText: "Cerrar"
+				}).then((result) => {
+					if (result.value) {
+						window.location = "datos-dia";
+					}
+				});
+			}else{
+
+				Command: toastr["error"]("No se encontro el tipo de cambio");
+
+			}
+		
+		}
+	})
+
+})
+
+$(".tablaRangosDias").DataTable({
+	"ajax": "ajax/movimientos/tabla-rangos-dias.ajax.php",
+	"deferRender": true,
+	"retrieve": true,
+	"processing": true,
+	"order": [[0, "asc"]],
+	"searching": false,
+	"paging": false,
+	"language": {
+		"sProcessing": "Procesando...",
+		"sLengthMenu": "Mostrar _MENU_ registros",
+		"sZeroRecords": "No se encontraron resultados",
+		"sEmptyTable": "No hay datos disponibles en esta tabla",
+		"sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_",
+		"sInfoEmpty": "Registros del 0 al 0 de un total de 0",
+		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		"sInfoPostFix": "",
+		"sSearch": "Buscar:",
+		"sUrl": "",
+		"sInfoThousands": ",",
+		"sLoadingRecords": "Cargando...",
+		"oPaginate": {
+			"sFirst": "Primero",
+			"sLast": "Último",
+			"sNext": "Siguiente",
+			"sPrevious": "Anterior"
+		},
+		"oAria": {
+			"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+			"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+		}
+	},
+	"drawCallback":function(){
+		var api=this.api();
+
+		$(api.column(1).footer()).html(
+			Intl.NumberFormat().format(api.column(1,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(2).footer()).html(
+			Intl.NumberFormat().format(api.column(2,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(3).footer()).html(
+			Intl.NumberFormat().format(api.column(3,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(4).footer()).html(
+			Intl.NumberFormat().format(api.column(4,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(5).footer()).html(
+			Intl.NumberFormat().format(api.column(5,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(6).footer()).html(
+			Intl.NumberFormat().format(api.column(6,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(7).footer()).html(
+			Intl.NumberFormat().format(api.column(7,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+
+		$(api.column(8).footer()).html(
+			Intl.NumberFormat().format(api.column(8,{page:'current'}).data().sum().toFixed(2)*-1)
+		)
+	}
+});

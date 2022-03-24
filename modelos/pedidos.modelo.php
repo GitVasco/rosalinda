@@ -259,6 +259,7 @@ class ModeloPedidos{
 					temporaljf
 				SET
 					cliente = :cliente,
+					vendedor = :vendedor,
 					op_gravada = :op_gravada,
 					descuento_total = :descuento_total,
 					sub_total = :sub_total,
@@ -272,6 +273,7 @@ class ModeloPedidos{
 		$stmt=Conexion::conectar()->prepare($sql);
 
 		$stmt->bindParam(":cliente", $datos["cliente"], PDO::PARAM_STR);
+		$stmt->bindParam(":vendedor", $datos["vendedor"], PDO::PARAM_STR);
 		$stmt->bindParam(":codigo", $datos["codigo"], PDO::PARAM_STR);
 		$stmt->bindParam(":op_gravada", $datos["op_gravada"], PDO::PARAM_STR);
 		$stmt->bindParam(":descuento_total", $datos["descuento_total"], PDO::PARAM_STR);
@@ -1048,5 +1050,112 @@ class ModeloPedidos{
 		$stmt->close();
 		$stmt = null;
 	}	
+
+	    /*
+    * MOSTRAR DETALLE DE TEMPORAL
+    */
+	static public function mdlPedidosPendientes($vendedor){
+
+		if($vendedor == null){
+
+			$sql="SELECT 
+			t.codigo,
+			t.codigo,
+			t.vendedor,
+			(SELECT 
+			  descripcion 
+			FROM
+			  maestrajf m 
+			WHERE m.tipo_dato = 'tvend' 
+			  AND m.codigo = t.vendedor) AS nom_vendedor,
+			t.op_gravada,
+			t.igv,
+			t.total,
+			t.condicion_venta,
+			(SELECT 
+			  descripcion 
+			FROM
+			  condiciones_ventajf cv 
+			WHERE cv.id = t.condicion_venta) AS nom_condicion,
+			t.estado,
+			DATE(t.fecha) AS fecha,
+			t.cliente,
+			c.nombre,
+			c.ubigeo,
+			(SELECT 
+			  nombre 
+			FROM
+			  ubigeo u 
+			WHERE u.codigo = c.ubigeo) AS nom_ubigeo 
+		  FROM
+			temporaljf t 
+			LEFT JOIN clientesjf c 
+			  ON t.cliente = c.codigo 
+		  WHERE t.estado NOT IN ('FACTURADO', 'ANULADO') 
+		  ORDER BY t.vendedor,
+					t.estado,
+					c.ubigeo,
+					t.fecha";
+
+		$stmt=Conexion::conectar()->prepare($sql);
+
+		$stmt->execute();
+
+		return $stmt->fetchAll();
+
+		}else{
+
+			$sql="SELECT 
+						t.codigo,
+						t.codigo,
+						t.vendedor,
+						(SELECT 
+						descripcion 
+						FROM
+						maestrajf m 
+						WHERE m.tipo_dato = 'tvend' 
+						AND m.codigo = t.vendedor) AS nom_vendedor,
+						t.op_gravada,
+						t.igv,
+						t.total,
+						t.condicion_venta,
+						(SELECT 
+						descripcion 
+						FROM
+						condiciones_ventajf cv 
+						WHERE cv.id = t.condicion_venta) AS nom_condicion,
+						t.estado,
+						DATE(t.fecha) AS fecha,
+						t.cliente,
+						c.nombre,
+						c.ubigeo,
+						(SELECT 
+						nombre 
+						FROM
+						ubigeo u 
+						WHERE u.codigo = c.ubigeo) AS nom_ubigeo 
+					FROM
+						temporaljf t 
+						LEFT JOIN clientesjf c 
+						ON t.cliente = c.codigo 
+					WHERE t.estado NOT IN ('FACTURADO', 'ANULADO') 
+						AND t.vendedor = :vendedor 
+						ORDER BY t.estado,
+							t.fecha DESC,
+							c.ubigeo";
+
+		$stmt=Conexion::conectar()->prepare($sql);
+
+		$stmt->bindParam(":vendedor", $vendedor, PDO::PARAM_STR);
+
+		$stmt->execute();
+
+		return $stmt->fetchAll();
+
+		}
+
+		$stmt=null;
+
+	}
 
 }

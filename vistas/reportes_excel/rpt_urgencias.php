@@ -476,70 +476,56 @@ $objPHPExcel->getActiveSheet()->getStyle("M$fila")->getAlignment()->setWrapText(
 
 #query para sacar los datos deL detalle
 $sqlDetalle = mysql_query("SELECT 
-                                    a.articulo,
-                                    a.id_marca,
-                                    m.marca,
-                                    a.modelo,
-                                    a.nombre,
-                                    a.cod_color,
-                                    a.color,
-                                    a.cod_talla,
-                                    a.talla,
-                                    a.estado,
-                                    a.urgencia,
-                                    a.mp_faltante,
-                                    ROUND(
-                                    (
-                                        IFNULL(v.ult_mes, 0) * a.urgencia / 100
-                                    ),
-                                    0
-                                    ) AS configuracion,
-                                    CASE
-                                    WHEN a.stock < 0 
-                                    THEN 0 
-                                    ELSE a.stock 
-                                    END AS stock,
-                                    (a.stock - a.pedidos) AS stockB,
-                                    a.pedidos,
-                                    (a.taller + a.servicio) as taller,
-                                    a.alm_corte,
-                                    a.ord_corte,
-                                    a.proyeccion,
-                                    IFNULL(p.prod, 0) AS prod,
-                                    IFNULL(
-                                    ROUND(
-                                        (IFNULL(p.prod, 0) / a.proyeccion) * 100,
-                                        2
-                                    ),
-                                    0
-                                    ) AS avance,
-                                    IFNULL(v.ult_mes, 0) AS ult_mes 
-                                    FROM
-                                    articulojf a 
-                                    LEFT JOIN marcasjf m 
-                                    ON a.id_marca = m.id 
-                                    LEFT JOIN 
-                                    (SELECT 
-                                        m.articulo,
-                                        SUM(m.cantidad) AS prod 
-                                    FROM
-                                        movimientosjf m 
-                                    WHERE YEAR(m.fecha) = '2021' 
-                                        AND MONTH(m.fecha) >= 1 
-                                        AND tipo = 'E20' 
-                                    GROUP BY m.articulo) AS p 
-                                    ON a.articulo = p.articulo 
-                                    LEFT JOIN 
-                                    (SELECT 
-                                        m.articulo,
-                                        SUM(m.cantidad) AS ult_mes 
-                                    FROM
-                                        movimientosjf m 
-                                    WHERE m.tipo IN ('S02', 'S03', 'S70') 
-                                        AND DATEDIFF(DATE(NOW()), m.fecha) <= 31 
-                                    GROUP BY m.articulo) AS v 
-                                    ON a.articulo = v.articulo 
-                                    WHERE a.estado = 'Activo'") or die(mysql_error());
+                  a.articulo,
+                  a.id_marca,
+                  m.marca,
+                  a.modelo,
+                  a.nombre,
+                  a.cod_color,
+                  a.color,
+                  a.cod_talla,
+                  a.talla,
+                  a.estado,
+                  a.urgencia,
+                  a.mp_faltante,
+                  ROUND(
+                    (
+                      IFNULL(a.ult_mes, 0) * a.urgencia / 100
+                    ),
+                    0
+                  ) AS configuracion,
+                  CASE
+                    WHEN a.stock < 0 
+                    THEN 0 
+                    ELSE a.stock 
+                  END AS stock,
+                  (a.stock - a.pedidos) AS stockB,
+                  a.pedidos,
+                  (a.taller + a.servicio) AS taller,
+                  a.alm_corte,
+                  a.ord_corte,
+                  a.proyeccion,
+                  IFNULL(a.prod, 0) AS prod,
+                  IFNULL(
+                    ROUND(
+                      (IFNULL(a.prod, 0) / a.proyeccion) * 100,
+                      2
+                    ),
+                    0
+                  ) AS avance,
+                  IFNULL(a.ult_mes, 0) AS ult_mes 
+                  FROM
+                  articulojf a 
+                  LEFT JOIN marcasjf m 
+                    ON a.id_marca = m.id 
+                  WHERE a.estado = 'Activo' 
+                  AND a.marca = 'ROSALINDA' 
+                  AND ROUND(
+                    (
+                      IFNULL(a.ult_mes, 0) * a.urgencia / 100
+                    ),
+                    0
+                  ) > (a.stock - a.pedidos)") or die(mysql_error());
 
 
 while($respDetalle = mysql_fetch_array($sqlDetalle)){

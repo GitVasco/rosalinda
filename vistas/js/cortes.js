@@ -167,3 +167,75 @@ $("#imprimirTicket").change(function(){
 	}
 })
 
+/*
+* CARGAR TABLA ENVIADOS A TALLER
+*/
+
+$("#selectModeloTaller").change(function(){
+	$(".tablaEnvTaller").DataTable().destroy();
+	var modeloTaller=$(this).val();
+	localStorage.setItem("modeloTaller", modeloTaller);
+	cargarTablaEnTaller(localStorage.getItem("modeloTaller"));
+	
+});
+
+$(".box").on("click", ".btnLimpiarModeloTaller", function () {
+
+	localStorage.removeItem("modeloTaller");
+	localStorage.clear();
+	window.location = "enviados-taller";
+	
+})
+
+if (localStorage.getItem("modeloTaller") != null) {
+	$("#selectModeloTaller").val(localStorage.getItem("modeloTaller"));
+	$("#selectModeloTaller").selectpicker("refresh");
+
+	cargarTablaEnTaller(localStorage.getItem("modeloTaller"));
+	// console.log("lleno");
+	
+}else{
+
+	cargarTablaEnTaller(null);
+	// console.log("vacio");
+
+}
+
+function cargarTablaEnTaller(modeloTaller) {
+	$('.tablaEnvTaller').DataTable({
+		"ajax": "ajax/produccion/tabla-enviados-taller.ajax.php?perfil=" + $("#perfilOculto").val()+ "&modeloTaller=" + modeloTaller,
+		"deferRender": true,
+		"retrieve": true,
+		"processing": true,
+		"order": [[0, "desc"]],
+		"pageLength": 20,
+		"lengthMenu": [[20, 40, 60, -1], [20, 40, 60, 'Todos']],
+		"language": {
+
+			"sProcessing": "Procesando...",
+			"sLengthMenu": "Mostrar _MENU_ registros",
+			"sZeroRecords": "No se encontraron resultados",
+			"sEmptyTable": "Ningún dato disponible en esta tabla",
+			"sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_",
+			"sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0",
+			"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+			"sInfoPostFix": "",
+			"sSearch": "Buscar:",
+			"sUrl": "",
+			"sInfoThousands": ",",
+			"sLoadingRecords": "Cargando...",
+			"oPaginate": {
+				"sFirst": "Primero",
+				"sLast": "Último",
+				"sNext": "Siguiente",
+				"sPrevious": "Anterior"
+			},
+			"oAria": {
+				"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+				"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			}
+
+		}
+
+	});
+}

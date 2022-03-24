@@ -196,6 +196,149 @@ class ControladorMovimientos{
 
         return $respuesta;
 
+    }   
+    
+    /* 
+    * MOSTRAR TOTALES DEL MES VTAS - PAGOS
+    */
+    static public function ctrTotalesSoles($mes){
+
+        $respuesta = ModeloMovimientos::mdlTotalesSoles($mes);
+
+        return $respuesta;
+
     }       
+    
+    /* 
+    * MOSTRAR TOTALES DEL MES PEDIDOS
+    */
+    static public function ctrTotalesSolesPedidos($mes){
+
+        $respuesta = ModeloMovimientos::mdlTotalesSolesPedidos($mes);
+
+        return $respuesta;
+
+    } 
+    
+    /* 
+    * MOSTRAR TOTALES VENCIDOS
+    */
+    static public function ctrTotalVencidos(){
+
+        $respuesta = ModeloMovimientos::mdlTotalVencidos();
+
+        return $respuesta;
+
+    } 
+    
+    /* 
+    * MOSTRAR TOTALES EN FACTURAS
+    */
+    static public function ctrFacturas($mes){
+
+        $respuesta = ModeloMovimientos::mdlFacturas($mes);
+  
+        return $respuesta;
+  
+    } 
+    
+    /* 
+    * MOSTRAR TOTALES EN PROFORMAS
+    */
+    static public function ctrProformas($mes){
+
+        $respuesta = ModeloMovimientos::mdlProformas($mes);
+
+        return $respuesta;
+
+    }      
+
+    /* 
+    * sacamos los totales vencidos por vendedor
+    */
+    static public function ctrTotalesVencidosVendedor($inicio, $lineas){
+
+        $respuesta = ModeloMovimientos::mdlTotalesVencidosVendedor($inicio, $lineas);
+
+        return $respuesta;
+
+    }    
+    
+    /* 
+    * sacamos los totales por mes de la  nueva tabla TOTALES
+    */
+    static public function ctrMostrarCtasVdor(){
+
+        $respuesta = ModeloMovimientos::mldMostrarCtasVdor();
+
+        return $respuesta;
+
+    } 
+    
+    /* 
+    * rangos por meses
+    */
+    static public function ctrMostrarRangosDias(){
+
+        $respuesta = ModeloMovimientos::mldMostrarRangosDias();
+
+        return $respuesta;
+
+    } 
+    
+    /* 
+    * MOSTRAR RANGOS
+    */
+    static public function ctrMostrarRangos($mes){
+
+        $respuesta = ModeloMovimientos::mdlMostrarRangos($mes);
+
+        return $respuesta;
+
+    }    
+    
+    /* 
+    * MOSTRAR RESUMEN DE VENTAS
+    */
+    static public function ctrMostrarResumenVtas($mes){
+
+        $respuesta = ModeloMovimientos::mdlMostrarResumenVtas($mes);
+
+        return $respuesta;
+
+    }  
+    
+    /* 
+    * MOSTRAR RESUMEN DE VENTAS POR VENDEDOR
+    */
+    static public function ctrMostrarResumenVdor($mes){
+
+        $respuesta = ModeloMovimientos::mdlMostrarResumenVdor($mes);
+
+        return $respuesta;
+
+    }  
+    
+    /* 
+    * sacamos los datos de mov del dia
+    */
+    static public function ctrMostrarDias(){
+
+        $respuesta = ModeloMovimientos::mldMostrarDias();
+
+        return $respuesta;
+
+    }        
+
+    /* 
+    * MOSTRAR RESUMEN DE VENTAS
+    */
+    static public function ctrMostrarResumenVtasB($mes){
+
+        $respuesta = ModeloMovimientos::mdlMostrarResumenVtasB($mes);
+
+        return $respuesta;
+
+    }    
 
 }

@@ -2621,6 +2621,18 @@ class ModeloTalleres{
     
   }
   
+  static public function mdlMesB($mes){
+
+    $stmt = Conexion::conectar()->prepare("SELECT DISTINCT 
+                                codigo,
+                                descripcion 
+                              FROM
+                                meses m WHERE ano='2020' AND codigo=$mes");
+
+    $stmt -> execute();
+
+    return $stmt -> fetch();
+  }  
 
     
 }

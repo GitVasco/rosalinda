@@ -26,6 +26,33 @@ class AjaxMovimientos{
 		echo $respuesta;
 	}
 
+
+	public function ajaxActualizarTC(){
+
+		$fecha=$this->fecha;
+
+		$ws = file_get_contents("https://api.apis.net.pe/v1/tipo-cambio-sunat?fecha=$fecha");
+
+		$tipoCambio = json_decode($ws, true);
+
+		if($tipoCambio["venta"] == "Fuera de plazo permitido"){
+
+			$respuesta = "no";
+
+		}else{
+
+			$respuesta = ModeloMovimientos::mdlActualizarTipoCambio($tipoCambio["compra"], $tipoCambio["venta"], $fecha);
+
+		}
+
+		
+
+		
+		echo $respuesta;
+
+	}
+
+
 }
 
 if(isset($_POST["año"])){
@@ -33,4 +60,10 @@ if(isset($_POST["año"])){
 	$actualizar->año=$_POST["año"];
 	$actualizar->mes=$_POST["mes"];
 	$actualizar->ajaxActualizarMovimientos();
+}
+
+if(isset($_POST["fecha"])){
+	$actualizar=new AjaxMovimientos();
+	$actualizar->fecha=$_POST["fecha"];
+	$actualizar->ajaxActualizarTC();
 }

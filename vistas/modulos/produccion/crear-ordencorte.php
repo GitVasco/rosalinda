@@ -26,7 +26,7 @@
       EL FORMULARIO
       ======================================-->
 
-      <div class="col-lg-5 col-xs-12">
+      <div class="col-lg-4 col-xs-12">
 
         <div class="box box-success">
 
@@ -134,33 +134,31 @@
 
                 </div>
 
-        
                 <!--=====================================
-                ENTRADA PARA AGREGAR MATERIAPRIMA
-                ======================================-->
-
-                <div class="form-group row nuevoArticuloOC" style="height:500px; overflow: scroll;">
-
-                  <!--=====================================
                   ENTRADA BUSCADOR
                   ======================================-->
 
-                  <span class="buscadorOc" id="elidOc">
-                      <label>Buscar:</label>
-                      <i class="fa fa-search"></i>
-                      <input type="text" class="form-control input-sm" id="buscadorOc" name="buscadorOc">
-
-                  </span>
+                  <div class=" form-group buscador" id="elid" style="padding-bottom:25px">
+                    <label for="" class="col-form-label col-lg-1">Buscar:</label>
+                    <div class="col-lg-11">
+                        <div class="input-group">
+                            
+                            <input type="text" class="form-control " id="buscadorOc" name="buscadorOc"/>
+                            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                        </div>
+                    </div>
+                        
+                  </div>
 
                   <!--=====================================
                   TITULOS
                   ======================================-->
 
-                  <div class="box box-primary">
+                  <div class="box box-primary"   >
 
                     <div class="row">
 
-                      <div class="col-xs-6">
+                      <div class="col-xs-8">
 
                         <label>Articulo</label>
 
@@ -174,12 +172,6 @@
 
                       <div class="col-xs-2">
 
-                        <label for="">SinProg</label>
-
-                      </div>
-
-                      <div class="col-xs-2">
-
                         <label for="">Mes</label>
 
                       </div>
@@ -188,11 +180,18 @@
 
                   </div>
 
+        
+                <!--=====================================
+                ENTRADA PARA AGREGAR MATERIAPRIMA
+                ======================================-->
+
+                <div class="form-group row nuevoArticuloOC" style="height:400px;overflow: scroll; overflow-x:hidden">
+
                 </div>
 
                 <input type="hidden" id="listaArticulosOC" name="listaArticulosOC">                
 
-                <div class="row">
+                <div class="row" >
 
                   <!--=====================================
                   ENTRADA IMPUESTOS Y TOTAL
@@ -277,7 +276,7 @@
       LA TABLA DE ARTICULOS
       ======================================-->
 
-      <div class="col-lg-7 hidden-md hidden-sm hidden-xs">
+      <div class="col-lg-8 hidden-md hidden-sm hidden-xs">
 
         <div class="box box-warning">
 
@@ -291,7 +290,7 @@
 
                 <tr>
 
-                  <th style="width:10px">Add</th>
+                  <th style="width:10px">+</th>
                   <th>Modelo</th>
                   <th>Color</th>
                   <th>Talla</th>
@@ -300,11 +299,12 @@
                   <th>Avance</th>
                   <th>Stock</th>
                   <th>Ped.</th>
-                  <th>En Taller</th>
-                  <th>Alm. Corte</th>
-                  <th>Ord. Corte</th>
+                  <th>Taller</th>
+                  <th>Alm. Cor.</th>
+                  <th>Ord. Cor.</th>
                   <th>Vtas 30d</th>
-                  <th>Xprog</th>
+                  <th>Mes Dura</th>
+                  <th>Faltante</th>
                   
                 </tr>
 
@@ -368,33 +368,7 @@ MODAL CONFIGURAR % DE URGENCIAS
               
                 <span class="input-group-addon"><i class="fa fa-tag"></i></span> 
 
-                <select class="form-control input-lg" id="urgencia" name="urgencia" required>
-
-                  <option value="">Selecionar Porcentaje</option>
-
-                  <option value="100">100 %</option>
-
-                  <option value="90">90 %</option>
-
-                  <option value="80">80 %</option>
-
-                  <option value="70">70 %</option>
-
-                  <option value="60">60 %</option>
-
-                  <option value="50">50 %</option>
-
-                  <option value="40">40 %</option>
-
-                  <option value="30">30 %</option>
-
-                  <option value="20">20 %</option>
-
-                  <option value="10">10 %</option>
-
-                  <option value="0">0 %</option>
-                
-                </select>
+                <input type="text" class="form-control input-md" name="urgencia" id="urgencia" required>
 
               </div>
 
@@ -454,12 +428,13 @@ $('.nuevoArticuloOC').ready(function(){
 
        for( var i = 0; i < nombres.length; i++ ){
 
-        item = $(nombres[i]).val().toLowerCase();
-        console.log(item);
+        item = $(nombres[i]).val();
+        item2 = $(nombres[i]).val().toLowerCase();
+        // console.log(item);
 
             for(var x = 0; x < item.length; x++ ){
 
-                if( buscando.length == 0 || item.indexOf( buscando ) > -1 ){
+                if( buscando.length == 0 || item.indexOf( buscando ) > -1 || item2.indexOf( buscando ) > -1 ){
 
                     $(nombres[i]).parents('.munditoOC').show(); 
 

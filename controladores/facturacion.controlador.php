@@ -1752,6 +1752,7 @@ class ControladorFacturacion{
     
 
             $cliente = array(
+                        'tipo'          => $venta["tip_doc_cli"],
                         'ruc'			=> $venta["dni"], 
                         'razon_social'  => $venta["nombre"], 
                         'cliente'       => $venta["cliente"],
@@ -1870,7 +1871,7 @@ class ControladorFacturacion{
                <cac:AccountingCustomerParty>
                   <cac:Party>
                      <cac:PartyIdentification>
-                        <cbc:ID schemeID="'.$tipodoc.'">'.$cliente['ruc'].'</cbc:ID>
+                        <cbc:ID schemeID="'.$cliente['tip_doc_cli'].'">'.$cliente['ruc'].'</cbc:ID>
                      </cac:PartyIdentification>
                      <cac:PartyLegalEntity>
                         <cbc:RegistrationName><![CDATA['.$cliente['razon_social'].']]></cbc:RegistrationName>

@@ -750,6 +750,7 @@ class ModeloFacturacion{
                     DATE_FORMAT(n.fecha_origen, '%Y-%m-%d') AS fecha_origen,
                     v.cliente,
                     c.nombre,
+                    c.tipo_documento AS tip_doc_cli,
                     c.documento AS dni,
                     c.direccion,
                     c.email,

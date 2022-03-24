@@ -44,14 +44,25 @@ class ControladorCortes{
 
         if(isset($_POST["nuevoArticulo"])){
 
-            
-
             /* 
             * registramos en la tabla taller cabecera para el código
             */
-            $datosCab = array( "usuario" => $_POST["usuario"],
-                            "articulo" => $_POST["nuevoArticulo"],
-                            "cantidad" => $_POST["nuevoAlmCorte"]);
+
+            if($_POST["seleccionarSectorServicio"] != ""){
+
+                $tallerCab = $_POST["seleccionarSectorServicio"];
+
+            }else{
+
+                $tallerCab = "VC";
+
+            }
+
+            $datosCab = array(  "usuario"   => $_POST["usuario"],
+                                "articulo"  => $_POST["nuevoArticulo"],
+                                "cantidad"  => $_POST["nuevoAlmCorte"],
+                                "estado"    => "0",
+                                "taller"    => $tallerCab);
 
             $respuestaCab = ModeloCortes::mdlMandarTallerCab($datosCab);
 
@@ -221,5 +232,16 @@ class ControladorCortes{
 		return $respuesta;
 
     }
+
+    /*
+    * MOSTRAR DATOS DE ALMACEN DE CORTE -VERSION 2
+    */
+    static public function ctrMostrarEnviadosTaller($modeloTaller){
+
+        $respuesta = ModeloCortes::mdlMostrarEnviadosTaller($modeloTaller);
+
+        return $respuesta;
+
+    }    
 
 }

@@ -218,7 +218,7 @@
 
                                             foreach ($vend2 as $key => $value) {
 
-                                            echo '<option value="'.$value["id"].'">'.$value["codigo"].' - '.$value["descripcion"].'</option>';
+                                            echo '<option value="'.$value["codigo"].'">'.$value["codigo"].' - '.$value["descripcion"].'</option>';
 
                                             }
 

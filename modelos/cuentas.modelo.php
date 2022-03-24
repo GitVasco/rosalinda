@@ -3154,6 +3154,286 @@ class ModeloCuentas{
     }
 	
    
+	//* ESTADO DE CEUNTA VENDEDOR
+	static public function mdlEstadoCtaVdor($vendedor){	
 
+		$stmt = Conexion::conectar()->prepare("SELECT 
+									cc.tipo_doc,
+									cc.num_cta,
+									cc.cod_pago,
+									cc.doc_origen,
+									cc.fecha,
+									cc.fecha_ven,
+									cc.cliente,
+									c.nombre,
+									cc.monto,
+									cc.saldo,
+									CASE
+									WHEN cc.protesta = 1 
+									THEN 'SI' 
+									ELSE '' 
+									END AS protesta,
+									cc.num_unico,
+									CASE
+									WHEN cc.banco = '02' 
+									THEN 'BCP' 
+									ELSE '' 
+									END AS banco 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'PENDIENTE' 
+									AND cc.vendedor = :vendedor 
+								UNION
+								SELECT 
+									'00' AS tipo_doc,
+									'' AS num_cta,
+									'' AS cod_pago,
+									'' AS doc_origen,
+									'' AS fecha,
+									'' AS fecha_ven,
+									cc.cliente,
+									c.nombre,
+									'' AS monto,
+									'' AS saldo,
+									'' AS protesta,
+									'' AS num_unico,
+									'' AS banco 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'PENDIENTE' 
+									AND cc.vendedor = :vendedor 
+								GROUP BY cc.cliente 
+								UNION
+								SELECT 
+									'98' AS tipo_doc,
+									'' AS num_cta,
+									'' AS cod_pago,
+									'' AS doc_origen,
+									'' AS fecha,
+									'' AS fecha_ven,
+									cc.cliente,
+									c.nombre,
+									SUM(cc.monto) AS monto,
+									SUM(cc.saldo) AS saldo,
+									'' AS protesta,
+									'' AS num_unico,
+									'' AS banco 
+								FROM
+									cuenta_ctejf cc 
+									LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+								WHERE cc.tip_mov = '+' 
+									AND cc.estado = 'PENDIENTE' 
+									AND cc.vendedor = :vendedor 
+								GROUP BY cc.cliente 
+								UNION
+								SELECT 
+								'99' AS tipo_doc,
+								'' AS num_cta,
+								'' AS cod_pago,
+								'' AS doc_origen,
+								'' AS fecha,
+								'' AS fecha_ven,
+								'Z9999999' AS cliente,
+								'' AS nombre,
+								SUM(cc.monto) AS monto,
+								SUM(cc.saldo) AS saldo,
+								'' AS protesta,
+								'' AS num_unico,
+								'' AS banco 
+								FROM
+								cuenta_ctejf cc 
+								LEFT JOIN clientesjf c 
+									ON cc.cliente = c.codigo 
+								WHERE cc.tip_mov = '+' 
+								AND cc.estado = 'PENDIENTE' 
+								AND cc.vendedor = :vendedor 
+								GROUP BY cc.vendedor 
+								ORDER BY cliente,
+								tipo_doc,
+								fecha_ven");
+
+		$stmt -> bindParam(":vendedor", $vendedor, PDO::PARAM_STR);
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll();
+
+		$stmt -> close();
+
+		$stmt = null;
+
+	}	
+
+	//* ESTADO DE CEUNTA VENDEDOR VENDIDOS POR ZONA
+	static public function mdlEstadoCtaVdorVdos($vendedor){	
+
+		if($vendedor == "08"){
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+						c.tipo_doc,
+						c.num_cta,
+						c.fecha,
+						c.fecha_ven,
+						CASE
+						WHEN c.tipo_doc = '85' 
+						THEN DATE_ADD(c.fecha_ven, INTERVAL 8 DAY) 
+						ELSE c.fecha_ven 
+						END AS fec_ven2,
+						c.doc_origen,
+						c.cliente,
+						cc.nombre,
+						c.saldo,
+						cc.ubigeo,
+						(SELECT 
+						nombre 
+						FROM
+						ubigeo u 
+						WHERE cc.ubigeo = u.codigo) AS nom_ubigeo,
+						CASE
+						WHEN c.protesta = '1' 
+						THEN 'SI' 
+						ELSE '' 
+						END AS protesta 
+					FROM
+						cuenta_ctejf c 
+						LEFT JOIN clientesjf cc 
+						ON c.cliente = cc.codigo 
+					WHERE c.tip_mov = '+' 
+						AND c.estado = 'PENDIENTE' 
+						AND 
+						CASE
+						WHEN c.tipo_doc = '85' 
+						THEN DATE_ADD(c.fecha_ven, INTERVAL 8 DAY) 
+						ELSE c.fecha_ven 
+						END < DATE(NOW()) 
+						AND c.vendedor = '08' 
+					UNION
+					SELECT 
+						'ZZ' AS tipo_doc,
+						'' AS num_cta,
+						'' AS fecha,
+						'9999-12-31' AS fecha_ven,
+						'' AS fec_ven2,
+						'' AS doc_origen,
+						'' cliente,
+						'' AS nombre,
+						SUM(c.saldo) AS saldo,
+						'ZZ' AS ubigeo,
+						'' AS nom_ubigeo,
+						'' AS protesta 
+					FROM
+						cuenta_ctejf c 
+						LEFT JOIN clientesjf cc 
+						ON c.cliente = cc.codigo 
+					WHERE c.tip_mov = '+' 
+						AND c.estado = 'PENDIENTE' 
+						AND 
+						CASE
+						WHEN c.tipo_doc = '85' 
+						THEN DATE_ADD(c.fecha_ven, INTERVAL 8 DAY) 
+						ELSE c.fecha_ven 
+						END < DATE(NOW()) 
+						AND c.vendedor = '08' 
+					GROUP BY c.vendedor 
+					ORDER BY fecha_ven");
+
+			$stmt -> bindParam(":vendedor", $vendedor, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+			return $stmt -> fetchAll();			
+
+		}else{
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+						c.tipo_doc,
+						c.num_cta,
+						c.fecha,
+						c.fecha_ven,
+						CASE
+						WHEN c.tipo_doc = '85' 
+						THEN DATE_ADD(c.fecha_ven, INTERVAL 8 DAY) 
+						ELSE c.fecha_ven 
+						END AS fec_ven2,
+						c.doc_origen,
+						c.cliente,
+						cc.nombre,
+						c.saldo,
+						cc.ubigeo,
+						(SELECT 
+						nombre 
+						FROM
+						ubigeo u 
+						WHERE cc.ubigeo = u.codigo) AS nom_ubigeo,
+						CASE
+						WHEN c.protesta = '1' 
+						THEN 'SI' 
+						ELSE '' 
+						END AS protesta 
+					FROM
+						cuenta_ctejf c 
+						LEFT JOIN clientesjf cc 
+						ON c.cliente = cc.codigo 
+					WHERE c.tip_mov = '+' 
+						AND c.estado = 'PENDIENTE' 
+						AND 
+						CASE
+						WHEN c.tipo_doc = '85' 
+						THEN DATE_ADD(c.fecha_ven, INTERVAL 8 DAY) 
+						ELSE c.fecha_ven 
+						END < DATE(NOW()) 
+						AND c.vendedor = :vendedor 
+					UNION
+					SELECT 
+						'ZZ' AS tipo_doc,
+						'' AS num_cta,
+						'' AS fecha,
+						'' AS fecha_ven,
+						'' AS fec_ven2,
+						'' AS doc_origen,
+						'' cliente,
+						'' AS nombre,
+						SUM(c.saldo) AS saldo,
+						'ZZ' AS ubigeo,
+						'' AS nom_ubigeo,
+						'' AS protesta 
+					FROM
+						cuenta_ctejf c 
+						LEFT JOIN clientesjf cc 
+						ON c.cliente = cc.codigo 
+					WHERE c.tip_mov = '+' 
+						AND c.estado = 'PENDIENTE' 
+						AND 
+						CASE
+						WHEN c.tipo_doc = '85' 
+						THEN DATE_ADD(c.fecha_ven, INTERVAL 8 DAY) 
+						ELSE c.fecha_ven 
+						END < DATE(NOW()) 
+						AND c.vendedor = :vendedor 
+					GROUP BY c.vendedor 
+					ORDER BY ubigeo,
+						cliente,
+						fecha_ven");
+
+			$stmt -> bindParam(":vendedor", $vendedor, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+			return $stmt -> fetchAll();
+
+		}
+
+		$stmt -> close();
+
+		$stmt = null;
+
+	}	
 
 }
