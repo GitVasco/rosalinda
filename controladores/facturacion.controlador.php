@@ -1760,6 +1760,8 @@ class ControladorFacturacion{
                         'pais'			=> 'PE'
                         );	
 
+            var_dump($cliente);
+
             $vendedor = array(
                         "codigo"		=> $venta["vendedor"],
                         "nombre"		=> $venta["nom_vendedor"]
@@ -1871,7 +1873,7 @@ class ControladorFacturacion{
                <cac:AccountingCustomerParty>
                   <cac:Party>
                      <cac:PartyIdentification>
-                        <cbc:ID schemeID="'.$cliente['tip_doc_cli'].'">'.$cliente['ruc'].'</cbc:ID>
+                        <cbc:ID schemeID="'.$cliente['tipo'].'">'.$cliente['ruc'].'</cbc:ID>
                      </cac:PartyIdentification>
                      <cac:PartyLegalEntity>
                         <cbc:RegistrationName><![CDATA['.$cliente['razon_social'].']]></cbc:RegistrationName>
