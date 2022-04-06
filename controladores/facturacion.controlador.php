@@ -849,7 +849,7 @@ class ControladorFacturacion{
 
                 foreach($respuesta as $value){
 
-                    $cantidad = $value["cantidad"]*-1;
+                    $cantidad = $value["cantidad"];
 
                     $respuestaNota = ModeloArticulos::mdlActualizarStockIngreso($value["articulo"],$cantidad);//sube
                     // $respuestaGuia = ModeloArticulos::mdlActualizarPedido($datos);
@@ -992,8 +992,8 @@ class ControladorFacturacion{
                                                 "tipo_doc"=>$tip_nota,
                                                 "doc_origen"=>$origen_venta,
                                                 "fecha_origen"=>$fecha_origen,
-                                                "motivo"=>'C5',
-                                                "tip_cont"=>'DE',
+                                                "motivo"=>'C7',
+                                                "tip_cont"=>'NC',
                                                 "observacion"=>'',
                                                 "usuario"=>$usuario);
 

@@ -3336,4 +3336,30 @@ class ModeloMovimientos{
 
 	}     
 
+   /* 
+   * top 10 de ventas modelos FOTOS
+   */
+  static public function mdlMovMesFoto(){
+
+   $stmt = Conexion::conectar()->prepare("SELECT 
+                     m.modelo,
+                     m.nombre,
+                     m.imagen,
+                     m.vtas_mes_pasado 
+                  FROM
+                     modelojf m 
+                     WHERE m.modelo NOT IN ('10013')
+                  ORDER BY m.vtas_mes_pasado DESC 
+                  LIMIT 12");
+
+   $stmt -> execute();
+
+   return $stmt -> fetchAll();
+
+   $stmt -> close();
+
+   $stmt = null;
+
+}     
+
 }

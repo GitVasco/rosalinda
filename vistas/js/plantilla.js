@@ -104,6 +104,7 @@ window.addEventListener("beforeunload", function (e) {
 	localStorage.removeItem("envioLetras");
 	// localStorage.removeItem("sectorIngreso");
 });
+
 //Libreria Toastr
 toastr.options = {
 	"closeButton": true,
@@ -124,7 +125,7 @@ toastr.options = {
   }
  
 
-  //Activacion de menu
+//Activacion de menu
 
 //   $(function() {
   

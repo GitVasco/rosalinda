@@ -341,4 +341,15 @@ class ControladorMovimientos{
 
     }    
 
+    /* 
+    * top 12 de ventas modelos fotos
+    */
+    static public function ctrMovMesFoto(){
+
+        $respuesta = ModeloMovimientos::mdlMovMesFoto();
+
+        return $respuesta;
+
+    }    
+
 }
