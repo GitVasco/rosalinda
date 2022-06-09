@@ -6,7 +6,7 @@ class ModeloFacturacion{
 	/*
 	* REGISTAR MOVIMIENTOS 
 	*/
-	static public function mdlRegistrarMovimientos($datos){
+	static public function mdlRegistrarMovimientos($detalle){
 
 		$stmt = Conexion::conectar()->prepare("INSERT INTO movimientosjf_2021 (
                                                     tipo,
@@ -20,44 +20,17 @@ class ModeloFacturacion{
                                                     dscto1,
                                                     dscto2,
                                                     total,
-                                                    nombre_tipo,
-                                                    almacen
+                                                    nombre_tipo
                                                 )
                                                 VALUES
-                                                    (
-                                                    :tipo,
-                                                    :documento,
-                                                    DATE(NOW()),
-                                                    :articulo,
-                                                    :cliente,
-                                                    :vendedor,
-                                                    :cantidad,
-                                                    :precio,
-                                                    '0',
-                                                    :dscto2,
-                                                    :total,
-                                                    :nombre_tipo,
-                                                    :almacen
-                                                    )");
-
-        $stmt->bindParam(":tipo", $datos["tipo"], PDO::PARAM_STR);
-        $stmt->bindParam(":documento", $datos["documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":articulo", $datos["articulo"], PDO::PARAM_STR);
-        $stmt->bindParam(":cliente", $datos["cliente"], PDO::PARAM_STR);
-        $stmt->bindParam(":vendedor", $datos["vendedor"], PDO::PARAM_STR);
-        $stmt->bindParam(":cantidad", $datos["cantidad"], PDO::PARAM_STR);
-        $stmt->bindParam(":precio", $datos["precio"], PDO::PARAM_STR);
-        $stmt->bindParam(":dscto2", $datos["dscto2"], PDO::PARAM_STR);
-        $stmt->bindParam(":total", $datos["total"], PDO::PARAM_STR);
-        $stmt->bindParam(":nombre_tipo", $datos["nombre_tipo"], PDO::PARAM_STR);
-        $stmt->bindParam(":almacen", $datos["almacen"], PDO::PARAM_STR);
-
+                                                    $detalle");
 		if ($stmt->execute()) {
 
 			return "ok";
+
 		} else {
 
-			return "error";
+			return $stmt->errorInfo();
 		}
 
 		$stmt->close();
@@ -284,60 +257,66 @@ class ModeloFacturacion{
     /*
     * ACTUALIZAR TALONARIO + 1 FACTURA
     */
-	static public function mdlGenerarCtaCte($datos){
+    static public function mdlGenerarCtaCte($datos){
 
-		$sql="INSERT INTO cuenta_ctejf (
-                        tipo_doc,
-                        num_cta,
-                        cliente,
-                        vendedor,
-                        fecha,
-                        fecha_ven,
-                        monto,
-                        cod_pago,
-                        doc_origen,
-                        usuario,
-                        saldo
-                    )
-                    VALUES
-                        (
-                        :tipo_doc,
-                        :num_cta,
-                        :cliente,
-                        :vendedor,
-                        DATE(NOW()),
-                        :fecha_ven,
-                        :monto,
-                        :cod_pago,
-                        :num_cta,
-                        :usuario,
-                        :saldo
-                        )";
-
-        $stmt=Conexion::conectar()->prepare($sql);
-
-        $stmt->bindParam(":tipo_doc", $datos["tipo_doc"], PDO::PARAM_STR);
-        $stmt->bindParam(":num_cta", $datos["num_cta"], PDO::PARAM_STR);
-        $stmt->bindParam(":cliente", $datos["cliente"], PDO::PARAM_STR);
-        $stmt->bindParam(":vendedor", $datos["vendedor"], PDO::PARAM_STR);
-        $stmt->bindParam(":fecha_ven", $datos["fecha_ven"], PDO::PARAM_STR);
-        $stmt->bindParam(":monto", $datos["monto"], PDO::PARAM_STR);
-        $stmt->bindParam(":cod_pago", $datos["cod_pago"], PDO::PARAM_STR);
-        $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":saldo", $datos["saldo"], PDO::PARAM_STR);
-
-		if ($stmt->execute()) {
-
-            return "ok";
-
-		} else {
-
-			return "error";
-		}
-
-		$stmt=null;
-
-    }
+      $sql="INSERT INTO cuenta_ctejf (
+                          tipo_doc,
+                          num_cta,
+                          cliente,
+                          vendedor,
+                          fecha,
+                          fecha_ven,
+                          monto,
+                          cod_pago,
+                          doc_origen,
+                          usuario,
+                          saldo,
+                          usureg,
+                          pcreg
+                      )
+                      VALUES
+                          (
+                          :tipo_doc,
+                          :num_cta,
+                          :cliente,
+                          :vendedor,
+                          DATE(NOW()),
+                          :fecha_ven,
+                          :monto,
+                          :cod_pago,
+                          :num_cta,
+                          :usuario,
+                          :saldo,
+                          :usureg,
+                          :pcreg
+                          )";
+  
+          $stmt=Conexion::conectar()->prepare($sql);
+  
+          $stmt->bindParam(":tipo_doc", $datos["tipo_doc"], PDO::PARAM_STR);
+          $stmt->bindParam(":num_cta", $datos["num_cta"], PDO::PARAM_STR);
+          $stmt->bindParam(":cliente", $datos["cliente"], PDO::PARAM_STR);
+          $stmt->bindParam(":vendedor", $datos["vendedor"], PDO::PARAM_STR);
+          $stmt->bindParam(":fecha_ven", $datos["fecha_ven"], PDO::PARAM_STR);
+          $stmt->bindParam(":monto", $datos["monto"], PDO::PARAM_STR);
+          $stmt->bindParam(":cod_pago", $datos["cod_pago"], PDO::PARAM_STR);
+          $stmt->bindParam(":usuario", $datos["usuario"], PDO::PARAM_STR);
+          $stmt->bindParam(":saldo", $datos["saldo"], PDO::PARAM_STR);
+          $stmt->bindParam(":usureg", $datos["usureg"], PDO::PARAM_STR);
+          $stmt->bindParam(":pcreg", $datos["pcreg"], PDO::PARAM_STR);
+  
+      if ($stmt->execute()) {
+  
+              return "ok";
+  
+      } else {
+  
+        return "error";
+      }
+  
+      $stmt=null;
+  
+      }
 
     /*
     * MOSTRAR DETALLE DE TEMPORAL

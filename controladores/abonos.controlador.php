@@ -217,14 +217,42 @@ class ControladorAbonos{
 
 			$tabla="cuenta_ctejf";
 			$tabla2="abonosjf";
-			$datos = array("id" => $_POST["idCuenta4"],
-			   			   "tipo_doc"=>"05",
-						   "num_cta"=>$_POST["editarCuenta"],
-						   "cliente"=>$_POST["editarCliente"],
-						   "vendedor"=>$_POST["editarVendedor"],
-						   "monto"=>$_POST["editarMonto"],
-						   "usuario"=>$_POST["editarUsuario"],
-						   "fecha"=>$_POST["editarFecha"]);
+
+
+			$usureg = $_SESSION["nombre"];
+			$pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);  
+
+			if($_POST["editarSaldo"] >= $_POST["editarAbono"]){
+
+				$abono = $_POST["editarAbono"];
+
+			}else{
+
+				$abono = $_POST["editarSaldo"];
+
+			}			
+
+			$datos = array("id" 		=> $_POST["idCuenta4"],
+			   			   "tipo_doc"	=>$_POST["editarTipo"],
+						   "num_cta"	=>$_POST["editarCuenta"],
+						   "cod_pago"	=>'05',
+						   "doc_origen"	=>$_POST["editarCuenta"],
+						   "cliente"	=>$_POST["editarCliente"],
+						   "vendedor"	=>$_POST["editarVendedor"],
+						   "monto"		=>$abono,
+						   "saldo"		=> 0,
+						   "tip_mov"	=> "-",
+						   "notas"		=> "Dep.en Cta BCP",
+						   "renovacion"	=> 0,
+						   "protesta"	=> 0,
+						   "estado"		=> "PENDIENTE",
+						   "usuario"	=>$_POST["editarUsuario"],
+						   "fecha"		=>$_POST["editarFecha"],	
+						   "fecha_ven"	=>$_POST["fechaVen"],						
+						   "usureg" 	=> $usureg,
+						   "pcreg" 		=> $pcreg);
+
+			#var_dump($datos);
 
 			$respuesta=ModeloCuentas::mdlIngresarCuenta($tabla,$datos);
 			$saldoNuevo=$_POST["editarSaldo"]-$_POST["editarAbono"];

@@ -73,6 +73,18 @@
                     <button type="button" class="btn btn-success" id="regMesM" name="regMesM" data-toggle="modal" data-target="#modalRegMEs">Registro Ventas
                     </button>
 
+                    <button type="button" class="btn btn-warning" id="transSistont" name="transSistont" data-toggle="modal" data-target="#modalSiscont">
+                        Transferir Ventas SISCONT
+                    </button>  
+                    
+                    <button type="button" class="btn btn-warning" id="transSistontLetras" name="transSistontLetras" data-toggle="modal" data-target="#modalSiscontLetras">
+                        Transferir Canje SISCONT
+                    </button>     
+                    
+                    <button type="button" class="btn btn-warning" id="transSistontCancelaciones" name="transSistontCancelaciones" data-toggle="modal" data-target="#modalSiscontCancelaciones">
+                        Transferir Cancelaciones SISCONT
+                    </button>                       
+
 
             </div>
 
@@ -577,6 +589,270 @@ MODAL REGISTRO DE VENTAS
 
 </div>
 
+
+<!--=====================================
+MODAL TRANSFERIR INFO SISCONT
+======================================-->
+
+<div id="modalSiscont" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Tranferir Información</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+
+          <div class="form-group col-lg-6" style="padding-left:0px">
+              <label>Fecha Inicio</label>
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="date" class="form-control input-md" name="inicioSiscont" id="inicioSiscont" required>
+
+              </div>
+
+            </div>    
+
+            <div class="form-group col-lg-6" style="padding-left:0px">
+              <label>Fecha Fin</label>
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="date" class="form-control input-md" name="finSiscont" id="finSiscont" required>
+
+              </div>
+
+            </div>             
+
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="submit" class="btn btn-primary btnGenerarReg">GENERAR</button>
+
+        </div>
+
+      </form>
+
+      <?php
+
+        $dividir = new ControladorContabilidad();
+        $dividir -> ctrGenerarVentasSiscont();
+
+      ?>      
+
+    </div>
+
+  </div>
+
+</div>
+
+<!--=====================================
+MODAL TRANSFERIR CANJE DE LETRAS INFO SISCONT
+======================================-->
+
+<div id="modalSiscontLetras" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Tranferir Información Canje Letras</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+
+          <div class="form-group col-lg-6" style="padding-left:0px">
+              <label>Fecha Inicio</label>
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="date" class="form-control input-md" name="inicioSiscontL" id="inicioSiscontL" required>
+
+              </div>
+
+            </div>    
+
+            <div class="form-group col-lg-6" style="padding-left:0px">
+              <label>Fecha Fin</label>
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="date" class="form-control input-md" name="finSiscontL" id="finSiscontL" required>
+
+              </div>
+
+            </div>             
+
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="submit" class="btn btn-primary">GENERAR</button>
+
+        </div>
+
+      </form>
+
+      <?php
+
+        $dividir = new ControladorContabilidad();
+        $dividir -> ctrGenerarCanjeSiscont();
+
+      ?>      
+
+    </div>
+
+  </div>
+
+</div>
+
+<!--=====================================
+MODAL TRANSFERIR CANCELACIONES INFO SISCONT
+======================================-->
+
+<div id="modalSiscontCancelaciones" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Tranferir Información Cancelaciones</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+
+          <div class="form-group col-lg-6" style="padding-left:0px">
+              <label>Fecha Inicio</label>
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="date" class="form-control input-md" name="inicioSiscontC" id="inicioSiscontC" required>
+
+              </div>
+
+            </div>    
+
+            <div class="form-group col-lg-6" style="padding-left:0px">
+              <label>Fecha Fin</label>
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="date" class="form-control input-md" name="finSiscontC" id="finSiscontC" required>
+
+              </div>
+
+            </div>             
+
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="submit" class="btn btn-primary">GENERAR</button>
+
+        </div>
+
+      </form>
+
+      <?php
+
+        $dividir = new ControladorContabilidad();
+        $dividir -> ctrGenerarCancelacionesSiscont();
+
+      ?>      
+
+    </div>
+
+  </div>
+
+</div>
 
 <?php 
     $enviarFacturaXML = new ControladorFacturacion();

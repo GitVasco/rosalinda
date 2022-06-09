@@ -133,6 +133,9 @@ require_once "controladores/abonos.controlador.php";
 require_once "modelos/cierres.modelo.php";
 require_once "controladores/cierres.controlador.php";
 
+require_once "modelos/contabilidad.modelo.php";
+require_once "controladores/contabilidad.controlador.php";
+
 require_once "modelos/produccion.modelo.php";
 
 require_once "modelos/talonarios.modelo.php";

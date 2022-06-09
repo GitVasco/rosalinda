@@ -71,7 +71,7 @@ class MYPDF extends TCPDF {
         // Title
         $this->Ln(13);
         $this->SetFont('helvetica', 'B', 9);
-        $this->Cell(140, 0, '', 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(140, 0, 'JOSE ADOLFO VASQUEZ CORTEZ', 0, false, 'C', 0, '', 0, false, false, false );
         $this->Ln(4);
         $this->SetFont('helvetica', 'A', 8);
         $this->Cell(140, 0, 'Calle 2 Mz. O Lt.10 - San Elias', 0, false, 'C', 0, '', 0, false, false, false );

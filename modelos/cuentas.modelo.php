@@ -10,7 +10,67 @@ class ModeloCuentas{
 
 	static public function mdlIngresarCuenta($tabla,$datos){
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(tipo_doc,num_cta,cliente,vendedor,fecha,fecha_ven,fecha_cep,tip_mon,monto,tip_cambio,estado,notas,cod_pago,doc_origen,renovacion,protesta,usuario,saldo,ult_pago,estado_doc,banco,num_unico,fecha_envio,fecha_abono,tip_mov) VALUES (:tipo_doc,:num_cta,:cliente,:vendedor,:fecha,:fecha_ven,:fecha_cep,:tip_mon,:monto,:tip_cambio,:estado,:notas,:cod_pago,:doc_origen,:renovacion,:protesta,:usuario,:saldo,:ult_pago,:estado_doc,:banco,:num_unico,:fecha_envio,:fecha_abono,:tip_mov)");
+		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (
+			tipo_doc,
+			num_cta,
+			cliente,
+			vendedor,
+			fecha,
+			fecha_ven,
+			fecha_cep,
+			tip_mon,
+			monto,
+			tip_cambio,
+			estado,
+			notas,
+			cod_pago,
+			doc_origen,
+			renovacion,
+			protesta,
+			usuario,
+			saldo,
+			ult_pago,
+			estado_doc,
+			banco,
+			num_unico,
+			fecha_envio,
+			fecha_abono,
+			tip_mov,
+			usureg,
+			pcreg,
+			fecha_ori
+		  ) 
+		  VALUES
+			(
+			  :tipo_doc,
+			  :num_cta,
+			  :cliente,
+			  :vendedor,
+			  :fecha,
+			  :fecha_ven,
+			  :fecha_cep,
+			  :tip_mon,
+			  :monto,
+			  :tip_cambio,
+			  :estado,
+			  :notas,
+			  :cod_pago,
+			  :doc_origen,
+			  :renovacion,
+			  :protesta,
+			  :usuario,
+			  :saldo,
+			  :ult_pago,
+			  :estado_doc,
+			  :banco,
+			  :num_unico,
+			  :fecha_envio,
+			  :fecha_abono,
+			  :tip_mov,
+			  :usureg,
+			  :pcreg,
+			  :fecha_ori
+			)");
 
 		$stmt->bindParam(":tipo_doc", $datos["tipo_doc"], PDO::PARAM_STR);
 		$stmt->bindParam(":num_cta", $datos["num_cta"], PDO::PARAM_STR);
@@ -37,6 +97,9 @@ class ModeloCuentas{
 		$stmt->bindParam(":fecha_envio", $datos["fecha_envio"], PDO::PARAM_STR);
 		$stmt->bindParam(":fecha_abono", $datos["fecha_abono"], PDO::PARAM_STR);
 		$stmt->bindParam(":tip_mov", $datos["tip_mov"], PDO::PARAM_STR);
+		$stmt->bindParam(":usureg", $datos["usureg"], PDO::PARAM_STR);
+		$stmt->bindParam(":pcreg", $datos["pcreg"], PDO::PARAM_STR);
+		$stmt->bindParam(":fecha_ori", $datos["fecha_ori"], PDO::PARAM_STR);
 
 
 		if($stmt->execute()){
@@ -52,7 +115,7 @@ class ModeloCuentas{
 		$stmt->close();
 		$stmt = null;
 
-	}    
+	}     
 
 	/*=============================================
 	VALIDAR CUENTA
@@ -114,13 +177,15 @@ class ModeloCuentas{
 		(SELECT 
 		  *,
 		  :usuario_bkp,
-		  :fecha_bkp 
+		  :fecha_bkp,
+		  :pc_bkp 
 		FROM
 		  cuenta_ctejf
 		  WHERE id = :id) ;");
 
 		$stmt->bindParam(":usuario_bkp", $datos["usuario_bkp"], PDO::PARAM_STR);
 		$stmt->bindParam(":fecha_bkp", $datos["fecha_bkp"], PDO::PARAM_STR);
+		$stmt->bindParam(":pc_bkp", $datos["pc_bkp"], PDO::PARAM_STR);
 		$stmt->bindParam(":id", $datos["id"], PDO::PARAM_STR);
 
 
@@ -130,7 +195,7 @@ class ModeloCuentas{
 
 		}else{
 
-			return "error";
+			return $stmt->errorInfo();
 		
 		}
 

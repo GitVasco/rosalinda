@@ -21,6 +21,10 @@ class ControladorCuentas{
 				}else{
 					$protestado=$_POST["protestado"];
 				}
+
+				$usureg = $_SESSION["nombre"];
+				$pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']); 
+
 			   	$datos = array("tipo_doc"=>$_POST["nuevoCodigo"],
 							   "num_cta"=>$_POST["nuevoDocumento"],
 							   "cliente"=>$_POST["nuevoCliente"],
@@ -45,7 +49,9 @@ class ControladorCuentas{
 							   "num_unico"=>$_POST["nuevoUnico"],
 							   "fecha_envio"=>$_POST["nuevaFechaEnvio"],
 							   "fecha_abono"=>$_POST["nuevaFechaAbono"],
-							   "tip_mov" => "+");
+							   "tip_mov" => "+",
+							   "usureg" => $usureg,
+							   "pcreg" => $pcreg);
 							   
 
 
@@ -392,20 +398,27 @@ class ControladorCuentas{
 		if(isset($_POST["cancelarDocumento"])){
 
 			$tabla="cuenta_ctejf";
-			   $datos = array("id" => $_POST["idCuenta2"],
-			   			   "tipo_doc"=>$_POST["cancelarTipoDocumento"],
-						   "num_cta"=>$_POST["cancelarDocumentoOriginal"],
-						   "cliente"=>$_POST["cancelarCliente"],
-						   "vendedor"=>$_POST["cancelarVendedor"],
-						   "monto"=>$_POST["cancelarMonto"],
-						   "notas"=>$_POST["cancelarNota"],
-						   "usuario"=>$_POST["cancelarUsuario"],
-						   "fecha"=>$_POST["cancelarFechaUltima"],
-						   "fecha_ven"=>$_POST["cancelarVencimientoOrigen"],
+
+			$usureg = $_SESSION["nombre"];
+			$pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);  
+			
+			
+			$datos = array("id" => $_POST["idCuenta2"],
+							"tipo_doc"=>$_POST["cancelarTipoDocumento"],
+							"num_cta"=>$_POST["cancelarDocumentoOriginal"],
+							"cliente"=>$_POST["cancelarCliente"],
+							"vendedor"=>$_POST["cancelarVendedor"],
+							"monto"=>$_POST["cancelarMonto"],
+							"notas"=>$_POST["cancelarNota"],
+							"usuario"=>$_POST["cancelarUsuario"],
+							"fecha"=>$_POST["cancelarFechaUltima"],
+							"fecha_ven"=>$_POST["cancelarVencimientoOrigen"],
 							"cod_pago" => $_POST["cancelarCodigo"],
 							"doc_origen" => $_POST["cancelarDocumento"],
 							"saldo"=>0,
-							"tip_mov" => "-");
+							"tip_mov" => "-",
+							"usureg" => $usureg,
+							"pcreg" => $pcreg);
 
 				$cuenta=ControladorCuentas::ctrMostrarCuentas("id",$_POST["idCuenta2"]);
 				$saldoNuevo=$cuenta["saldo"]-$_POST["cancelarMonto"];
@@ -644,9 +657,12 @@ class ControladorCuentas{
 				$estado=ModeloCuentas::mdlActualizarUnDato($tabla,"estado","PENDIENTE",$idOrigen);
 			}
 			$actualizacion=ModeloCuentas::mdlActualizarUnDato($tabla,"saldo",$saldoNuevo,$idOrigen);
+			
 			$datos3 = array("id"=>$cancelacion["id"],
-						   "usuario_bkp"=>$_SESSION["id"],
-						   "fecha_bkp"=>$fecha->format("Y-m-d H:i:s"));
+						   "usuario_bkp"=>$_SESSION["nombre"],
+						   "fecha_bkp"=>$fecha->format("Y-m-d H:i:s"),
+						   "pc_bkp" => gethostbyaddr($_SERVER['REMOTE_ADDR']));
+
 			$ingreso_bkp = ModeloCuentas::mdlIngresarCuentaBckp2("cuenta_cte_bkpjf",$datos3);
 			//Despues de realizar el bkp eliminamos
 			$respuesta = ModeloCuentas::mdlEliminarCuenta($tabla,$datos);		
@@ -690,6 +706,12 @@ class ControladorCuentas{
 			$doc1=substr($_POST["letraDocumento"],0,4);
 			$doc2=substr($_POST["letraDocumento"],-5);
 			$documento=$doc1.$doc2."-";
+
+
+			$usureg = $_SESSION["nombre"];
+			$pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);  
+			
+			
             for ($i=0; $i <count($fechasInput) ; $i++) { 
 
 				$datos = array("tipo_doc"=>"85",
@@ -708,7 +730,9 @@ class ControladorCuentas{
 							"doc_origen"=>$_POST["letraDocumento"],
 							"renovacion"=>0,
 							"protesta"=>0,
-							"tip_mov"=>'+');
+							"tip_mov"=>'+',
+							"usureg" => $usureg,
+							"pcreg" => $pcreg);
 
 					
 					$respuesta = ModeloCuentas::mdlIngresarCuenta($tabla,$datos);
@@ -923,20 +947,26 @@ class ControladorCuentas{
 		if(isset($_POST["cancelarDocumento2"])){
 
 			$tabla="cuenta_ctejf";
-			   $datos = array("id" => $_POST["idCuenta3"],
-			   			   "tipo_doc"=>$_POST["cancelarTipoDocumento2"],
-						   "num_cta"=>$_POST["cancelarDocumentoOriginal2"],
-						   "cliente"=>$_POST["cancelarCliente2"],
-						   "vendedor"=>$_POST["cancelarVendedor2"],
-						   "monto"=>$_POST["cancelarMonto3"],
-						   "notas"=>$_POST["cancelarNota2"],
-						   "usuario"=>$_POST["cancelarUsuario2"],
-						   "fecha"=>$_POST["cancelarFechaUltima2"],
-						   "fecha_ven"=>$_POST["cancelarVencimientoOrigen2"],
-						   "cod_pago" => $_POST["cancelarCodigo2"],
-						   "doc_origen" => $_POST["cancelarDocumento2"],
-						   "saldo"=>0,
-						   "tip_mov" => "-"	
+			$usureg = $_SESSION["nombre"];
+			$pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);  
+
+			$datos = array(	"id" 		=> $_POST["idCuenta3"],
+							"tipo_doc"	=>$_POST["cancelarTipoDocumento2"],
+							"num_cta"	=>$_POST["cancelarDocumentoOriginal2"],
+							"cliente"	=>$_POST["cancelarCliente2"],
+							"vendedor"	=>$_POST["cancelarVendedor2"],
+							"monto"		=>$_POST["cancelarMonto3"],
+							"notas"		=>$_POST["cancelarNota2"],
+							"usuario"	=>$_POST["cancelarUsuario2"],
+							"fecha"		=>$_POST["cancelarFechaUltima2"],
+							"fecha_ven"	=>$_POST["cancelarVencimientoOrigen2"],
+							"cod_pago" 	=> $_POST["cancelarCodigo2"],
+							"doc_origen"=> $_POST["cancelarDocumento2"],
+							"saldo"		=>0,
+							"tip_mov" 	=> "-",
+							"usureg" 	=> $usureg,
+							"pcreg" 	=> $pcreg,
+							"fecha_ori" => 	$_POST["cancelarFechaOrigen2"]
 						);
 
 				$cuenta=ControladorCuentas::ctrMostrarCuentas("id",$_POST["idCuenta3"]);
