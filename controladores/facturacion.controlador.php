@@ -24,7 +24,7 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en movimientos
                 */
-                if($respuestaGuia == "ok"){
+                if($respuestaFactura == "ok"){
 
                     foreach($respuesta as $value){
 
