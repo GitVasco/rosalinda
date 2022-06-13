@@ -26,20 +26,18 @@ class ControladorFacturacion{
                 */
                 if($respuestaFactura == "ok"){
 
-                    foreach($respuesta as $value){
+                    $documento = $_POST["serie"];
+                    $doc = str_replace ( '-', '', $documento);
+                    #var_dump($doc);
 
-                        $documento = $_POST["serie"];
-                        $doc = str_replace ( '-', '', $documento);
-                        //var_dump($doc);
+                    $cliente = $_POST["codCli"];
+                    #var_dump($cliente);
 
-                        $cliente = $_POST["codCli"];
-                        //var_dump($cliente);
+                    $vendedor = $_POST["codVen"];
+                    #var_dump($vendedor);
 
-                        $vendedor = $_POST["codVen"];
-                        //var_dump($vendedor);
-
-                        $dscto = $_POST["dscto"];
-                        //var_dump($dscto);
+                    $dscto = $_POST["dscto"];
+                    #var_dump($dscto);
 
                     $tipo = "S01";
                     $nombre_tipo = "GUIA REMISION";
@@ -70,8 +68,7 @@ class ControladorFacturacion{
                     #var_dump("detalle", $detalle);
 
                     $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
-                    #var_dump($respuestaMovimientos);     
-                    }
+                    #var_dump($respuestaMovimientos);   
                 }
                     //var_dump($respuestaMovimientos);
 
