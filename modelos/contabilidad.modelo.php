@@ -567,7 +567,7 @@ class ModeloContabilidad{
 		
 		}
 
-		$stmt->close();
+		#$stmt->close();
 		$stmt = null;
 
     }    

@@ -844,7 +844,7 @@ class ControladorContabilidad{
             $origen = 'c:/xampp/htdocs/vascorp/vistas/contabilidad/cancelaciones/C'.$nomar.'.txt';
                 
             #$destino = '//Sistemas-2/d/contabilidad/cancelaciones/C'.$nomar.'.txt';   
-            #$destino = '//Yudy-pc/datasmart/LINDA2022/C'.$nomar.'.txt';        
+            $destino = '//Yudy-pc/datasmart/LINDA2022/C'.$nomar.'.txt';        
             
             copy($origen, $destino);
 
@@ -858,7 +858,7 @@ class ControladorContabilidad{
             
             $origen2 = 'c:/xampp/htdocs/vascorp/vistas/contabilidad/cancelaciones/CB'.$nomar.'.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/cancelaciones/CB'.$nomar.'.bat';
-            #$destino2 = '//Yudy-pc/datasmart/LINDA2022/CB'.$nomar.'.bat';  
+            $destino2 = '//Yudy-pc/datasmart/LINDA2022/CB'.$nomar.'.bat';  
             copy($origen2, $destino2);
 
             $correlativo = ModeloContabilidad::mdlActualizarCorrelativo($añoI, $mesI, $corr04, "valor_3");
