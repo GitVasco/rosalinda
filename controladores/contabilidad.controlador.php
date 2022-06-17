@@ -841,7 +841,7 @@ class ControladorContabilidad{
 
             fclose($archivo); 
 
-            $origen = 'c:/xampp/htdocs/vascorp/vistas/contabilidad/cancelaciones/C'.$nomar.'.txt';
+            $origen = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/cancelaciones/C'.$nomar.'.txt';
                 
             #$destino = '//Sistemas-2/d/contabilidad/cancelaciones/C'.$nomar.'.txt';   
             $destino = '//Yudy-pc/datasmart/LINDA2022/C'.$nomar.'.txt';        
@@ -856,7 +856,7 @@ class ControladorContabilidad{
             fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." C".$nomar.".txt".PHP_EOL);
             fclose($archivoBat); 
             
-            $origen2 = 'c:/xampp/htdocs/vascorp/vistas/contabilidad/cancelaciones/CB'.$nomar.'.bat';
+            $origen2 = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/cancelaciones/CB'.$nomar.'.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/cancelaciones/CB'.$nomar.'.bat';
             $destino2 = '//Yudy-pc/datasmart/LINDA2022/CB'.$nomar.'.bat';  
             copy($origen2, $destino2);

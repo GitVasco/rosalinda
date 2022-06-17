@@ -34,7 +34,7 @@ class ModeloContabilidad{
                 ELSE '2' 
                 END AS zona,
                 CASE
-                WHEN v.tipo IN ('S02', 'S03', 'S05') 
+                WHEN v.tipo IN ('S02', 'S03', 'S99') 
                 AND LEFT(tm.cuenta, 2) = '12' 
                 THEN v.total 
                 WHEN v.tipo IN ('E05') 
@@ -46,13 +46,13 @@ class ModeloContabilidad{
                 ELSE 0 
                 END AS debe,
                 CASE
-                WHEN v.tipo IN ('S02', 'S03', 'S05') 
+                WHEN v.tipo IN ('S02', 'S03', 'S99') 
                 AND LEFT(tm.cuenta, 2) = '12' 
                 THEN 0 
-                WHEN v.tipo IN ('S02', 'S03', 'S05') 
+                WHEN v.tipo IN ('S02', 'S03', 'S99') 
                 AND LEFT(tm.cuenta, 2) = '40' 
                 THEN v.igv 
-                WHEN v.tipo IN ('S02', 'S03', 'S05') 
+                WHEN v.tipo IN ('S02', 'S03', 'S99') 
                 AND LEFT(tm.cuenta, 2) = '70' 
                 THEN v.neto 
                 WHEN v.tipo IN ('E05') 
@@ -69,7 +69,7 @@ class ModeloContabilidad{
                 THEN '01' 
                 WHEN v.tipo = 'E05' 
                 THEN '07' 
-                WHEN v.tipo = 'S05' 
+                WHEN v.tipo = 'S99' 
                 THEN '08' 
                 END AS tipo_doc,
                 CONCAT(
@@ -159,7 +159,7 @@ class ModeloContabilidad{
                 AND v.documento = n.documento 
             WHERE v.tipo = :tipo 
                 AND v.documento = :documento 
-                AND v.tipo IN ('S02', 'S03', 'S05', 'E05') 
+                AND v.tipo IN ('S02', 'S03', 'S99', 'E05') 
             ORDER BY v.documento,
                 tm.cuenta";                
 
@@ -234,7 +234,7 @@ class ModeloContabilidad{
                     THEN '01' 
                     WHEN v.tipo = 'E05' 
                     THEN '07' 
-                    WHEN v.tipo = 'S05' 
+                    WHEN v.tipo = 'S99' 
                     THEN '08' 
                     END AS doc,
                     CONCAT(
@@ -277,7 +277,7 @@ class ModeloContabilidad{
                     AND v.documento = n.documento 
                 WHERE v.fecha BETWEEN '$inicio' 
                     AND '$fin' 
-                    AND v.tipo IN ('S02', 'S03', 'E05', 'S05') 
+                    AND v.tipo IN ('S02', 'S03', 'E05', 'S99') 
                     UNION
                     SELECT 
                     '02' AS t,
@@ -330,7 +330,7 @@ class ModeloContabilidad{
                         THEN '01' 
                         WHEN v.tipo = 'E05' 
                         THEN '07' 
-                        WHEN v.tipo = 'S05' 
+                        WHEN v.tipo = 'S99' 
                         THEN '08' 
                     END AS doc,
                     CONCAT(
@@ -373,7 +373,7 @@ class ModeloContabilidad{
                         AND v.documento = n.documento 
                     WHERE v.fecha BETWEEN '$inicio' 
                     AND '$fin' 
-                    AND v.tipo IN ('S02', 'S03', 'E05', 'S05') 
+                    AND v.tipo IN ('S02', 'S03', 'E05', 'S99') 
                     UNION
                     SELECT 
                         '02' AS t,
@@ -426,7 +426,7 @@ class ModeloContabilidad{
                         THEN '01' 
                         WHEN v.tipo = 'E05' 
                         THEN '07' 
-                        WHEN v.tipo = 'S05' 
+                        WHEN v.tipo = 'S99' 
                         THEN '08' 
                         END AS doc,
                         CONCAT(
@@ -469,7 +469,7 @@ class ModeloContabilidad{
                         AND v.documento = n.documento 
                     WHERE v.fecha BETWEEN '$inicio' 
                         AND '$fin' 
-                        AND v.tipo IN ('S02', 'S03', 'E05', 'S05') 
+                        AND v.tipo IN ('S02', 'S03', 'E05', 'S99') 
                     ORDER BY documento,
                         cuenta";                
 
@@ -525,7 +525,7 @@ class ModeloContabilidad{
                     ventajf v 
                 WHERE v.fecha BETWEEN :fechaInicio 
                     AND :fechaFin 
-                    AND v.tipo IN ('S02', 'S03', 'S05', 'E05') 
+                    AND v.tipo IN ('S02', 'S03', 'S99', 'E05') 
                 ORDER BY v.fecha,
                     v.tipo,
                     v.documento";
@@ -864,7 +864,7 @@ class ModeloContabilidad{
                         CASE
                         WHEN c1.codigos_pago = '04' 
                         THEN '101100' 
-                        ELSE '121101' 
+                        ELSE '121201' 
                         END AS cuenta,
                         ROUND(c1.monto, 2) AS debe,
                         0 AS haber,
@@ -1033,7 +1033,7 @@ class ModeloContabilidad{
                         CASE
                             WHEN cc.tipo_doc = '85' 
                             THEN '123101' 
-                            ELSE '121101' 
+                            ELSE '121201' 
                         END AS cuenta,
                         ROUND('0.00', 2) AS debe,
                         cc.monto AS haber,
@@ -1140,7 +1140,7 @@ class ModeloContabilidad{
                     THEN '104101' 
                     WHEN c1.cod_pago IN ('06', '14') 
                     THEN '104103' 
-                    ELSE '121101' 
+                    ELSE '121201' 
                     END AS cuenta,
                     ROUND(c1.monto, 2) AS debe,
                     0 AS haber,
@@ -1303,7 +1303,7 @@ class ModeloContabilidad{
                     CASE
                         WHEN cc.tipo_doc = '85' 
                         THEN '123101' 
-                        ELSE '121101' 
+                        ELSE '121201' 
                     END AS cuenta,
                     ROUND('0.00', 2) AS debe,
                     cc.monto AS haber,
