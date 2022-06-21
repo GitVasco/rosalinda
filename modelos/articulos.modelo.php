@@ -323,7 +323,7 @@ class ModeloArticulos
 	* MOSTRAR ARTICULOS PARA LA TABLA DE ORDENES DE CORTE
 	*/
 	static public function mdlMostrarArticulosTaller($sectorIngreso){
-		if($sectorIngreso=="T4" || $sectorIngreso=="T6" || $sectorIngreso=="T9" || $sectorIngreso=="T2" || $sectorIngreso=="T8"  || $sectorIngreso=="TA" ||  $sectorIngreso=="T1" || $sectorIngreso == "T3" || $sectorIngreso=="T7"){
+		if($sectorIngreso=="T4" || $sectorIngreso=="T6" || $sectorIngreso=="T9" || $sectorIngreso=="T2" || $sectorIngreso=="T8"  || $sectorIngreso=="TA" ||  $sectorIngreso=="T1" || $sectorIngreso == "T3" || $sectorIngreso=="T7" || $sectorIngreso=="T10"){
 
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			a.articulo,
@@ -338,15 +338,19 @@ class ModeloArticulos
 			cd.cantidad AS taller,
 			a.alm_corte,
 			a.ord_corte 
-			FROM
-			  cierres_detallejf cd 
-			  LEFT JOIN cierresjf c 
-				ON cd.codigo = c.codigo 
-			  LEFT JOIN articulojf a 
-				ON cd.articulo = a.articulo 
-			WHERE LEFT(cd.codigo, 2) = '".$sectorIngreso."' 
-			AND cd.cantidad >0
-			ORDER BY c.guia, a.articulo;");
+		  FROM
+			cierres_detallejf cd 
+			LEFT JOIN cierresjf c 
+			  ON cd.codigo = c.codigo 
+			LEFT JOIN articulojf a 
+			  ON cd.articulo = a.articulo 
+		  WHERE (
+			  LEFT(cd.codigo, 2) = 'T10' 
+			  OR LEFT(cd.codigo, 3) = 'T10'
+			) 
+			AND cd.cantidad > 0 
+		  ORDER BY c.guia,
+			a.articulo");
 	
 			$stmt->execute();
 	
