@@ -27,9 +27,11 @@ class MYPDF extends TCPDF {
         $this->Cell(0, 8, $fechaCabecera, 0, false, 'R', 0, '', 0, false, false, false );
         
         $this->Ln(2);
-        $this->Cell(0, 15, 'DOCUMENTOS POR COBRAR - '.$fechaActual, 0, false, 'C', 0, '', 0, false, false, false );
+        $this->Cell(0, 15, 'DOCUMENTOS VENCIDOS - '.$fechaActual, 0, false, 'C', 0, '', 0, false, false, false );
+        
         $this->Ln(7);
-        $this->Cell(0, 9, 'T.     Nro. doc.          F. Emi            F. Ven           Saldo                   Cod.              Cliente                                                 Saldo             Zona                        Prot.  ', 0, 1, 'C', 0, '', 0, false, false, false );
+        $this->SetFont('helvetica', 'B', 12);
+        $this->Cell(0, 9, 'T.    Nro. doc.          F. Emi           F. Ven          Origen              Cod.            Cliente                                                 Saldo          Zona                         Prot.', 0, 1, 'C', 0, '', 0, false, false, false );
         
         $this->Cell(0, 0, '========================================================================================================================', 0, 1, 'L', 0, '', 0, false, 'M', 'M' );
 
@@ -50,7 +52,7 @@ $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-$pdf->AddPage('P','A4');
+$pdf->AddPage('L','A4');
 $pdf->setPage(1, true);
 
 
@@ -69,7 +71,7 @@ $pdf->SetFont($fontname, '', 7, '', false);
 //---------------------------------------------------------
 
 
-$pdf->SetFont($fontname, '', 10, '', false);
+$pdf->SetFont($fontname, '', 12, '', false);
 
 $bloque1 = '<table style="text-center" >
                 <tbody>
@@ -104,13 +106,13 @@ $bloque1 = '<table style="text-center" >
 
 $pdf->writeHTML($bloque1, false, false, false, false, '');   
 
-$pdf->SetFont($fontname, '', 7, '', false);
+$pdf->SetFont($fontname, '', 10, '', false);
 
 foreach ($cuentas as $key => $value){
 
     if($value["tipo_doc"] == "ZZ"){
 
-        $pdf->SetFont($fontname, '', 8, '', false);
+        $pdf->SetFont($fontname, '', 12, '', false);
         $nombre = substr($value["nombre"],0,30);
 
         $nom_ubigeo = substr($value["nom_ubigeo"],0,15);
@@ -119,29 +121,29 @@ foreach ($cuentas as $key => $value){
         <tbody>
 
             <tr>
-                <td style="width:15px"></td>
-                <td style="width:60px"></td>
-                <td style="width:50px"></td>
-                <td style="width:50px"></td>
-                <td style="width:60px"></td>
-                <td style="width:50px"></td>
-                <td style="width:140px"></td>
-                <td style="width:55px;text-align:right"></td>
+                <td style="width:25px"></td>
+                <td style="width:85px"></td>
                 <td style="width:70px"></td>
+                <td style="width:70px"></td>
+                <td style="width:85px"></td>
+                <td style="width:70px"></td>
+                <td style="width:190px"></td>
+                <td style="width:75px;text-align:right"></td>
+                <td style="width:120px"></td>
                 <td style="width:35px"></td>
             </tr>
     
     
             <tr>
-                <td style="width:15px"></td>
-                <td style="width:60px"></td>
-                <td style="width:50px"></td>
-                <td style="width:50px"></td>
-                <td style="width:60px"></td>
-                <td style="width:50px"></td>
-                <td style="width:140px"><b>Total Vencidos S/</b></td>
-                <td style="width:55px;text-align:right">'.number_format($value["saldo"],2).'</td>
+                <td style="width:25px"></td>
+                <td style="width:85px"></td>
                 <td style="width:70px"></td>
+                <td style="width:70px"></td>
+                <td style="width:85px"></td>
+                <td style="width:70px"></td>
+                <td style="width:185px"><b>Total Vencidos S/</b></td>
+                <td style="width:80px;text-align:right"><b>'.number_format($value["saldo"],2).'</b></td>
+                <td style="width:120px"></td>
                 <td style="width:35px"></td>
             </tr>
         </tbody>
@@ -158,15 +160,15 @@ foreach ($cuentas as $key => $value){
         $bloque3 = '<table style="text-center" >
         <tbody>
             <tr>
-                <td style="width:15px">'.$value["tipo_doc"].'</td>
-                <td style="width:60px">'.$value["num_cta"].'</td>
-                <td style="width:50px">'.$value["fecha"].'</td>
-                <td style="width:50px">'.$value["fecha_ven"].'</td>
-                <td style="width:60px">'.$value["doc_origen"].'</td>
-                <td style="width:55px">'.$value["cliente"].'</td>
-                <td style="width:140px">'.$nombre.'</td>
-                <td style="width:50px;text-align:right">'.number_format($value["saldo"],2).'</td>
-                <td style="width:70px">'.$nom_ubigeo.'</td>
+                <td style="width:25px">'.$value["tipo_doc"].'</td>
+                <td style="width:85px">'.$value["num_cta"].'</td>
+                <td style="width:70px">'.$value["fecha"].'</td>
+                <td style="width:70px">'.$value["fecha_ven"].'</td>
+                <td style="width:85px">'.$value["doc_origen"].'</td>
+                <td style="width:70px">'.$value["cliente"].'</td>
+                <td style="width:190px">'.$nombre.'</td>
+                <td style="width:75px;text-align:right">'.number_format($value["saldo"],2).'</td>
+                <td style="width:120px">'.$nom_ubigeo.'</td>
                 <td style="width:35px">'.$value["protesta"].'</td>
             </tr>
         </tbody>
