@@ -323,7 +323,7 @@ class ModeloArticulos
 	* MOSTRAR ARTICULOS PARA LA TABLA DE ORDENES DE CORTE
 	*/
 	static public function mdlMostrarArticulosTaller($sectorIngreso){
-		if($sectorIngreso=="T4" || $sectorIngreso=="T6" || $sectorIngreso=="T9" || $sectorIngreso=="T2" || $sectorIngreso=="T8"  || $sectorIngreso=="TA" ||  $sectorIngreso=="T1" || $sectorIngreso == "T3" || $sectorIngreso=="T7" || $sectorIngreso=="T10"){
+		if($sectorIngreso=="T4" || $sectorIngreso=="T6" || $sectorIngreso=="T9" || $sectorIngreso=="T2" || $sectorIngreso=="T8"  || $sectorIngreso=="TA" ||  $sectorIngreso=="T1" || $sectorIngreso == "T3" || $sectorIngreso=="T7" || $sectorIngreso=="T10" || $sectorIngreso=="T11"){
 
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			a.articulo,
