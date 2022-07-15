@@ -344,7 +344,17 @@ class ModeloServicios{
 
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT pd.*,m.nombre FROM $tabla pd LEFT JOIN modelojf  m ON pd.modelo = m.modelo ORDER BY pd.id DESC");
+			$stmt = Conexion::conectar()->prepare("SELECT 
+								pd.*,
+								s.nom_sector,
+								m.nombre 
+							FROM
+								precio_serviciojf pd 
+								LEFT JOIN modelojf m 
+								ON pd.modelo = m.modelo 
+								LEFT JOIN sectorjf s
+								ON pd.taller=s.cod_sector
+							ORDER BY pd.id DESC ");
 
 			$stmt -> execute();
 
@@ -924,7 +934,7 @@ class ModeloServicios{
 		$stmt = Conexion::conectar()->prepare("SELECT 
 		c.taller,
 		ROUND(
-		  SUM(sd.cantidad / 12 * ps.precio_doc),
+		  SUM(sd.total / 12 * ps.precio_doc),
 		  2
 		) AS total_soles 
 	  FROM
@@ -1092,65 +1102,65 @@ class ModeloServicios{
 	static public function mdlVerSumaPagos($inicio,$fin,$sector){
 
 		$stmt = Conexion::conectar()->prepare("SELECT 
-		c.taller,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '1' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t1,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '2' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t2,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '3' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t3,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '4' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t4,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '5' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t5,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '6' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t6,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '7' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t7,
-		SUM(
-		  CASE
-			WHEN a.cod_talla = '8' 
-			THEN sd.cantidad 
-			ELSE 0 
-		  END
-		) AS t8,
-		SUM(sd.cantidad) AS total_und,
-		ROUND(SUM(sd.cantidad) / 12, 2) AS total_docenas 
+			c.taller,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '1' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t1,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '2' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t2,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '3' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t3,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '4' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t4,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '5' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t5,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '6' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t6,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '7' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t7,
+			SUM(
+				CASE
+				WHEN a.cod_talla = '8' 
+				THEN sd.total 
+				ELSE 0 
+				END
+			) AS t8,
+			SUM(sd.total) AS total_und,
+			ROUND(SUM(sd.total) / 12, 2) AS total_docenas 
 	  FROM
 		cierresjf c 
 		LEFT JOIN cierres_detallejf sd 
