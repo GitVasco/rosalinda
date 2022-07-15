@@ -994,65 +994,65 @@ class ModeloServicios{
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '1' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t1,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '2' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t2,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '3' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t3,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '4' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t4,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '5' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t5,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '6' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t6,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '7' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t7,
 		SUM(
 		  CASE
 			WHEN a.cod_talla = '8' 
-			THEN sd.cantidad 
+			THEN sd.total 
 			ELSE 0 
 		  END
 		) AS t8,
-		SUM(sd.cantidad) AS total_und,
-		ROUND(SUM(sd.cantidad) / 12, 2) AS total_docenas,
+		SUM(sd.total) AS total_und,
+		ROUND(SUM(sd.total) / 12, 2) AS total_docenas,
 		ps.precio_doc,
 		ROUND(
 		  (
-			(SUM(sd.cantidad) / 12) * ps.precio_doc
+			(SUM(sd.total) / 12) * ps.precio_doc
 		  ),
 		  2
 		) AS total_soles 

@@ -345,8 +345,8 @@ class ModeloArticulos
 			LEFT JOIN articulojf a 
 			  ON cd.articulo = a.articulo 
 		  WHERE (
-			  LEFT(cd.codigo, 2) = 'T10' 
-			  OR LEFT(cd.codigo, 3) = 'T10'
+			  LEFT(cd.codigo, 2) = '$sectorIngreso' 
+			  OR LEFT(cd.codigo, 3) = '$sectorIngreso'
 			) 
 			AND cd.cantidad > 0 
 		  ORDER BY c.guia,

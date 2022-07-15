@@ -114,7 +114,8 @@ class ControladorCierres{
 					foreach($listaProductos as $key=>$value){
 
 						$datos=array("articulo"=>$value["articulo"],
-									 "cantidad"=>$value["cantidad"],
+									"total"=>$value["cantidad"], 
+									"cantidad"=>$value["cantidad"],
 									 "codigo"=>$_POST["nuevoCierre"],
 									 "cod_servicio"=>$value["codServicio"]);
 
