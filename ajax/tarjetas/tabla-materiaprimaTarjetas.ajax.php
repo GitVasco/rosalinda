@@ -21,7 +21,7 @@ class TablaMateriaPrimaTarjetas{
 
         for($i = 0; $i < count($materiaprima); $i++){
 
-    
+            $descripcion = str_replace('"','',$materiaprima[$i]["descripcion"]);
         /*=============================================
         TRAEMOS LAS ACCIONES
         =============================================*/         
@@ -31,7 +31,7 @@ class TablaMateriaPrimaTarjetas{
             $datosJson .= '[
             "'.$materiaprima[$i]["codlinea"].'",
             "'.$materiaprima[$i]["codigo"].'",
-            "'.$materiaprima[$i]["descripcion"].'",
+            "'.$descripcion.'",
             "'.$materiaprima[$i]["color"].'",
             "'.$materiaprima[$i]["unidad"].'",
             "'.$botones.'"

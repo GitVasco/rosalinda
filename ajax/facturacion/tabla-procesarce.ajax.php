@@ -104,6 +104,13 @@ class TablaProcesarCE{
                 $botones =  "";
        
 
+            }else if ($factura[$i]["facturacion"] == "4"){
+
+                $envio = "<span style='font-size:85%' class='label label-danger'>ANULADO</span>";
+                
+                $botones =  "";
+       
+
             }
             
 

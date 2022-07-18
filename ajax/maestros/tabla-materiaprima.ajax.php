@@ -21,6 +21,8 @@ class TablaMateriaPrima{
     
             for($i = 0; $i < count($materiaprima); $i++){
 
+                $descripcion = str_replace('"','',$materiaprima[$i]["descripcion"]);
+
 
             /*=============================================
             PROMEDIO
@@ -46,7 +48,7 @@ class TablaMateriaPrima{
                 "'.$materiaprima[$i]["codigo"].'",
                 "'.$materiaprima[$i]["codlinea"].'",
                 "'.$materiaprima[$i]["linea"].'",
-                "'.$materiaprima[$i]["descripcion"].'",
+                "'.$descripcion.'",
                 "'.$materiaprima[$i]["color"].'",
                 "'.$materiaprima[$i]["stock"].'",
                 "'.$prom.'",
