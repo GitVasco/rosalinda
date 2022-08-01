@@ -172,7 +172,7 @@ class ControladorClientes{
 								"ape_materno"		=>$ape_mat,
 								"nombres"			=>$nombres,
 								"direccion"			=>$direccion,
-								"direccion_despacho"=>$direccionDespacho,
+								"direccion_despacho"=>$_POST["editarDireccionDespacho"],
 								"ubigeo"			=>$_POST["editarUbigeo"],
 								"ubigeo_despacho"	=>$_POST["editarUbigeoDespacho"],
 								"telefono"			=>$telefono1,

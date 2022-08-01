@@ -961,7 +961,7 @@ class ControladorCuentas{
 							"fecha"		=>$_POST["cancelarFechaUltima2"],
 							"fecha_ven"	=>$_POST["cancelarVencimientoOrigen2"],
 							"cod_pago" 	=> $_POST["cancelarCodigo2"],
-							"doc_origen"=> $_POST["cancelarDocumento2"],
+							"doc_origen"=> trim($_POST["cancelarDocumento2"]),
 							"saldo"		=>0,
 							"tip_mov" 	=> "-",
 							"usureg" 	=> $usureg,
@@ -1367,5 +1367,27 @@ class ControladorCuentas{
 		return $respuesta;
 
     }
+
+	/*=============================================
+	ESTADO DE CUENTA CABECERA
+	=============================================*/
+	static public function ctrEstadoCuentaCab($cliente){
+
+		$respuesta = ModeloCuentas::ctrEstadoCuentaCab($cliente);
+
+		return $respuesta;
+
+	}	
+
+	/*=============================================
+	ESTADO DE CUENTA DETALLE
+	=============================================*/
+	static public function ctrEstadoCuentaDet($cliente){
+
+		$respuesta = ModeloCuentas::ctrEstadoCuentaDet($cliente);
+
+		return $respuesta;
+
+	}		
 
 }

@@ -2130,3 +2130,17 @@ $(".tablaCtasVdor").on("click", ".btnEstadoCtaVdorVdos", function () {
 window.open("extensiones/tcpdf/pdf/reporte_estado_cuenta_vdor_vdos.php?vendedor=" +vendedor,"_blank");
 
 })
+
+
+/* 
+* BOTON  IMPRIMIR TICKET
+*/
+$(".tablaClientes").on("click", ".btnImprimirEstadoCuenta", function () {
+
+  var cliente = $(this).attr("cliente");
+  //console.log(cliente);
+
+
+window.open("vistas/reportes_ticket/estado_cuenta.php?cliente=" +cliente,"_blank");
+
+})

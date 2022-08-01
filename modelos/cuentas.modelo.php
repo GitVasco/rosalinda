@@ -3501,4 +3501,126 @@ class ModeloCuentas{
 
 	}	
 
+	//* ESTADO DE CEUNTA CABECERA
+	static public function ctrEstadoCuentaCab($cliente){	
+
+			$stmt = Conexion::conectar()->prepare("SELECT 
+														cc.cliente,
+														c.nombre,
+														c.direccion,
+														c.ubigeo,
+														(SELECT 
+															nombre 
+														FROM
+															ubigeo u 
+														WHERE c.ubigeo = u.codigo) AS nom_ubigeo,
+														c.documento,
+														c.telefono,
+														SUM(cc.saldo) AS saldo,
+														SUM(
+															CASE
+															WHEN cc.protesta = '1' 
+															THEN 85 
+															ELSE 0 
+															END
+														) AS gastos,
+														(
+															SUM(cc.saldo) + SUM(
+															CASE
+																WHEN cc.protesta = '1' 
+																THEN 85 
+																ELSE 0 
+															END
+															)
+														) AS monto_total 
+																FROM
+																	cuenta_ctejf cc 
+																	LEFT JOIN clientesjf c 
+																	ON cc.cliente = c.codigo 
+																WHERE cc.cliente = :cliente 
+																	AND cc.tip_mov = '+' 
+																	AND cc.estado = 'PENDIENTE' 
+																GROUP BY cc.cliente");
+	
+			$stmt -> bindParam(":cliente", $cliente, PDO::PARAM_STR);
+	
+			$stmt -> execute();
+	
+			return $stmt -> fetch();
+
+		
+
+		$stmt -> close();
+
+		$stmt = null;
+
+    }		
+
+	//* ESTADO DE CEUNTA DETALLE
+	static public function ctrEstadoCuentaDet($cliente){	
+
+		$stmt = Conexion::conectar()->prepare("SELECT 
+											CASE
+												WHEN c.tipo_doc = '01' 
+												THEN 'FACTURA' 
+												WHEN c.tipo_doc = '03' 
+												THEN 'BOLETA' 
+												WHEN c.tipo_doc = '07' 
+												THEN 'NC' 
+												WHEN c.tipo_doc = '08' 
+												THEN 'ND' 
+												WHEN c.tipo_doc = '09' 
+												THEN 'PROFORMA' 
+												ELSE 'LETRA' 
+											END AS tipo_documento,
+											c.num_cta,
+											c.fecha,
+											c.fecha_ven,
+											c.vendedor,
+											c.num_unico,
+											CASE
+												WHEN c.banco = '02' 
+												THEN 'BCP' 
+												ELSE '' 
+											END AS banco,
+											c.monto,
+											c.saldo,
+											CASE
+												WHEN c.protesta = '1' 
+												THEN 'SI' 
+												ELSE 'NO' 
+											END AS protesta,
+											CASE
+												WHEN c.protesta = '1' 
+												THEN 85 
+												ELSE 0 
+											END AS gasto,
+											(
+												c.saldo + 
+												CASE
+												WHEN c.protesta = '1' 
+												THEN 85 
+												ELSE 0 
+												END
+											) AS monto_total 
+												FROM
+													cuenta_ctejf c 
+												WHERE c.cliente = :cliente 
+													AND c.tip_mov = '+' 
+													AND c.estado = 'PENDIENTE' 
+												ORDER BY c.tipo_doc,
+													c.fecha_ven");
+
+		$stmt -> bindParam(":cliente", $cliente, PDO::PARAM_STR);
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll();
+
+		$stmt -> close();
+
+		$stmt = null;
+
+	}		
+
 }

@@ -79,7 +79,7 @@ class TablaClientes{
             TRAEMOS LAS ACCIONES
             =============================================*/         
             
-            $botones =  "<div class='btn-group'><button class='btn btn-xs btn-warning btnEditarCliente' codigo='".$clientes[$i]["codigo"]."' data-toggle='modal' data-target='#modalEditarCliente' title='Editar cliente'><i class='fa fa-pencil' ></i></button><button class='btn btn-xs btn-primary btnEditarAval' title='Editar Aval'  codigo='".$clientes[$i]["codigo"]."' data-toggle='modal' data-target='#modalEditarAval'><i class='fa fa-user'></i></button></div>"; 
+            $botones =  "<div class='btn-group'><button class='btn btn-xs btn-warning btnEditarCliente' codigo='".$clientes[$i]["codigo"]."' data-toggle='modal' data-target='#modalEditarCliente' title='Editar cliente'><i class='fa fa-pencil' ></i></button><button class='btn btn-xs btn-primary btnEditarAval' title='Editar Aval'  codigo='".$clientes[$i]["codigo"]."' data-toggle='modal' data-target='#modalEditarAval'><i class='fa fa-user'></i></button><button title='Imprimir Estado Cuenta' class='btn btn-xs btn-success btnImprimirEstadoCuenta' cliente='".$clientes[$i]["codigo"]."'><i class='fa fa-diamond'></i></button></div>"; 
 
                 $datosJson .= '[
                 "'.$clientes[$i]["codigo"].'",
