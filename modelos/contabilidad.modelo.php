@@ -677,8 +677,8 @@ class ModeloContabilidad{
                         cc.doc_origen,
                         CASE
                         WHEN cc.cod_pago = '85' 
-                        THEN '123101' 
-                        ELSE '121101' 
+                        THEN '123201' 
+                        ELSE '121201' 
                         END AS cuenta,
                         ROUND('0.00', 2) AS debe,
                         ROUND(SUM(cc.monto), 2) AS haber,
@@ -778,8 +778,8 @@ class ModeloContabilidad{
                         cc.doc_origen,
                         CASE
                         WHEN cc.tipo_doc = '08' 
-                        THEN '121101' 
-                        ELSE '123101' 
+                        THEN '121201' 
+                        ELSE '123201' 
                         END AS cuenta,
                         ROUND('0.00', 2) AS debe,
                         ROUND(cc.monto, 2) AS haber,

@@ -478,7 +478,7 @@ $("#nuevaMarca").change(function(){
 		$("#nuevoTipo").html("<option value=''>Seleccionar Tipo</option><option value='BOXER V'>BOXER V</option>");
 	}
 	else if(marca=="4"){
-		$("#nuevoTipo").html("<option value=''>Seleccionar Tipo</option><option value='SK'>SK</option>");
+		$("#nuevoTipo").html("<option value=''>Seleccionar Tipo</option><option value='TRUSAS'>TRUSAS</option><option value='TOP'>TOP</option>");
 	}
 });
 
