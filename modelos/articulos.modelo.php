@@ -323,7 +323,7 @@ class ModeloArticulos
 	* MOSTRAR ARTICULOS PARA LA TABLA DE ORDENES DE CORTE
 	*/
 	static public function mdlMostrarArticulosTaller($sectorIngreso){
-		if($sectorIngreso=="T4" || $sectorIngreso=="T6" || $sectorIngreso=="T9" || $sectorIngreso=="T2" || $sectorIngreso=="T8"  || $sectorIngreso=="TA" ||  $sectorIngreso=="T1" || $sectorIngreso == "T3" || $sectorIngreso=="T7" || $sectorIngreso=="T10" || $sectorIngreso=="T11"){
+		if($sectorIngreso=="T4" || $sectorIngreso=="T6" || $sectorIngreso=="T9" || $sectorIngreso=="T2" || $sectorIngreso=="T8"  || $sectorIngreso=="TA" ||  $sectorIngreso=="T1" || $sectorIngreso == "T3" || $sectorIngreso=="T7" || $sectorIngreso=="T10" || $sectorIngreso=="T11" || $sectorIngreso=="T5"){
 
 			$stmt = Conexion::conectar()->prepare("SELECT 
 			a.articulo,
@@ -344,10 +344,7 @@ class ModeloArticulos
 			  ON cd.codigo = c.codigo 
 			LEFT JOIN articulojf a 
 			  ON cd.articulo = a.articulo 
-		  WHERE (
-			  LEFT(cd.codigo, 2) = '$sectorIngreso' 
-			  OR LEFT(cd.codigo, 3) = '$sectorIngreso'
-			) 
+		  WHERE c.taller = '$sectorIngreso'
 			AND cd.cantidad > 0 
 		  ORDER BY c.guia,
 			a.articulo");
@@ -1829,7 +1826,7 @@ class ModeloArticulos
 		  FROM
 			articulojf a 
 		  WHERE a.estado = 'ACTIVO' 
-		  AND a.marca IN ('ROSALINDA','JOSXX') 
+		  AND a.marca IN ('ROSALINDA','JOSXX','SWEET KISS') 
 		  ORDER BY a.articulo ASC");
 
 			$stmt->bindParam(":modelo", $modelo, PDO::PARAM_STR);
@@ -1902,7 +1899,7 @@ class ModeloArticulos
 		  FROM
 			articulojf a 
 		  WHERE a.estado = 'ACTIVO' 
-			AND a.marca IN ('ROSALINDA','JOSXX') 
+			AND a.marca IN ('ROSALINDA','JOSXX','SWEET KISS') 
 			AND a.modelo = :valor
 		  ORDER BY a.articulo ASC");
 
