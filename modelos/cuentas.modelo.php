@@ -251,6 +251,7 @@ class ModeloCuentas{
 			c.fecha_ven,
 			c.fecha,
 			c.monto,
+			c.saldo,
 			cli.codigo,
 			cli.nombre,
 			cli.direccion,
@@ -305,7 +306,7 @@ class ModeloCuentas{
 
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT c.num_cta,c.doc_origen,c.fecha_ven,c.fecha,c.monto,cli.nombre,cli.direccion,cli.documento,cli.telefono FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+'");
+			$stmt = Conexion::conectar()->prepare("SELECT c.num_cta,c.doc_origen,c.fecha_ven,c.fecha,c.monto,c.saldo,cli.nombre,cli.direccion,cli.documento,cli.telefono FROM $tabla c LEFT JOIN clientesjf cli ON c.cliente=cli.codigo WHERE c.tip_mov ='+'");
 
 			$stmt -> execute();
 

@@ -5,7 +5,8 @@
   <link href="css/ticket_v4.css" target="_blank" rel="stylesheet" type="text/css">
 </head>
 
-<body onload="window.print();">
+<!-- <body onload="window.print();"> -->
+<body>
 <?php
 require_once "../../controladores/cuentas.controlador.php";
 require_once "../../modelos/cuentas.modelo.php";
@@ -30,7 +31,7 @@ $diaVencimiento = substr($respuesta["fecha_ven"],8,2);
 $mesVencimiento = substr($respuesta["fecha_ven"],5,2);
 $anoVencimiento = substr($respuesta["fecha_ven"],0,4);
 
-$letras= CantidadEnLetra($respuesta["monto"]);
+$letras= CantidadEnLetra($respuesta["saldo"]);
 
 ?>
   <div class="zona_impresion">
@@ -43,39 +44,39 @@ $letras= CantidadEnLetra($respuesta["monto"]);
       echo '<table >
     
                 <tr>
-                    <td style="width:180px;text-align:center">'.$respuesta["num_cta"].'</td>
-                    <td style="width:180px;text-align:center">'.$respuesta["doc_origen"].'</td>
-                    <td style="width:80px;text-align:center">'.$diaEmision.'</td>
-                    <td style="width:50px;text-align:center">'.$mesEmision.'</td>
-                    <td style="width:50px;text-align:center">'.$anoEmision.'</td>
-                    <td style="width:250px;text-align:center">'.$lugar.'</td>
-                    <td style="width:50px">'.$diaVencimiento.'</td>
-                    <td style="width:50px">'.$mesVencimiento.'</td>
-                    <td style="width:100px">'.$anoVencimiento.'</td>
-                    <td style="width:60px">S/</td>
-                    <td style="width:40px;text-align:right">'.$respuesta["monto"].'</td>
+                    <td style="width:160px;text-align:center;">'.$respuesta["num_cta"].'</td>
+                    <td style="width:150px;text-align:center;font-size: 20px">'.$respuesta["doc_origen"].'</td>
+                    <td style="width:40px;text-align:center">'.$diaEmision.'</td>
+                    <td style="width:40px;text-align:center">'.$mesEmision.'</td>
+                    <td style="width:40px;text-align:center">'.$anoEmision.'</td>
+                    <td style="width:150px;text-align:center">'.$lugar.'</td>
+                    <td style="width:40px">'.$diaVencimiento.'</td>
+                    <td style="width:40px">'.$mesVencimiento.'</td>
+                    <td style="width:60px">'.$anoVencimiento.'</td>
+                    <td style="width:25px">S/</td>
+                    <td style="width:40px;text-align:right">'.$respuesta["saldo"].'</td>
                 </tr>
 
             </table>
-            <table style="padding-top:70px">
+            <table style="padding-top:40px">
                 <tr>
-                    <td>'.$letras.'</td>  
+                    <td style="font-size: 20px">'.$letras.'</td>  
                 </tr>
             </table>
-            <table   style="padding-top:40px;margin-left:100px">
+            <table   style="padding-top:25px;margin-left:100px">
     
                 <tr>
-                    <td style="width:600px;text-align:left">'.$respuesta["nombre"].'</td>
+                    <td style="width:600px;text-align:left;font-size: 20px">'.$respuesta["nombre"].'</td>
                 
                 </tr>
             </table>      
                 
-            <table style="padding-top:35px;margin-left:100px">
+            <table style="padding-top:20px;margin-left:90px">
                 <tr>
-                    <td style="width:400px" rowspan="2">'.$respuesta["direccion"].'</td>
+                    <td style="width:400px;font-size: 20px" rowspan="2">'.$respuesta["direccion"].'</td>
                 </tr>  
             </table>
-            <table style="margin-left:420px;padding-top:10px">
+            <table style="margin-left:310px;padding-top:0px">
                 <tr>
                     <td style="width:400px" >'.$respuesta["ubcli"].'</td>
                 </tr>  
@@ -83,7 +84,7 @@ $letras= CantidadEnLetra($respuesta["monto"]);
             
             <table style="padding-top:10px">
                 <tr>
-                    <td style="width:235px;text-align:right">'.$respuesta["documento"].'</td>
+                    <td style="width:200px;text-align:right">'.$respuesta["documento"].'</td>
                     <td style="width:300px;text-align:right">'.$respuesta["telefono"].'</td>
                 </tr>
             </table>';
