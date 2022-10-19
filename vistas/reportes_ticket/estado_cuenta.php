@@ -38,7 +38,7 @@
                     
                             <tr>
                         
-                                <th style="text-align:left;" colspan="11">ROSALINDA</th>
+                                <img src="../../vistas/img/plantilla/logo_rosalinda_v2.jpg" width="200px" height="100px">
                         
                             </tr>
 
