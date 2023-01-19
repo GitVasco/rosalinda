@@ -13,7 +13,7 @@ require_once "../../modelos/usuarios.modelo.php";
 /* 
 * LLAMAMOS A LA CONEXION
 */
-$con=ControladorUsuarios::ctrMostrarConexiones("id",1);
+$con = ControladorUsuarios::ctrMostrarConexiones("id", 1);
 
 $conexion = mysql_connect($con["ip"], $con["user"], $con["pwd"]) or die("No se pudo conectar: " . mysql_error());
 mysql_select_db($con["db"], $conexion);
@@ -45,45 +45,52 @@ $objPHPExcel->getProperties()->setTitle("00000020"); //titulo
 #negrita subrayado T-11
 $texto1 = new PHPExcel_Style();
 $texto1->applyFromArray(
-  array('alignment' => array(
+  array(
+    'alignment' => array(
       'wrap' => false
     ),
     'font' => array(
       'bold' => true,
-      'underline' =>true,
+      'underline' => true,
       'size' => 11
     )
-));
+  )
+);
 
 #negrita T-11
 $texto2 = new PHPExcel_Style();
 $texto2->applyFromArray(
-  array('alignment' => array(
+  array(
+    'alignment' => array(
       'wrap' => false
     ),
     'font' => array(
       'bold' => true,
-      'underline' =>false,
+      'underline' => false,
       'size' => 11
     )
-));
+  )
+);
 $texto3 = new PHPExcel_Style();
 $texto3->applyFromArray(
-  array('alignment' => array(
+  array(
+    'alignment' => array(
       'wrap' => false
     ),
     'font' => array(
       'bold' => true,
       'color' => array('rgb' => 'FF0008'),
-      'underline' =>true,
+      'underline' => true,
       'size' => 13
     )
-));
+  )
+);
 
 #bordes grueso: izquierda-arriba-derecha, color  GRIS NEGRITA T11
 $borde1 = new PHPExcel_Style();
 $borde1->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -96,16 +103,18 @@ $borde1->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => true,
       'size' => 11
     )
-));
+  )
+);
 
 #bordes grueso: izquierda-derecha, color  GRIS NEGRITA T11
 $borde2 = new PHPExcel_Style();
 $borde2->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -119,16 +128,18 @@ $borde2->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => true,
       'size' => 11
     )
-));
+  )
+);
 
 #bordes grueso: izquierda-derecha-abajo, color  GRIS NEGRITA T11
 $borde3 = new PHPExcel_Style();
 $borde3->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -141,16 +152,18 @@ $borde3->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => true,
       'size' => 11
     )
-));
+  )
+);
 
 #bordes derecho delgado / borde izquiedo grueso / borde abajo delgado
 $borde4 = new PHPExcel_Style();
 $borde4->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -159,16 +172,18 @@ $borde4->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => false,
       'size' => 10
     )
-));
+  )
+);
 
 #bordes derecho delgado / borde izquiedo delgado / borde abajo delgado
 $borde5 = new PHPExcel_Style();
 $borde5->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -177,16 +192,18 @@ $borde5->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => false,
       'size' => 10
     )
-));
+  )
+);
 
 #bordes derecho grueso / borde izquiedo delgado / borde abajo delgado
 $borde6 = new PHPExcel_Style();
 $borde6->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -195,16 +212,18 @@ $borde6->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => false,
       'size' => 10
     )
-));
+  )
+);
 
 #bordes grueso: izquierda-arriba-derecha, color  GRIS NEGRITA T11
 $borde7 = new PHPExcel_Style();
 $borde7->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -218,24 +237,28 @@ $borde7->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => true,
       'size' => 11
     )
-));
+  )
+);
 
 #bordes grueso: ABAJO
 $borde8 = new PHPExcel_Style();
 $borde8->applyFromArray(
-  array('borders' => array(
+  array(
+    'borders' => array(
       'bottom' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     )
-));
+  )
+);
 
 #bordes grueso: izquierda-derecha-abajo-arriba, color  GRIS NEGRITA T10
 $borde9 = new PHPExcel_Style();
 $borde9->applyFromArray(
-  array('alignment' => array( 
+  array(
+    'alignment' => array(
       'wrap' => false,
       'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
     ),
@@ -249,11 +272,12 @@ $borde9->applyFromArray(
       'right' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM),
       'left' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
     ),
-      'font' => array(
+    'font' => array(
       'bold' => true,
       'size' => 10
     )
-));
+  )
+);
 
 /* 
 * FIN DE ESTILOS
@@ -265,7 +289,7 @@ $objPHPExcel->createSheet(0);
 $objPHPExcel->setActiveSheetIndex(0);
 
 # Titulo de la hoja
-$objPHPExcel->getActiveSheet()->setTitle("Resumen de Vtas -".$fecha);
+$objPHPExcel->getActiveSheet()->setTitle("Resumen de Vtas -" . $fecha);
 
 # Orientacion hoja
 $objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT);
@@ -456,7 +480,7 @@ $sqlDetalle = mysql_query("SELECT
                 SUM(v.total) AS total 
                 FROM
                 ventajf v 
-                WHERE YEAR(v.fecha) = YEAR(NOW()) 
+                WHERE YEAR(v.fecha) = YEAR(NOW())
                 AND v.tipo IN ('S05', 'E05', 'S02', 'S03') 
                 GROUP BY MONTH(v.fecha)") or die(mysql_error());
 
@@ -472,38 +496,37 @@ $ncT = 0;
 $ndT = 0;
 $total = 0;
 
-while($respDetalle = mysql_fetch_array($sqlDetalle)){
+while ($respDetalle = mysql_fetch_array($sqlDetalle)) {
 
-    $fila+=1;
-    
-    $objPHPExcel->getActiveSheet()->SetCellValue("A$fila", utf8_encode($respDetalle["nom_mes"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("B$fila", utf8_encode($respDetalle["nfa"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("C$fila", utf8_encode($respDetalle["nbo"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("D$fila", utf8_encode($respDetalle["nnc"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("E$fila", utf8_encode($respDetalle["nnd"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("F$fila", utf8_encode($respDetalle["neto"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("G$fila", utf8_encode($respDetalle["tfa"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("H$fila", utf8_encode($respDetalle["tbo"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("I$fila", utf8_encode($respDetalle["tnc"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("J$fila", utf8_encode($respDetalle["tnd"]));
-    $objPHPExcel->getActiveSheet()->SetCellValue("K$fila", utf8_encode($respDetalle["total"]));
+  $fila += 1;
 
-    $facturasN +=  $respDetalle["nfa"];    
-    $boletasN += $respDetalle["nbo"];
-    $ncN += $respDetalle["nnc"];
-    $ndN += $respDetalle["nnd"];
-    $neto += $respDetalle["neto"];
+  $objPHPExcel->getActiveSheet()->SetCellValue("A$fila", utf8_encode($respDetalle["nom_mes"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("B$fila", utf8_encode($respDetalle["nfa"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("C$fila", utf8_encode($respDetalle["nbo"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("D$fila", utf8_encode($respDetalle["nnc"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("E$fila", utf8_encode($respDetalle["nnd"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("F$fila", utf8_encode($respDetalle["neto"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("G$fila", utf8_encode($respDetalle["tfa"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("H$fila", utf8_encode($respDetalle["tbo"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("I$fila", utf8_encode($respDetalle["tnc"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("J$fila", utf8_encode($respDetalle["tnd"]));
+  $objPHPExcel->getActiveSheet()->SetCellValue("K$fila", utf8_encode($respDetalle["total"]));
 
-    $facturasT +=  $respDetalle["tfa"];
-    $boletasT += $respDetalle["tbo"];
-    $ncT += $respDetalle["tnc"];
-    $ndT += $respDetalle["tnd"];
-    $total += $respDetalle["total"];
-    
+  $facturasN +=  $respDetalle["nfa"];
+  $boletasN += $respDetalle["nbo"];
+  $ncN += $respDetalle["nnc"];
+  $ndN += $respDetalle["nnd"];
+  $neto += $respDetalle["neto"];
+
+  $facturasT +=  $respDetalle["tfa"];
+  $boletasT += $respDetalle["tbo"];
+  $ncT += $respDetalle["tnc"];
+  $ndT += $respDetalle["tnd"];
+  $total += $respDetalle["total"];
 }
 
 
-$fila+=1;
+$fila += 1;
 
 $objPHPExcel->getActiveSheet()->SetCellValue("A$fila", "Total");
 $objPHPExcel->getActiveSheet()->SetCellValue("B$fila", utf8_encode($facturasN));
@@ -537,7 +560,7 @@ header('Cache-Control: max-age=0');
 */
 
 # Nombre del archivo
-header('Content-Disposition: attachment; filename=" Resumen Vtas - '.$fecha.'.xlsx"');
-$objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+header('Content-Disposition: attachment; filename=" Resumen Vtas - ' . $fecha . '.xlsx"');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 //forzar a descarga por el navegador
 $objWriter->save('php://output');

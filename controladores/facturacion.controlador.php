@@ -1,12 +1,14 @@
 <?php
 
-class ControladorFacturacion{
+class ControladorFacturacion
+{
 
-    static public function ctrFacturar(){
+    static public function ctrFacturar()
+    {
 
-        if(isset($_POST["codPedido"])){
+        if (isset($_POST["codPedido"])) {
 
-            if($_POST["tdoc"] == "00"){
+            if ($_POST["tdoc"] == "00") {
 
                 /*
                 todo: BAJAR EL STOCK
@@ -24,10 +26,10 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en movimientos
                 */
-                if($respuestaFactura == "ok"){
+                if ($respuestaFactura == "ok") {
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     #var_dump($doc);
 
                     $cliente = $_POST["codCli"];
@@ -49,39 +51,36 @@ class ControladorFacturacion{
                     $intoB = "";
                     foreach ($respuesta as $key => $value) {
 
-                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
+                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto) / 100);
                         //var_dump($total);
 
-                        if($key < count($respuesta)-1){
+                        if ($key < count($respuesta) - 1) {
 
-                            $intoA .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."'),";
+                            $intoA .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "'),";
+                        } else {
 
-                        }else{
-
-                            $intoB .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."')";
-
+                            $intoB .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "')";
                         }
-                        
                     }
 
-                    $detalle = $intoA.$intoB;
+                    $detalle = $intoA . $intoB;
                     #var_dump("detalle", $detalle);
 
                     $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
                     #var_dump($respuestaMovimientos);   
                 }
-                    //var_dump($respuestaMovimientos);
+                //var_dump($respuestaMovimientos);
 
                 /*
                 todo: registrar en ventajf
                 */
-                if($respuestaMovimientos == "ok"){
+                if ($respuestaMovimientos == "ok") {
 
                     $respuestaDoc = ModeloPedidos::mdlMostraPedidosCabecera($_POST["codPedido"]);
                     //var_dump($respuestaDoc);
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     //var_dump($doc);
 
                     $usuario = $_POST["idUsuario"];
@@ -91,33 +90,34 @@ class ControladorFacturacion{
                     //var_dump("$docOrigen");
 
                     $docDestino = $_POST["serieSeparado"];
-                    $docDest = str_replace ( '-', '', $docDestino);
+                    $docDest = str_replace('-', '', $docDestino);
                     //var_dump($docDest);
 
                     $usureg = $_SESSION["nombre"];
-                    $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);
+                    $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                    $datosD = array("tipo" => "S01",
-                                    "documento" => $doc,
-                                    "neto" => $respuestaDoc["op_gravada"],
-                                    "igv" => $respuestaDoc["igv"],
-                                    "dscto" => $respuestaDoc["descuento_total"],
-                                    "total" => $respuestaDoc["total"],
-                                    "cliente" => $respuestaDoc["cod_cli"],
-                                    "vendedor" => $respuestaDoc["vendedor"],
-                                    "agencia" => $respuestaDoc["agencia"],
-                                    "lista_precios" => $respuestaDoc["lista"],
-                                    "condicion_venta" => $respuestaDoc["condicion_venta"],
-                                    "doc_destino" => $docDest,
-                                    "doc_origen" => $docOrigen,
-                                    "usuario" => $usuario,
-                                    "tipo_documento" => "GUIA REMISION",
-                                    "usureg" => $usureg,
-                                    "pcreg" => $pcreg);
+                    $datosD = array(
+                        "tipo" => "S01",
+                        "documento" => $doc,
+                        "neto" => $respuestaDoc["op_gravada"],
+                        "igv" => $respuestaDoc["igv"],
+                        "dscto" => $respuestaDoc["descuento_total"],
+                        "total" => $respuestaDoc["total"],
+                        "cliente" => $respuestaDoc["cod_cli"],
+                        "vendedor" => $respuestaDoc["vendedor"],
+                        "agencia" => $respuestaDoc["agencia"],
+                        "lista_precios" => $respuestaDoc["lista"],
+                        "condicion_venta" => $respuestaDoc["condicion_venta"],
+                        "doc_destino" => $docDest,
+                        "doc_origen" => $docOrigen,
+                        "usuario" => $usuario,
+                        "tipo_documento" => "GUIA REMISION",
+                        "usureg" => $usureg,
+                        "pcreg" => $pcreg
+                    );
                     //var_dump($datosD);
 
                     $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
-
                 }
 
                 //var_dump($respuestaDocumento);
@@ -125,14 +125,13 @@ class ControladorFacturacion{
                 /* 
                 todo: SUMAR 1 AL DOCUMENTO
                 */
-                if($respuestaDocumento == "ok"){
+                if ($respuestaDocumento == "ok") {
 
                     $documento = $_POST["serie"];
-                    $serie = substr($documento,0,3);
+                    $serie = substr($documento, 0, 3);
                     //var_dump($serie);
 
                     $talonario = ModeloFacturacion::mdlActualizarTalonarioGuia($serie);
-
                 }
 
                 //var_dump($talonario);
@@ -140,19 +139,19 @@ class ControladorFacturacion{
                 /*
                 todo: CAMBIAR EL ESTADO DEL PEDIDO
                 */
-                if($talonario == "ok"){
+                if ($talonario == "ok") {
 
                     $estado = ModeloFacturacion::mdlActualizarPedidoF($_POST["codPedido"]);
 
                     //var_dump($estado);
 
-                    if($estado == "ok"){
+                    if ($estado == "ok") {
 
-                        echo'<script>
+                        echo '<script>
 
                         swal({
                                 type: "success",
-                                title: "Se Genero la Guia '.$documento.'",
+                                title: "Se Genero la Guia ' . $documento . '",
                                 showConfirmButton: true,
                                 confirmButtonText: "Cerrar"
                         }).then(function(result){
@@ -164,15 +163,9 @@ class ControladorFacturacion{
                                     })
 
                         </script>';
-
                     }
-
                 }
-
-
-                
-
-            }else if($_POST["tdoc"] == "01"){
+            } else if ($_POST["tdoc"] == "01") {
 
                 /*
                 todo: BAJAR EL STOCK
@@ -188,10 +181,10 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en movimientos
                 */
-                if($respuestaFactura == "ok"){
+                if ($respuestaFactura == "ok") {
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     #var_dump($doc);
 
                     $cliente = $_POST["codCli"];
@@ -213,39 +206,36 @@ class ControladorFacturacion{
                     $intoB = "";
                     foreach ($respuesta as $key => $value) {
 
-                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
+                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto) / 100);
                         //var_dump($total);
 
-                        if($key < count($respuesta)-1){
+                        if ($key < count($respuesta) - 1) {
 
-                            $intoA .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."'),";
+                            $intoA .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "'),";
+                        } else {
 
-                        }else{
-
-                            $intoB .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."')";
-
+                            $intoB .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "')";
                         }
-                        
                     }
 
-                    $detalle = $intoA.$intoB;
+                    $detalle = $intoA . $intoB;
                     #var_dump("detalle", $detalle);
 
                     $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
                     #var_dump($respuestaMovimientos);                 
 
                 }
-                
+
                 /*
                 todo: registrar en ventajf
                 */
-                if($respuestaMovimientos == "ok"){
+                if ($respuestaMovimientos == "ok") {
 
                     $respuestaDoc = ModeloPedidos::mdlMostraPedidosCabecera($_POST["codPedido"]);
                     //var_dump($respuestaDoc);
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     //var_dump($doc);
 
                     $usuario = $_POST["idUsuario"];
@@ -258,29 +248,30 @@ class ControladorFacturacion{
                     //var_dump($docDest);
 
                     $usureg = $_SESSION["nombre"];
-                    $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                        
+                    $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                    $datosD = array("tipo" => "S03",
-                                    "documento" => $doc,
-                                    "neto" => $respuestaDoc["op_gravada"],
-                                    "igv" => $respuestaDoc["igv"],
-                                    "dscto" => $respuestaDoc["descuento_total"],
-                                    "total" => $respuestaDoc["total"],
-                                    "cliente" => $respuestaDoc["cod_cli"],
-                                    "vendedor" => $respuestaDoc["vendedor"],
-                                    "agencia" => $respuestaDoc["agencia"],
-                                    "lista_precios" => $respuestaDoc["lista"],
-                                    "condicion_venta" => $respuestaDoc["condicion_venta"],
-                                    "doc_destino" => $docDest,
-                                    "doc_origen" => $docOrigen,
-                                    "usuario" => $usuario,
-                                    "tipo_documento" => "FACTURA",
-                                    "usureg" => $usureg,
-                                    "pcreg" => $pcreg);
+                    $datosD = array(
+                        "tipo" => "S03",
+                        "documento" => $doc,
+                        "neto" => $respuestaDoc["op_gravada"],
+                        "igv" => $respuestaDoc["igv"],
+                        "dscto" => $respuestaDoc["descuento_total"],
+                        "total" => $respuestaDoc["total"],
+                        "cliente" => $respuestaDoc["cod_cli"],
+                        "vendedor" => $respuestaDoc["vendedor"],
+                        "agencia" => $respuestaDoc["agencia"],
+                        "lista_precios" => $respuestaDoc["lista"],
+                        "condicion_venta" => $respuestaDoc["condicion_venta"],
+                        "doc_destino" => $docDest,
+                        "doc_origen" => $docOrigen,
+                        "usuario" => $usuario,
+                        "tipo_documento" => "FACTURA",
+                        "usureg" => $usureg,
+                        "pcreg" => $pcreg
+                    );
                     //var_dump($datosD);
 
                     $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
-
                 }
 
                 //var_dump($respuestaDocumento);
@@ -288,14 +279,13 @@ class ControladorFacturacion{
                 /*
                 todo: SUMAR 1 AL DOCUMENTO
                 */
-                if($respuestaDocumento == "ok"){
+                if ($respuestaDocumento == "ok") {
 
                     $documento = $_POST["serie"];
-                    $serie = substr($documento,0,4);
+                    $serie = substr($documento, 0, 4);
                     //var_dump($serie);
 
                     $talonario = ModeloFacturacion::mdlActualizarTalonarioFactura($serie);
-
                 }
 
                 //var_dump($talonario);
@@ -303,13 +293,13 @@ class ControladorFacturacion{
                 /*
                 todo: CAMBIAR EL ESTADO DEL PEDIDO
                 */
-                if($talonario == "ok"){
+                if ($talonario == "ok") {
 
                     $estado = ModeloFacturacion::mdlActualizarPedidoF($_POST["codPedido"]);
 
                     //var_dump($estado);
 
-                    if($estado == "ok"){
+                    if ($estado == "ok") {
 
                         /*
                         todo:GENERAMOS LA CUENTA CORRIENTE
@@ -321,7 +311,7 @@ class ControladorFacturacion{
                         //var_dump($tipo_doc);
 
                         $documento = $_POST["serie"];
-                        $doc = str_replace ( '-', '', $documento);
+                        $doc = str_replace('-', '', $documento);
                         //var_dump($doc);
 
                         $cliente = $respuestaDoc["cod_cli"];
@@ -337,7 +327,7 @@ class ControladorFacturacion{
                         $dias = $respuestaDoc["dias"];
                         //var_dump($dias);
 
-                        $fecha_ven = date("Y-m-d",strtotime($fecha."+ ".$dias." day"));
+                        $fecha_ven = date("Y-m-d", strtotime($fecha . "+ " . $dias . " day"));
                         //var_dump($fecha_ven);
 
                         $monto = $respuestaDoc["total"];
@@ -353,31 +343,33 @@ class ControladorFacturacion{
                         //var_dump($usuario);
 
                         $usureg = $_SESSION["nombre"];
-                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                          
+                        $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                        $datos = array( "tipo_doc" => $tipo_doc,
-                                        "num_cta" => $doc,
-                                        "cliente" => $cliente,
-                                        "vendedor" => $vendedor,
-                                        "fecha_ven" => $fecha_ven,
-                                        "monto" => $monto,
-                                        "cod_pago" => $cod_pago,
-                                        "usuario" => $usuario,
-                                        "saldo" => $saldo,
-                                        "usureg" => $usureg,
-                                        "pcreg" => $pcreg);
+                        $datos = array(
+                            "tipo_doc" => $tipo_doc,
+                            "num_cta" => $doc,
+                            "cliente" => $cliente,
+                            "vendedor" => $vendedor,
+                            "fecha_ven" => $fecha_ven,
+                            "monto" => $monto,
+                            "cod_pago" => $cod_pago,
+                            "usuario" => $usuario,
+                            "saldo" => $saldo,
+                            "usureg" => $usureg,
+                            "pcreg" => $pcreg
+                        );
                         //var_dump($datos);
 
                         $ctacte = ModeloFacturacion::mdlGenerarCtaCte($datos);
                         //var_dump($ctacte);
 
-                        if($ctacte == "ok"){
+                        if ($ctacte == "ok") {
 
-                            echo'<script>
+                            echo '<script>
 
                             swal({
                                     type: "success",
-                                    title: "Se Genero la Factura '.$documento.'",
+                                    title: "Se Genero la Factura ' . $documento . '",
                                     showConfirmButton: true,
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
@@ -389,16 +381,10 @@ class ControladorFacturacion{
                                         })
 
                             </script>';
-
                         }
-
                     }
-
                 }
-
-                
-
-            }else if($_POST["tdoc"] == "03"){
+            } else if ($_POST["tdoc"] == "03") {
 
                 /*
                 todo: BAJAR EL STOCK
@@ -410,14 +396,14 @@ class ControladorFacturacion{
 
                 $respuestaBoleta = ModeloArticulos::mdlActualizarStockPedido($_POST["codPedido"]);
                 //var_dump($respuestaBoleta);
-                
+
                 /*
                 todo: registrar en movimientos
                 */
-                if($respuestaBoleta == "ok"){
+                if ($respuestaBoleta == "ok") {
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     #var_dump($doc);
 
                     $cliente = $_POST["codCli"];
@@ -439,22 +425,19 @@ class ControladorFacturacion{
                     $intoB = "";
                     foreach ($respuesta as $key => $value) {
 
-                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
+                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto) / 100);
                         //var_dump($total);
 
-                        if($key < count($respuesta)-1){
+                        if ($key < count($respuesta) - 1) {
 
-                            $intoA .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."'),";
+                            $intoA .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "'),";
+                        } else {
 
-                        }else{
-
-                            $intoB .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."')";
-
+                            $intoB .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "')";
                         }
-                        
                     }
 
-                    $detalle = $intoA.$intoB;
+                    $detalle = $intoA . $intoB;
                     #var_dump("detalle", $detalle);
 
                     $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
@@ -466,13 +449,13 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en ventajf
                 */
-                if($respuestaMovimientos == "ok"){
+                if ($respuestaMovimientos == "ok") {
 
                     $respuestaDoc = ModeloPedidos::mdlMostraPedidosCabecera($_POST["codPedido"]);
                     //var_dump($respuestaDoc);
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     //var_dump($doc);
 
                     $usuario = $_POST["idUsuario"];
@@ -485,29 +468,30 @@ class ControladorFacturacion{
                     //var_dump($docDest);
 
                     $usureg = $_SESSION["nombre"];
-                    $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);
+                    $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                    $datosD = array("tipo" => "S02",
-                                    "documento" => $doc,
-                                    "neto" => $respuestaDoc["op_gravada"],
-                                    "igv" => $respuestaDoc["igv"],
-                                    "dscto" => $respuestaDoc["descuento_total"],
-                                    "total" => $respuestaDoc["total"],
-                                    "cliente" => $respuestaDoc["cod_cli"],
-                                    "vendedor" => $respuestaDoc["vendedor"],
-                                    "agencia" => $respuestaDoc["agencia"],
-                                    "lista_precios" => $respuestaDoc["lista"],
-                                    "condicion_venta" => $respuestaDoc["condicion_venta"],
-                                    "doc_destino" => $docDest,
-                                    "doc_origen" => $docOrigen,
-                                    "usuario" => $usuario,
-                                    "tipo_documento" => "BOLETA",
-                                    "usureg" => $usureg,
-                                    "pcreg" => $pcreg);
+                    $datosD = array(
+                        "tipo" => "S02",
+                        "documento" => $doc,
+                        "neto" => $respuestaDoc["op_gravada"],
+                        "igv" => $respuestaDoc["igv"],
+                        "dscto" => $respuestaDoc["descuento_total"],
+                        "total" => $respuestaDoc["total"],
+                        "cliente" => $respuestaDoc["cod_cli"],
+                        "vendedor" => $respuestaDoc["vendedor"],
+                        "agencia" => $respuestaDoc["agencia"],
+                        "lista_precios" => $respuestaDoc["lista"],
+                        "condicion_venta" => $respuestaDoc["condicion_venta"],
+                        "doc_destino" => $docDest,
+                        "doc_origen" => $docOrigen,
+                        "usuario" => $usuario,
+                        "tipo_documento" => "BOLETA",
+                        "usureg" => $usureg,
+                        "pcreg" => $pcreg
+                    );
                     //var_dump($datosD);
 
                     $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
-
                 }
 
                 //var_dump($respuestaDocumento);
@@ -515,14 +499,13 @@ class ControladorFacturacion{
                 /*
                 todo: SUMAR 1 AL DOCUMENTO
                 */
-                if($respuestaDocumento == "ok"){
+                if ($respuestaDocumento == "ok") {
 
                     $documento = $_POST["serie"];
-                    $serie = substr($documento,0,4);
+                    $serie = substr($documento, 0, 4);
                     //var_dump($serie);
 
                     $talonario = ModeloFacturacion::mdlActualizarTalonarioBoleta($serie);
-
                 }
 
                 //var_dump($talonario);
@@ -530,13 +513,13 @@ class ControladorFacturacion{
                 /*
                 todo: CAMBIAR EL ESTADO DEL PEDIDO
                 */
-                if($talonario == "ok"){
+                if ($talonario == "ok") {
 
                     $estado = ModeloFacturacion::mdlActualizarPedidoF($_POST["codPedido"]);
 
                     //var_dump($estado);
 
-                    if($estado == "ok"){
+                    if ($estado == "ok") {
 
                         /*
                         todo:GENERAMOS LA CUENTA CORRIENTE
@@ -548,7 +531,7 @@ class ControladorFacturacion{
                         //var_dump($tipo_doc);
 
                         $documento = $_POST["serie"];
-                        $doc = str_replace ( '-', '', $documento);
+                        $doc = str_replace('-', '', $documento);
                         //var_dump($doc);
 
                         $cliente = $respuestaDoc["cod_cli"];
@@ -564,7 +547,7 @@ class ControladorFacturacion{
                         $dias = $respuestaDoc["dias"];
                         //var_dump($dias);
 
-                        $fecha_ven = date("Y-m-d",strtotime($fecha."+ ".$dias." day"));
+                        $fecha_ven = date("Y-m-d", strtotime($fecha . "+ " . $dias . " day"));
                         //var_dump($fecha_ven);
 
                         $monto = $respuestaDoc["total"];
@@ -580,31 +563,33 @@ class ControladorFacturacion{
                         //var_dump($usuario);
 
                         $usureg = $_SESSION["nombre"];
-                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                          
+                        $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                        $datos = array( "tipo_doc" => $tipo_doc,
-                                        "num_cta" => $doc,
-                                        "cliente" => $cliente,
-                                        "vendedor" => $vendedor,
-                                        "fecha_ven" => $fecha_ven,
-                                        "monto" => $monto,
-                                        "cod_pago" => $cod_pago,
-                                        "usuario" => $usuario,
-                                        "saldo" => $saldo,
-                                        "usureg" => $usureg,
-                                        "pcreg" => $pcreg);
+                        $datos = array(
+                            "tipo_doc" => $tipo_doc,
+                            "num_cta" => $doc,
+                            "cliente" => $cliente,
+                            "vendedor" => $vendedor,
+                            "fecha_ven" => $fecha_ven,
+                            "monto" => $monto,
+                            "cod_pago" => $cod_pago,
+                            "usuario" => $usuario,
+                            "saldo" => $saldo,
+                            "usureg" => $usureg,
+                            "pcreg" => $pcreg
+                        );
                         //var_dump($datos);
 
                         $ctacte = ModeloFacturacion::mdlGenerarCtaCte($datos);
                         //var_dump($ctacte);
 
-                        if($ctacte == "ok"){
+                        if ($ctacte == "ok") {
 
-                            echo'<script>
+                            echo '<script>
 
                             swal({
                                     type: "success",
-                                    title: "Se Genero la Boleta '.$documento.'",
+                                    title: "Se Genero la Boleta ' . $documento . '",
                                     showConfirmButton: true,
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
@@ -616,16 +601,10 @@ class ControladorFacturacion{
                                         })
 
                             </script>';
-
                         }
-
                     }
-
                 }
-
-                
-
-            }else if($_POST["tdoc"] == "09"){
+            } else if ($_POST["tdoc"] == "09") {
 
                 /*
                 todo: BAJAR EL STOCK
@@ -641,10 +620,10 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en movimientos
                 */
-                if($respuestaProforma == "ok"){
+                if ($respuestaProforma == "ok") {
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     #var_dump($doc);
 
                     $cliente = $_POST["codCli"];
@@ -666,22 +645,19 @@ class ControladorFacturacion{
                     $intoB = "";
                     foreach ($respuesta as $key => $value) {
 
-                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
+                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto) / 100);
                         //var_dump($total);
 
-                        if($key < count($respuesta)-1){
+                        if ($key < count($respuesta) - 1) {
 
-                            $intoA .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."'),";
+                            $intoA .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "'),";
+                        } else {
 
-                        }else{
-
-                            $intoB .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."')";
-
+                            $intoB .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "')";
                         }
-                        
                     }
 
-                    $detalle = $intoA.$intoB;
+                    $detalle = $intoA . $intoB;
                     #var_dump("detalle", $detalle);
 
                     $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
@@ -692,13 +668,13 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en ventajf
                 */
-                if($respuestaMovimientos == "ok"){
+                if ($respuestaMovimientos == "ok") {
 
                     $respuestaDoc = ModeloPedidos::mdlMostraPedidosCabecera($_POST["codPedido"]);
                     //var_dump($respuestaDoc);
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     //var_dump($doc);
 
                     $usuario = $_POST["idUsuario"];
@@ -711,29 +687,30 @@ class ControladorFacturacion{
                     //var_dump($docDest);
 
                     $usureg = $_SESSION["nombre"];
-                    $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                        
+                    $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                    $datosD = array("tipo" => "S70",
-                                    "documento" => $doc,
-                                    "neto" => $respuestaDoc["op_gravada"],
-                                    "igv" => $respuestaDoc["igv"],
-                                    "dscto" => $respuestaDoc["descuento_total"],
-                                    "total" => $respuestaDoc["total"],
-                                    "cliente" => $respuestaDoc["cod_cli"],
-                                    "vendedor" => $respuestaDoc["vendedor"],
-                                    "agencia" => $respuestaDoc["agencia"],
-                                    "lista_precios" => $respuestaDoc["lista"],
-                                    "condicion_venta" => $respuestaDoc["condicion_venta"],
-                                    "doc_destino" => $docDest,
-                                    "doc_origen" => $docOrigen,
-                                    "usuario" => $usuario,
-                                    "tipo_documento" => "PROFORMA",
-                                    "usureg" => $usureg,
-                                    "pcreg" => $pcreg);
+                    $datosD = array(
+                        "tipo" => "S70",
+                        "documento" => $doc,
+                        "neto" => $respuestaDoc["op_gravada"],
+                        "igv" => $respuestaDoc["igv"],
+                        "dscto" => $respuestaDoc["descuento_total"],
+                        "total" => $respuestaDoc["total"],
+                        "cliente" => $respuestaDoc["cod_cli"],
+                        "vendedor" => $respuestaDoc["vendedor"],
+                        "agencia" => $respuestaDoc["agencia"],
+                        "lista_precios" => $respuestaDoc["lista"],
+                        "condicion_venta" => $respuestaDoc["condicion_venta"],
+                        "doc_destino" => $docDest,
+                        "doc_origen" => $docOrigen,
+                        "usuario" => $usuario,
+                        "tipo_documento" => "PROFORMA",
+                        "usureg" => $usureg,
+                        "pcreg" => $pcreg
+                    );
                     //var_dump($datosD);
 
                     $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
-
                 }
 
                 //var_dump($respuestaDocumento);
@@ -741,14 +718,13 @@ class ControladorFacturacion{
                 /*
                 todo: SUMAR 1 AL DOCUMENTO
                 */
-                if($respuestaDocumento == "ok"){
+                if ($respuestaDocumento == "ok") {
 
                     $documento = $_POST["serie"];
-                    $serie = substr($documento,0,3);
+                    $serie = substr($documento, 0, 3);
                     //var_dump($serie);
 
                     $talonario = ModeloFacturacion::mdlActualizarTalonarioProforma($serie);
-
                 }
 
                 //var_dump($talonario);
@@ -756,13 +732,13 @@ class ControladorFacturacion{
                 /*
                 todo: CAMBIAR EL ESTADO DEL PEDIDO
                 */
-                if($talonario == "ok"){
+                if ($talonario == "ok") {
 
                     $estado = ModeloFacturacion::mdlActualizarPedidoF($_POST["codPedido"]);
 
                     //var_dump($estado);
 
-                    if($estado == "ok"){
+                    if ($estado == "ok") {
 
                         /*
                         todo:GENERAMOS LA CUENTA CORRIENTE
@@ -774,7 +750,7 @@ class ControladorFacturacion{
                         //var_dump($tipo_doc);
 
                         $documento = $_POST["serie"];
-                        $doc = str_replace ( '-', '', $documento);
+                        $doc = str_replace('-', '', $documento);
                         //var_dump($doc);
 
                         $cliente = $respuestaDoc["cod_cli"];
@@ -790,7 +766,7 @@ class ControladorFacturacion{
                         $dias = $respuestaDoc["dias"];
                         //var_dump($dias);
 
-                        $fecha_ven = date("Y-m-d",strtotime($fecha."+ ".$dias." day"));
+                        $fecha_ven = date("Y-m-d", strtotime($fecha . "+ " . $dias . " day"));
                         //var_dump($fecha_ven);
 
                         $monto = $respuestaDoc["total"];
@@ -806,31 +782,33 @@ class ControladorFacturacion{
                         //var_dump($usuario);
 
                         $usureg = $_SESSION["nombre"];
-                        $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                          
+                        $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                        $datos = array( "tipo_doc" => $tipo_doc,
-                                        "num_cta" => $doc,
-                                        "cliente" => $cliente,
-                                        "vendedor" => $vendedor,
-                                        "fecha_ven" => $fecha_ven,
-                                        "monto" => $monto,
-                                        "cod_pago" => $cod_pago,
-                                        "usuario" => $usuario,
-                                        "saldo" => $saldo,
-                                        "usureg" => $usureg,
-                                        "pcreg" => $pcreg);
+                        $datos = array(
+                            "tipo_doc" => $tipo_doc,
+                            "num_cta" => $doc,
+                            "cliente" => $cliente,
+                            "vendedor" => $vendedor,
+                            "fecha_ven" => $fecha_ven,
+                            "monto" => $monto,
+                            "cod_pago" => $cod_pago,
+                            "usuario" => $usuario,
+                            "saldo" => $saldo,
+                            "usureg" => $usureg,
+                            "pcreg" => $pcreg
+                        );
                         //var_dump($datos);
 
                         $ctacte = ModeloFacturacion::mdlGenerarCtaCte($datos);
                         //var_dump($ctacte);
 
-                        if($ctacte == "ok"){
+                        if ($ctacte == "ok") {
 
-                            echo'<script>
+                            echo '<script>
 
                             swal({
                                     type: "success",
-                                    title: "Se Genero la Proforma '.$documento.'",
+                                    title: "Se Genero la Proforma ' . $documento . '",
                                     showConfirmButton: true,
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
@@ -842,16 +820,10 @@ class ControladorFacturacion{
                                         })
 
                             </script>';
-
                         }
-
                     }
-
                 }
-
-                
-
-            }else{
+            } else {
 
                 /*
                 todo: BAJAR EL STOCK
@@ -867,10 +839,10 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en movimientos
                 */
-                if($respuestaNota == "ok"){
+                if ($respuestaNota == "ok") {
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     #var_dump($doc);
 
                     $cliente = $_POST["codCli"];
@@ -892,22 +864,19 @@ class ControladorFacturacion{
                     $intoB = "";
                     foreach ($respuesta as $key => $value) {
 
-                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
+                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto) / 100);
                         //var_dump($total);
 
-                        if($key < count($respuesta)-1){
+                        if ($key < count($respuesta) - 1) {
 
-                            $intoA .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',-".$value["cantidad"].",".$value["precio"].",0,".$dscto.",-".$total.",'".$nombre_tipo."'),";
+                            $intoA .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "',-" . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . ",-" . $total . ",'" . $nombre_tipo . "'),";
+                        } else {
 
-                        }else{
-
-                            $intoB .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',-".$value["cantidad"].",".$value["precio"].",0,".$dscto.",-".$total.",'".$nombre_tipo."')";
-
+                            $intoB .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "',-" . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . ",-" . $total . ",'" . $nombre_tipo . "')";
                         }
-                        
                     }
 
-                    $detalle = $intoA.$intoB;
+                    $detalle = $intoA . $intoB;
                     #var_dump("detalle", $detalle);
 
                     $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
@@ -918,13 +887,13 @@ class ControladorFacturacion{
                 /*
                 todo: registrar en ventajf
                 */
-                if($respuestaMovimientos == "ok"){
+                if ($respuestaMovimientos == "ok") {
 
                     $respuestaDoc = ModeloPedidos::mdlMostraPedidosCabecera($_POST["codPedido"]);
                     //var_dump($respuestaDoc);
 
                     $documento = $_POST["serie"];
-                    $doc = str_replace ( '-', '', $documento);
+                    $doc = str_replace('-', '', $documento);
                     //var_dump($doc);
 
                     $usuario = $_POST["idUsuario"];
@@ -937,29 +906,30 @@ class ControladorFacturacion{
                     //var_dump($docDest);
 
                     $usureg = $_SESSION["nombre"];
-                    $pcreg= gethostbyaddr($_SERVER['REMOTE_ADDR']);                        
+                    $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-                    $datosD = array("tipo" => "E05",
-                                    "documento" => $doc,
-                                    "neto" => "-".$respuestaDoc["op_gravada"],
-                                    "igv" => "-".$respuestaDoc["igv"],
-                                    "dscto" => "-".$respuestaDoc["descuento_total"],
-                                    "total" => "-".$respuestaDoc["total"],
-                                    "cliente" => $respuestaDoc["cod_cli"],
-                                    "vendedor" => $respuestaDoc["vendedor"],
-                                    "agencia" => $respuestaDoc["agencia"],
-                                    "lista_precios" => $respuestaDoc["lista"],
-                                    "condicion_venta" => $respuestaDoc["condicion_venta"],
-                                    "doc_destino" => $docDest,
-                                    "doc_origen" => $docOrigen,
-                                    "usuario" => $usuario,
-                                    "tipo_documento" => "NC",
-                                    "usureg" => $usureg,
-                                    "pcreg" => $pcreg);
+                    $datosD = array(
+                        "tipo" => "E05",
+                        "documento" => $doc,
+                        "neto" => "-" . $respuestaDoc["op_gravada"],
+                        "igv" => "-" . $respuestaDoc["igv"],
+                        "dscto" => "-" . $respuestaDoc["descuento_total"],
+                        "total" => "-" . $respuestaDoc["total"],
+                        "cliente" => $respuestaDoc["cod_cli"],
+                        "vendedor" => $respuestaDoc["vendedor"],
+                        "agencia" => $respuestaDoc["agencia"],
+                        "lista_precios" => $respuestaDoc["lista"],
+                        "condicion_venta" => $respuestaDoc["condicion_venta"],
+                        "doc_destino" => $docDest,
+                        "doc_origen" => $docOrigen,
+                        "usuario" => $usuario,
+                        "tipo_documento" => "NC",
+                        "usureg" => $usureg,
+                        "pcreg" => $pcreg
+                    );
                     //var_dump($datosD);
 
                     $respuestaDocumento = ModeloFacturacion::mdlRegistrarDocumento($datosD);
-
                 }
 
                 //var_dump($respuestaDocumento);
@@ -967,14 +937,13 @@ class ControladorFacturacion{
                 /*
                 todo: SUMAR 1 AL DOCUMENTO
                 */
-                if($respuestaDocumento == "ok"){
+                if ($respuestaDocumento == "ok") {
 
                     $documento = $_POST["serie"];
-                    $serie = substr($documento,0,4);
+                    $serie = substr($documento, 0, 4);
                     //var_dump($serie);
 
-                    $talonario = ModeloFacturacion::mdlActualizarNotaSerie("nota_credito","serie_nc",$serie);
-
+                    $talonario = ModeloFacturacion::mdlActualizarNotaSerie("nota_credito", "serie_nc", $serie);
                 }
 
                 //var_dump($talonario);
@@ -982,46 +951,48 @@ class ControladorFacturacion{
                 /*
                 todo: CAMBIAR EL ESTADO DEL PEDIDO
                 */
-                if($talonario == "ok"){
+                if ($talonario == "ok") {
 
                     $estado = ModeloFacturacion::mdlActualizarPedidoF($_POST["codPedido"]);
 
                     //var_dump($estado);
 
-                    if($estado == "ok"){
+                    if ($estado == "ok") {
 
                         $documento = $_POST["serie"];
-                        $doc = str_replace ( '-', '', $documento);
+                        $doc = str_replace('-', '', $documento);
 
                         $tip_nota = $_POST["tdocorigen"];
-                        
+
                         $origen_venta = $_POST["serieOrigen"];
-                        
+
                         $fecha_origen = $_POST["fechaOrigen"];
 
                         $usuario = $_POST["idUsuario"];
                         //var_dump($usuario);
 
-                        $arregloNota = array("tipo"=>'E05',
-                                            "documento"=>$doc,
-                                            "tipo_doc"=>$tip_nota,
-                                            "doc_origen"=>$origen_venta,
-                                            "fecha_origen"=>$fecha_origen,
-                                            "motivo"=>'C7',
-                                            "tip_cont"=>'NC',
-                                            "observacion"=>'',
-                                            "usuario"=>$usuario);
+                        $arregloNota = array(
+                            "tipo" => 'E05',
+                            "documento" => $doc,
+                            "tipo_doc" => $tip_nota,
+                            "doc_origen" => $origen_venta,
+                            "fecha_origen" => $fecha_origen,
+                            "motivo" => 'C7',
+                            "tip_cont" => 'NC',
+                            "observacion" => '',
+                            "usuario" => $usuario
+                        );
 
                         $notaCredito = ModeloFacturacion::mdlIngresarNotaCD($arregloNota);
                         //var_dump($ctacte);
 
-                        if($notaCredito == "ok"){
+                        if ($notaCredito == "ok") {
 
-                            echo'<script>
+                            echo '<script>
 
                             swal({
                                     type: "success",
-                                    title: "Se Genero la Nota cred. '.$doc.'",
+                                    title: "Se Genero la Nota cred. ' . $doc . '",
                                     showConfirmButton: true,
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
@@ -1033,174 +1004,167 @@ class ControladorFacturacion{
                                         })
 
                             </script>';
-
                         }
-
                     }
-
                 }
-
-                
-
             }
-
-        }else{
+        } else {
 
             //var_dump("no");
 
         }
-
     }
 
     /*
     * MOSTRAR CABECERA DE TEMPORAL
     */
-	static public function ctrMostrarTablas($tipo, $estado, $valor){
+    static public function ctrMostrarTablas($tipo, $estado, $valor)
+    {
 
-		$respuesta = ModeloFacturacion::mdlMostrarTablas($tipo, $estado, $valor);
+        $respuesta = ModeloFacturacion::mdlMostrarTablas($tipo, $estado, $valor);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-     /*
+    /*
     * MOSTRAR RANGO DE FECHAS DE FACTURAS
     */
-	static public function ctrRangoFechasFacturas($fechaInicial, $fechaFinal){
-		$respuesta = ModeloFacturacion::mdlRangoFechasFacturas($fechaInicial, $fechaFinal);
+    static public function ctrRangoFechasFacturas($fechaInicial, $fechaFinal)
+    {
+        $respuesta = ModeloFacturacion::mdlRangoFechasFacturas($fechaInicial, $fechaFinal);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-     /*
+    /*
     * MOSTRAR RANGO DE FECHA DE BOLETAS
     */
-	static public function ctrRangoFechasBoletas($fechaInicial, $fechaFinal){
-		$respuesta = ModeloFacturacion::mdlRangoFechasBoletas( $fechaInicial, $fechaFinal);
+    static public function ctrRangoFechasBoletas($fechaInicial, $fechaFinal)
+    {
+        $respuesta = ModeloFacturacion::mdlRangoFechasBoletas($fechaInicial, $fechaFinal);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-     /*
+    /*
     * MOSTRAR RANGO DE FECHA DE PROFORMAS
     */
-	static public function ctrRangoFechasProformas($fechaInicial, $fechaFinal){
-		$respuesta = ModeloFacturacion::mdlRangoFechasProformas( $fechaInicial, $fechaFinal);
+    static public function ctrRangoFechasProformas($fechaInicial, $fechaFinal)
+    {
+        $respuesta = ModeloFacturacion::mdlRangoFechasProformas($fechaInicial, $fechaFinal);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-        /*
+    /*
     * MOSTRAR talonarios credito
     */
-	static public function ctrMostrarTalonarios($item, $valor){
-        $tabla="talonariosjf";
-		$respuesta = ModeloFacturacion::mdlMostrarTalonarios($tabla, $item, $valor);
+    static public function ctrMostrarTalonarios($item, $valor)
+    {
+        $tabla = "talonariosjf";
+        $respuesta = ModeloFacturacion::mdlMostrarTalonarios($tabla, $item, $valor);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
     /*
     * MOSTRAR talonarios debito
     */
-	static public function ctrMostrarTalonariosDebito($item, $valor){
-        $tabla="talonariosjf";
-		$respuesta = ModeloFacturacion::mdlMostrarTalonariosDebito($tabla, $item, $valor);
+    static public function ctrMostrarTalonariosDebito($item, $valor)
+    {
+        $tabla = "talonariosjf";
+        $respuesta = ModeloFacturacion::mdlMostrarTalonariosDebito($tabla, $item, $valor);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
     /*
     * MOSTRAR RANGO DE FECHAS DE NOTAS DE VENTA CREDITO/DEBITO
     */
-	static public function ctrRangoFechasNotasCD($fechaInicial, $fechaFinal){
-		$respuesta = ModeloFacturacion::mdlRangoFechasNotasCD( $fechaInicial, $fechaFinal);
+    static public function ctrRangoFechasNotasCD($fechaInicial, $fechaFinal)
+    {
+        $respuesta = ModeloFacturacion::mdlRangoFechasNotasCD($fechaInicial, $fechaFinal);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-     /*
+    /*
     * MOSTRAR RANGO DE FECHA DE PROCESAR COMPROBANTES ELECTRONICOS
     */
-	static public function ctrRangoFechasProcesarCE($fechaInicial, $fechaFinal,$tipo){
-		$respuesta = ModeloFacturacion::mdlRangoFechasProcesarCE( $fechaInicial, $fechaFinal,$tipo);
+    static public function ctrRangoFechasProcesarCE($fechaInicial, $fechaFinal, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlRangoFechasProcesarCE($fechaInicial, $fechaFinal, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-    
-     /*
+
+    /*
     * MOSTRAR NOTAS DE DEBITO PARA IMPRESION
     */
-	static public function ctrMostrarDebitoImpresion($documento, $tipo){
-		$respuesta = ModeloFacturacion::mdlMostrarDebitoImpresion( $documento, $tipo);
+    static public function ctrMostrarDebitoImpresion($documento, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarDebitoImpresion($documento, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
 
     /*
     * MOSTRAR VENTA DE NOTAS PARA IMPRESION
     */
-	static public function ctrMostrarVentaImpresion($documento, $tipo){
-		$respuesta = ModeloFacturacion::mdlMostrarVentaImpresion( $documento, $tipo);
+    static public function ctrMostrarVentaImpresion($documento, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarVentaImpresion($documento, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-     /*
+    /*
     * MOSTRAR VENTA DE NOTAS PARA IMPRESION
     */
-	static public function ctrMostrarCreditoImpresion($documento, $tipo){
-		$respuesta = ModeloFacturacion::mdlMostrarCreditoImpresion( $documento, $tipo);
+    static public function ctrMostrarCreditoImpresion($documento, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarCreditoImpresion($documento, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
     /*
     * MOSTRAR MODELO DE NOTAS PARA IMPRESION
     */
-	static public function ctrMostrarModeloImpresion($documento, $tipo){
-		$respuesta = ModeloFacturacion::mdlMostrarModeloImpresion( $documento, $tipo);
+    static public function ctrMostrarModeloImpresion($documento, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarModeloImpresion($documento, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
     /*
     * MOSTRAR MODELO DE PROFORMAS PARA IMPRESION
     */
-	static public function ctrMostrarModeloProforma($documento, $tipo){
-		$respuesta = ModeloFacturacion::mdlMostrarModeloProforma( $documento, $tipo);
+    static public function ctrMostrarModeloProforma($documento, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarModeloProforma($documento, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
 
     /*
     * MOSTRAR UNIDADES DE BOLETA Y FACTURA PARA IMPRESION
     */
-	static public function ctrMostrarUnidadesImpresion($documento, $tipo){
-		$respuesta = ModeloFacturacion::mdlMostrarUnidadesImpresion( $documento, $tipo);
+    static public function ctrMostrarUnidadesImpresion($documento, $tipo)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarUnidadesImpresion($documento, $tipo);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
-    static public function ctrFacturarGuia(){
+    static public function ctrFacturarGuia()
+    {
 
-        if(isset($_POST["codPedido"])){
+        if (isset($_POST["codPedido"])) {
 
             $codigo = $_POST["codPedido"];
             //var_dump($codigo);
@@ -1208,7 +1172,7 @@ class ControladorFacturacion{
             //var_dump($serie);
             $documento = $_POST["docDest"];
             //var_dump($serie.$documento);
-            $docDestino = $serie.$documento;
+            $docDestino = $serie . $documento;
             //var_dump($docDestino);
 
             $tip_dest = substr($serie, 0, 1);
@@ -1220,25 +1184,25 @@ class ControladorFacturacion{
             //var_dump($tipo_origen);
             $usuario = $_POST["idUsuario"];
 
-            if($tip_dest == "F"){
+            if ($tip_dest == "F") {
 
                 $tipo = "S03";
                 //var_dump($tipo);
                 $tipoCta = '01';
                 //var_dump($tipoCta);
-                $nombre_tipo="FACTURA";
+                $nombre_tipo = "FACTURA";
                 //var_dump($nombre_tipo);
 
                 $talonario = ModeloFacturacion::mdlActualizarTalonarioFactura($serie);
                 //var_dump("factura", $talonario);
 
-            }else{
+            } else {
 
                 $tipo = "S02";
                 //var_dump($tipo);
                 $tipoCta = '03';
                 //var_dump($tipoCta);
-                $nombre_tipo="BOLETA";
+                $nombre_tipo = "BOLETA";
                 //var_dump($nombre_tipo);
 
                 $talonario = ModeloFacturacion::mdlActualizarTalonarioBoleta($serie);
@@ -1250,12 +1214,14 @@ class ControladorFacturacion{
             todo GENERAMOS EN MOVIMIENTOS
             */
 
-            $datos = array( "tipo" => $tipo,
-                            "documento" => $docDestino,
-                            "fecha" => $fecha,
-                            "nombre_tipo" => $nombre_tipo,
-                            "codigo" => $codigo,
-                            "tipo_documento" => $tipo_origen);
+            $datos = array(
+                "tipo" => $tipo,
+                "documento" => $docDestino,
+                "fecha" => $fecha,
+                "nombre_tipo" => $nombre_tipo,
+                "codigo" => $codigo,
+                "tipo_documento" => $tipo_origen
+            );
             //var_dump($datos);
 
             $facturar = ModeloFacturacion::mdlFacturarGuiaM($datos);
@@ -1264,7 +1230,7 @@ class ControladorFacturacion{
             /*
             todo REGISTRAMOS EN VENTAJF
             */
-            if($facturar == "ok"){
+            if ($facturar == "ok") {
 
                 //var_dump($tipo);
                 //var_dump($docDestino);
@@ -1272,24 +1238,26 @@ class ControladorFacturacion{
                 //var_dump($codigo);
                 //var_dump($usuario);
 
-                $datosV = array(    "tipo_ori" => "S01",
-                                    "tipo" => $tipo,
-                                    "documento" => $docDestino,
-                                    "tipo_documento" => $nombre_tipo,
-                                    "doc_origen" => $codigo,
-                                    "usuario" => $usuario);
+                $datosV = array(
+                    "tipo_ori" => "S01",
+                    "tipo" => $tipo,
+                    "documento" => $docDestino,
+                    "tipo_documento" => $nombre_tipo,
+                    "doc_origen" => $codigo,
+                    "usuario" => $usuario
+                );
                 //var_dump($datosV);
 
                 $facturarV = ModeloFacturacion::mdlFacturarGuiaV($datosV);
                 //$facturarV = "ok";
                 //var_dump($facturar);
 
-                if($facturarV == "ok"){
+                if ($facturarV == "ok") {
 
                     $estado = ModeloFacturacion::mdlActualizarGuiaF($codigo);
                     //var_dump($estado);
 
-                    if($estado == "ok"){
+                    if ($estado == "ok") {
 
                         $codCta = $docDestino;
                         //var_dump($codCta);
@@ -1308,7 +1276,7 @@ class ControladorFacturacion{
                         //var_dump($fecha);
                         $dias = $respuestaDoc["dias"];
                         //var_dump($dias);
-                        $fecha_ven = date("Y-m-d",strtotime($fecha."+ ".$dias." day"));
+                        $fecha_ven = date("Y-m-d", strtotime($fecha . "+ " . $dias . " day"));
                         //var_dump($fecha_ven);
 
                         $monto = $respuestaDoc["total"];
@@ -1319,27 +1287,29 @@ class ControladorFacturacion{
                         $cod_pago = $tipoCta;
                         //var_dump($cod_pago);
 
-                        $datosCta = array(  "tipo_doc" => $tipoCta,
-                                            "num_cta" => $docDestino,
-                                            "cliente" => $cliente,
-                                            "vendedor" => $vendedor,
-                                            "fecha_ven" => $fecha_ven,
-                                            "monto" => $monto,
-                                            "cod_pago" => $cod_pago,
-                                            "usuario" => $usuario,
-                                            "saldo" => $saldo);
+                        $datosCta = array(
+                            "tipo_doc" => $tipoCta,
+                            "num_cta" => $docDestino,
+                            "cliente" => $cliente,
+                            "vendedor" => $vendedor,
+                            "fecha_ven" => $fecha_ven,
+                            "monto" => $monto,
+                            "cod_pago" => $cod_pago,
+                            "usuario" => $usuario,
+                            "saldo" => $saldo
+                        );
                         //var_dump($datosCta);
 
                         $ctacte = ModeloFacturacion::mdlGenerarCtaCte($datosCta);
                         //var_dump($ctacte);
 
-                        if($ctacte == "ok"){
+                        if ($ctacte == "ok") {
 
-                            echo'<script>
+                            echo '<script>
 
                             swal({
                                     type: "success",
-                                    title: "Se Genero la '.$nombre_tipo.' N° '.$docDestino.'",
+                                    title: "Se Genero la ' . $nombre_tipo . ' N° ' . $docDestino . '",
                                     showConfirmButton: true,
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
@@ -1351,30 +1321,25 @@ class ControladorFacturacion{
                                         })
 
                             </script>';
-
                         }
-
                     }
-
                 }
-
             }
-
         }
-
     }
 
     /* 
     * FACTURAR DESDE GUIA
     */
-    static public function ctrFacturarB(){
+    static public function ctrFacturarB()
+    {
 
-        if(isset($_POST["codPedidoB"])){
+        if (isset($_POST["codPedidoB"])) {
 
             $codigo = $_POST["codPedidoB"];
             //var_dump($codigo);
             $doc = $_POST["serieSeparadoB"];
-            $docDestino = str_replace ( '-', '', $doc);
+            $docDestino = str_replace('-', '', $doc);
             //var_dump($docDestino);
             $tip_dest = substr($docDestino, 0, 1);
             //var_dump($tip_dest);
@@ -1389,25 +1354,25 @@ class ControladorFacturacion{
             $serie = substr($docDestino, 0, 4);;
             //var_dump($serie);
 
-            if($tip_dest == "F"){
+            if ($tip_dest == "F") {
 
                 $tipo = "S03";
                 //var_dump($tipo);
                 $tipoCta = '01';
                 //var_dump($tipoCta);
-                $nombre_tipo="FACTURA";
+                $nombre_tipo = "FACTURA";
                 //var_dump($nombre_tipo);
 
                 $talonario = ModeloFacturacion::mdlActualizarTalonarioFactura($serie);
                 //var_dump("factura", $talonario);
 
-            }else{
+            } else {
 
                 $tipo = "S02";
                 //var_dump($tipo);
                 $tipoCta = '03';
                 //var_dump($tipoCta);
-                $nombre_tipo="BOLETA";
+                $nombre_tipo = "BOLETA";
                 //var_dump($nombre_tipo);
 
                 $talonario = ModeloFacturacion::mdlActualizarTalonarioBoleta($serie);
@@ -1415,92 +1380,98 @@ class ControladorFacturacion{
 
             }
 
-                /*
+            /*
                 todo GENERAMOS EN MOVIMIENTOS
                 */
-                $datos = array( "tipo" => $tipo,
-                                "documento" => $docDestino,
-                                "fecha" => $fecha,
-                                "nombre_tipo" => $nombre_tipo,
-                                "codigo" => $codigo,
-                                "tipo_documento" => $tipo_origen);
-                //var_dump($datos);
+            $datos = array(
+                "tipo" => $tipo,
+                "documento" => $docDestino,
+                "fecha" => $fecha,
+                "nombre_tipo" => $nombre_tipo,
+                "codigo" => $codigo,
+                "tipo_documento" => $tipo_origen
+            );
+            //var_dump($datos);
 
-                $facturar = ModeloFacturacion::mdlFacturarGuiaM($datos);
-                //var_dump($facturar);
+            $facturar = ModeloFacturacion::mdlFacturarGuiaM($datos);
+            //var_dump($facturar);
 
-                /*
+            /*
                 todo REGISTRAMOS EN VENTAJF
                 */
-                if($facturar == "ok"){
+            if ($facturar == "ok") {
 
-                    $datosV = array(    "tipo_ori" => "S01",
-                                        "tipo" => $tipo,
-                                        "documento" => $docDestino,
-                                        "tipo_documento" => $nombre_tipo,
-                                        "doc_origen" => $codigo,
-                                        "usuario" => $usuario);
-                    //var_dump($datosV);
+                $datosV = array(
+                    "tipo_ori" => "S01",
+                    "tipo" => $tipo,
+                    "documento" => $docDestino,
+                    "tipo_documento" => $nombre_tipo,
+                    "doc_origen" => $codigo,
+                    "usuario" => $usuario
+                );
+                //var_dump($datosV);
 
-                    $facturarV = ModeloFacturacion::mdlFacturarGuiaV($datosV);
-                    //var_dump($facturarV);
+                $facturarV = ModeloFacturacion::mdlFacturarGuiaV($datosV);
+                //var_dump($facturarV);
 
-                    if($facturarV == "ok"){
+                if ($facturarV == "ok") {
 
-                        $estado = ModeloFacturacion::mdlActualizarGuiaF($codigo);
-                        //var_dump($estado);
+                    $estado = ModeloFacturacion::mdlActualizarGuiaF($codigo);
+                    //var_dump($estado);
 
-                        if($estado == "ok"){
+                    if ($estado == "ok") {
 
-                            $codCta = $docDestino;
-                            //var_dump($codCta);
-                            $tipoDoc = $tipo;
+                        $codCta = $docDestino;
+                        //var_dump($codCta);
+                        $tipoDoc = $tipo;
 
-                            $respuestaDoc = ModeloFacturacion::mdlMostraVentaDocumento($codCta, $tipoDoc);
-                            //var_dump($respuestaDoc);
+                        $respuestaDoc = ModeloFacturacion::mdlMostraVentaDocumento($codCta, $tipoDoc);
+                        //var_dump($respuestaDoc);
 
-                            $cliente = $respuestaDoc["cliente"];
-                            //var_dump($cliente);
-                            $vendedor = $respuestaDoc["vendedor"];
-                            //var_dump($vendedor);
+                        $cliente = $respuestaDoc["cliente"];
+                        //var_dump($cliente);
+                        $vendedor = $respuestaDoc["vendedor"];
+                        //var_dump($vendedor);
 
-                            date_default_timezone_set("America/Lima");
-                            $fecha = date("Y-m-d");
-                            //var_dump($fecha);
-                            $dias = $respuestaDoc["dias"];
-                            //var_dump($dias);
-                            $fecha_ven = date("Y-m-d",strtotime($fecha."+ ".$dias." day"));
-                            //var_dump($fecha_ven);
+                        date_default_timezone_set("America/Lima");
+                        $fecha = date("Y-m-d");
+                        //var_dump($fecha);
+                        $dias = $respuestaDoc["dias"];
+                        //var_dump($dias);
+                        $fecha_ven = date("Y-m-d", strtotime($fecha . "+ " . $dias . " day"));
+                        //var_dump($fecha_ven);
 
-                            $monto = $respuestaDoc["total"];
-                            //var_dump($monto);
-                            $saldo = $respuestaDoc["total"];
-                            //var_dump($saldo);
+                        $monto = $respuestaDoc["total"];
+                        //var_dump($monto);
+                        $saldo = $respuestaDoc["total"];
+                        //var_dump($saldo);
 
-                            $cod_pago = $tipoCta;
-                            //var_dump($cod_pago);
+                        $cod_pago = $tipoCta;
+                        //var_dump($cod_pago);
 
-                            $datosCta = array(  "tipo_doc" => $tipoCta,
-                                                "num_cta" => $docDestino,
-                                                "cliente" => $cliente,
-                                                "vendedor" => $vendedor,
-                                                "fecha_ven" => $fecha_ven,
-                                                "monto" => $monto,
-                                                "cod_pago" => $cod_pago,
-                                                "usuario" => $usuario,
-                                                "saldo" => $saldo);
-                            //var_dump($datosCta);
+                        $datosCta = array(
+                            "tipo_doc" => $tipoCta,
+                            "num_cta" => $docDestino,
+                            "cliente" => $cliente,
+                            "vendedor" => $vendedor,
+                            "fecha_ven" => $fecha_ven,
+                            "monto" => $monto,
+                            "cod_pago" => $cod_pago,
+                            "usuario" => $usuario,
+                            "saldo" => $saldo
+                        );
+                        //var_dump($datosCta);
 
-                            $ctacte = ModeloFacturacion::mdlGenerarCtaCte($datosCta);
-                            //var_dump($ctacte);
+                        $ctacte = ModeloFacturacion::mdlGenerarCtaCte($datosCta);
+                        //var_dump($ctacte);
 
-                            if($ctacte == "ok"){
+                        if ($ctacte == "ok") {
 
-                                echo'<script>
+                            echo '<script>
 
                                 swal({
                                         type: "success",
-                                        title: "Se Genero la '.$nombre_tipo.' N° '.$docDestino.'",
+                                        title: "Se Genero la ' . $nombre_tipo . ' N° ' . $docDestino . '",
                                         showConfirmButton: true,
                                         confirmButtonText: "Cerrar"
                                 }).then(function(result){
@@ -1512,185 +1483,177 @@ class ControladorFacturacion{
                                             })
 
                                 </script>';
-
-                            }
-
                         }
-
                     }
-
                 }
-
-
+            }
         }
-
     }
 
-    static public function ctrFacturarSalida(){
+    static public function ctrFacturarSalida()
+    {
 
-        if(isset($_POST["codSalida"])){
+        if (isset($_POST["codSalida"])) {
 
 
-                /*
+            /*
                 todo: BAJAR o subir EL STOCK
                 */
-                $tabla = "detalle_ing_sal";
+            $tabla = "detalle_ing_sal";
 
-                $respuesta = ModeloSalidas::mdlMostraDetallesTemporal($tabla, $_POST["codSalida"]);
-                //var_dump($respuesta);
+            $respuesta = ModeloSalidas::mdlMostraDetallesTemporal($tabla, $_POST["codSalida"]);
+            //var_dump($respuesta);
 
-                foreach($respuesta as $value){
+            foreach ($respuesta as $value) {
 
-                    $datos = array( "articulo" => $value["articulo"],
-                                    "cantidad" => $value["cantidad"]);
-                    #var_dump($datos);
-                    $inicioTipo = substr($_POST["tdoc"],0,1);
-                    
-                    if($inicioTipo == 'E'){
+                $datos = array(
+                    "articulo" => $value["articulo"],
+                    "cantidad" => $value["cantidad"]
+                );
+                #var_dump($datos);
+                $inicioTipo = substr($_POST["tdoc"], 0, 1);
 
-                        $respuestaGuia = ModeloArticulos::mdlActualizarStockIngreso($value["articulo"],$value["cantidad"]);
-                        
-                    }else{
+                if ($inicioTipo == 'E') {
 
-                        $respuestaGuia = ModeloArticulos::mdlActualizarStock($datos);
-                    }
-                    
-                    #var_dump($respuestaGuia);
+                    $respuestaGuia = ModeloArticulos::mdlActualizarStockIngreso($value["articulo"], $value["cantidad"]);
+                } else {
 
+                    $respuestaGuia = ModeloArticulos::mdlActualizarStock($datos);
                 }
 
-                //var_dump($respuestaGuia);
+                #var_dump($respuestaGuia);
 
-                #$respuestaGuia="ok";
+            }
 
-                /*
+            //var_dump($respuestaGuia);
+
+            #$respuestaGuia="ok";
+
+            /*
                 todo: registrar en movimientos
                 */
-                if($respuestaGuia == "ok"){
+            if ($respuestaGuia == "ok") {
 
-                    $intoA = "";
-                    $intoB = "";
-                    foreach($respuesta as $key => $value){
+                $intoA = "";
+                $intoB = "";
+                foreach ($respuesta as $key => $value) {
 
-                        $tipo= $_POST["tdoc"];
+                    $tipo = $_POST["tdoc"];
 
-                        $documento = $_POST["serieSalida"];
-                        $doc = $tipo.$documento;
-                        //var_dump($doc);
+                    $documento = $_POST["serieSalida"];
+                    $doc = $tipo . $documento;
+                    //var_dump($doc);
 
-                        $cliente = $_POST["codCli"];
-                        //var_dump($cliente);
+                    $cliente = $_POST["codCli"];
+                    //var_dump($cliente);
 
-                        $vendedor = $_POST["codVen"];
-                        //var_dump($vendedor);
+                    $vendedor = $_POST["codVen"];
+                    //var_dump($vendedor);
 
-                        $dscto = 0;
-                        //var_dump($dscto);
+                    $dscto = 0;
+                    //var_dump($dscto);
 
-                        date_default_timezone_set("America/Lima");
-                        $fecha = date("Y-m-d");
-                        $nombre_tipo = "AJUSTES DE INV.";
+                    date_default_timezone_set("America/Lima");
+                    $fecha = date("Y-m-d");
+                    $nombre_tipo = "AJUSTES DE INV.";
 
 
-                        $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto)/100);
-                        //var_dump($total);
+                    $total = $value["cantidad"] * $value["precio"] * ((100 - $dscto) / 100);
+                    //var_dump($total);
 
-                        if($key < count($respuesta)-1){
+                    if ($key < count($respuesta) - 1) {
 
-                            $intoA .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."'),";
+                        $intoA .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "'),";
+                    } else {
 
-                        }else{
-
-                            $intoB .= "('".$tipo."','".$doc."','".$fecha."','".$value["articulo"]."','".$cliente."','".$vendedor."',".$value["cantidad"].",".$value["precio"].",0,".$dscto.",".$total.",'".$nombre_tipo."')";
-
-                        }
-
+                        $intoB .= "('" . $tipo . "','" . $doc . "','" . $fecha . "','" . $value["articulo"] . "','" . $cliente . "','" . $vendedor . "'," . $value["cantidad"] . "," . $value["precio"] . ",0," . $dscto . "," . $total . ",'" . $nombre_tipo . "')";
                     }
+                }
 
-                    $detalle = $intoA.$intoB;
-                    #var_dump("detalle", $detalle);
+                $detalle = $intoA . $intoB;
+                #var_dump("detalle", $detalle);
 
-                    $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
-                    #var_dump($respuestaMovimientos);   
-                    //var_dump($respuestaMovimientos);
+                $respuestaMovimientos = ModeloFacturacion::mdlRegistrarMovimientos($detalle);
+                #var_dump($respuestaMovimientos);   
+                //var_dump($respuestaMovimientos);
 
-                    /*
+                /*
                     todo: registrar en ventajf
                     */
-                    if($respuestaMovimientos == "ok"){
+                if ($respuestaMovimientos == "ok") {
 
-                        $respuestaDoc = ModeloSalidas::mdlMostrarSalidasCabecera($_POST["codSalida"]);
-                        //var_dump($respuestaDoc);
+                    $respuestaDoc = ModeloSalidas::mdlMostrarSalidasCabecera($_POST["codSalida"]);
+                    //var_dump($respuestaDoc);
 
-                        $tipo= $_POST["tdoc"];
+                    $tipo = $_POST["tdoc"];
 
-                        $documento = $_POST["serieSalida"];
-                        $doc = $tipo.$documento;
-                        //var_dump($doc);
+                    $documento = $_POST["serieSalida"];
+                    $doc = $tipo . $documento;
+                    //var_dump($doc);
 
-                        $usuario = $_POST["idUsuario"];
-                        //var_dump($usuario);
+                    $usuario = $_POST["idUsuario"];
+                    //var_dump($usuario);
 
-                        $docOrigen = $_POST["codSalida"];
-                        //var_dump("$docOrigen");
+                    $docOrigen = $_POST["codSalida"];
+                    //var_dump("$docOrigen");
 
-                        $docDestino = $_POST["serieSeparado"];
-                        $docDest = str_replace ( '-', '', $docDestino);
-                        //var_dump($docDest);
+                    $docDestino = $_POST["serieSeparado"];
+                    $docDest = str_replace('-', '', $docDestino);
+                    //var_dump($docDest);
 
-                        $datosD = array("tipo" => $tipo,
-                                        "documento" => $doc,
-                                        "neto" => $respuestaDoc["op_gravada"],
-                                        "igv" => $respuestaDoc["igv"],
-                                        "dscto" => $respuestaDoc["descuento_total"],
-                                        "total" => $respuestaDoc["total"],
-                                        "cliente" => $respuestaDoc["cod_cli"],
-                                        "vendedor" => $respuestaDoc["vendedor"],
-                                        "agencia" => $respuestaDoc["agencia"],
-                                        "lista_precios" => $respuestaDoc["lista"],
-                                        "condicion_venta" => $respuestaDoc["condicion_venta"],
-                                        "doc_destino" => $docDest,
-                                        "doc_origen" => $docOrigen,
-                                        "usuario" => $usuario,
-                                        "tipo_documento" => $_POST["nomTipo"]);
-                        //var_dump($datosD);
+                    $datosD = array(
+                        "tipo" => $tipo,
+                        "documento" => $doc,
+                        "neto" => $respuestaDoc["op_gravada"],
+                        "igv" => $respuestaDoc["igv"],
+                        "dscto" => $respuestaDoc["descuento_total"],
+                        "total" => $respuestaDoc["total"],
+                        "cliente" => $respuestaDoc["cod_cli"],
+                        "vendedor" => $respuestaDoc["vendedor"],
+                        "agencia" => $respuestaDoc["agencia"],
+                        "lista_precios" => $respuestaDoc["lista"],
+                        "condicion_venta" => $respuestaDoc["condicion_venta"],
+                        "doc_destino" => $docDest,
+                        "doc_origen" => $docOrigen,
+                        "usuario" => $usuario,
+                        "tipo_documento" => $_POST["nomTipo"]
+                    );
+                    //var_dump($datosD);
 
-                        $respuestaDocumento = ModeloSalidas::mdlRegistrarDocumentoSalida($datosD);
+                    $respuestaDocumento = ModeloSalidas::mdlRegistrarDocumentoSalida($datosD);
+                }
 
-                    }
+                var_dump($respuestaDocumento);
 
-                    var_dump($respuestaDocumento);
-
-                    /* 
+                /* 
                     todo: SUMAR 1 AL DOCUMENTO
                     */
-                    if($respuestaDocumento == "ok"){
+                if ($respuestaDocumento == "ok") {
 
-                        $serie = $_POST["tdoc"];
-                        //var_dump($serie);
+                    $serie = $_POST["tdoc"];
+                    //var_dump($serie);
 
-                        $talonario = ModeloSalidas::mdlActualizarArgumento($serie);
+                    $talonario = ModeloSalidas::mdlActualizarArgumento($serie);
+                }
 
-                    }
+                //var_dump($talonario);
 
-                    //var_dump($talonario);
-
-                    /*
+                /*
                     todo: CAMBIAR EL ESTADO DEL PEDIDO
                     */
-                    if($talonario == "ok"){
+                if ($talonario == "ok") {
 
-                        $estado = ModeloSalidas::mdlActualizarSalidaF($_POST["codSalida"]);
+                    $estado = ModeloSalidas::mdlActualizarSalidaF($_POST["codSalida"]);
 
-                        //var_dump($estado);
+                    //var_dump($estado);
 
-                        if($estado == "ok"){
+                    if ($estado == "ok") {
 
-                            echo'<script>
+                        echo '<script>
 
                             swal({
                                     type: "success",
-                                    title: "Se Genero el documento '.$documento.'",
+                                    title: "Se Genero el documento ' . $documento . '",
                                     showConfirmButton: true,
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
@@ -1702,27 +1665,20 @@ class ControladorFacturacion{
                                         })
 
                             </script>';
-
-                        }
-
                     }
-
-
                 }
-
-            
-
-        }else{
+            }
+        } else {
 
             //var_dump("no");
 
         }
-
     }
 
-    static public function ctrCrearFacturaXML(){
+    static public function ctrCrearFacturaXML()
+    {
 
-        if(isset($_GET["tipoFact"]) && isset($_GET["documentoFact"])){
+        if (isset($_GET["tipoFact"]) && isset($_GET["documentoFact"])) {
 
             $doc = new DOMDocument();
             $doc->formatOutput = FALSE;
@@ -1735,68 +1691,68 @@ class ControladorFacturacion{
             $tipo = $_GET["tipoFact"];
 
             $documento = $_GET["documentoFact"];
-            $venta = ControladorFacturacion::ctrMostrarVentaImpresion($documento,$tipo);
+            $venta = ControladorFacturacion::ctrMostrarVentaImpresion($documento, $tipo);
 
-            $modelos = ControladorFacturacion::ctrMostrarModeloImpresion($documento,$tipo);
+            $modelos = ControladorFacturacion::ctrMostrarModeloImpresion($documento, $tipo);
 
-            $unidad= ControladorFacturacion::ctrMostrarUnidadesImpresion($documento,$tipo);
-             
+            $unidad = ControladorFacturacion::ctrMostrarUnidadesImpresion($documento, $tipo);
 
-            if($tipo == 'S03'){
+
+            if ($tipo == 'S03') {
                 $tipcomprobante = '01';
 
                 $nomcomprobante = "FACTURA";
-            }else{
+            } else {
                 $tipcomprobante = '03';
 
                 $nomcomprobante = "BOLETA";
             }
-            $emisor = 	array(
-                'tipodoc'		=> '6',
-                'ruc' 			=> '10094806777', 
-                'razon_social'	=> 'JOSE ADOLFO VASQUEZ CORTEZ', 
-                'nombre_comercial'	=> 'ROSALINDA', 
-                'direccion'		=> 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA', 
-                'pais'			=> 'PE', 
-                'departamento'  => 'LIMA',//LIMA 
-                'provincia'		=> 'LIMA',//LIMA 
-                'distrito'		=> 'LOS OLIVOS', //CARABAYLLO
-                'ubigeo'		=> '150117', //CARABAYLLO
-                'usuario_sol'	=> 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-                'clave_sol'		=> 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
-                );
-    
-    
+            $emisor =     array(
+                'tipodoc'        => '6',
+                'ruc'             => '10094806777',
+                'razon_social'    => 'JOSE ADOLFO VASQUEZ CORTEZ',
+                'nombre_comercial'    => 'ROSALINDA',
+                'direccion'        => 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA',
+                'pais'            => 'PE',
+                'departamento'  => 'LIMA', //LIMA 
+                'provincia'        => 'LIMA', //LIMA 
+                'distrito'        => 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'        => '150117', //CARABAYLLO
+                'usuario_sol'    => 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'        => 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+            );
+
+
 
             $cliente = array(
-                        'tipo'          => $venta["tip_doc_cli"],
-                        'ruc'			=> $venta["dni"], 
-                        'razon_social'  => $venta["nombre"], 
-                        'cliente'       => $venta["cliente"],
-                        'direccion'		=> $venta["direccion"],
-                        'pais'			=> 'PE'
-                        );	
+                'tipo'          => $venta["tip_doc_cli"],
+                'ruc'            => $venta["dni"],
+                'razon_social'  => $venta["nombre"],
+                'cliente'       => $venta["cliente"],
+                'direccion'        => $venta["direccion"],
+                'pais'            => 'PE'
+            );
 
             var_dump($cliente);
 
             $vendedor = array(
-                        "codigo"		=> $venta["vendedor"],
-                        "nombre"		=> $venta["nom_vendedor"]
-                        );
+                "codigo"        => $venta["vendedor"],
+                "nombre"        => $venta["nom_vendedor"]
+            );
 
-            $comprobante =	array(
-                        'tipodoc'		=> $tipcomprobante, //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
-                        'serie'			=> substr($venta["documento"],0,4),
-                        'correlativo'	=> substr($venta["documento"],4,12),
-                        'fecha_emision' => $venta["fecha_emision"],
-                        'moneda'		=> 'PEN', //PEN->SOLES; USD->DOLARES
-                        'total_opgravadas'=> 0, //OP. GRAVADAS
-                        'total_opexoneradas'=>0,
-                        'total_opinafectas'=>0,
-                        'igv'			=> 0,
-                        'total'			=> 0,
-                        'total_texto'	=> ''
-                    );
+            $comprobante =    array(
+                'tipodoc'        => $tipcomprobante, //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
+                'serie'            => substr($venta["documento"], 0, 4),
+                'correlativo'    => substr($venta["documento"], 4, 12),
+                'fecha_emision' => $venta["fecha_emision"],
+                'moneda'        => 'PEN', //PEN->SOLES; USD->DOLARES
+                'total_opgravadas' => 0, //OP. GRAVADAS
+                'total_opexoneradas' => 0,
+                'total_opinafectas' => 0,
+                'igv'            => 0,
+                'total'            => 0,
+                'total_texto'    => ''
+            );
 
 
 
@@ -1810,20 +1766,20 @@ class ControladorFacturacion{
             $comprobante['igv'] = $venta["igv"];
             $comprobante['total'] = $venta["total"];
             $comprobante['total_texto'] = CantidadEnLetra($venta["total"]);
-            $totalSinIGV= $venta["total"] - $venta["igv"];
+            $totalSinIGV = $venta["total"] - $venta["igv"];
 
             //RUC DEL EMISOR - TIPO DE COMPROBANTE - SERIE DEL DOCUMENTO - CORRELATIVO
             //01-> FACTURA, 03-> BOLETA, 07-> NOTA DE CREDITO, 08-> NOTA DE DEBITO, 09->GUIA DE REMISION
-            $nombrexml = $emisor['ruc'].'-'.$comprobante['tipodoc'].'-'.$comprobante['serie'].'-'.$comprobante['correlativo'];
+            $nombrexml = $emisor['ruc'] . '-' . $comprobante['tipodoc'] . '-' . $comprobante['serie'] . '-' . $comprobante['correlativo'];
 
-            $ruta = "vistas/generar_xml/archivos_xml/".$nombrexml;
+            $ruta = "vistas/generar_xml/archivos_xml/" . $nombrexml;
 
             $tipoCliente = $cliente["ruc"];
 
-            if(strlen($tipoCliente) == 8){
-                $tipodoc='1';
-            }else{
-                $tipodoc='6';
+            if (strlen($tipoCliente) == 8) {
+                $tipodoc = '1';
+            } else {
+                $tipodoc = '6';
             }
 
             $xml = '<?xml version="1.0" encoding="UTF-8"?>
@@ -1834,24 +1790,25 @@ class ControladorFacturacion{
                         <ext:ExtensionContent />
                     </ext:UBLExtension>
                </ext:UBLExtensions>
+
                <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
                <cbc:CustomizationID>2.0</cbc:CustomizationID>
-               <cbc:ID>'.$comprobante['serie'].'-'.$comprobante['correlativo'].'</cbc:ID>
-               <cbc:IssueDate>'.$comprobante['fecha_emision'].'</cbc:IssueDate>
+               <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
+               <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
                <cbc:IssueTime>00:00:00</cbc:IssueTime>
-               <cbc:DueDate>'.$comprobante['fecha_emision'].'</cbc:DueDate>
-               <cbc:InvoiceTypeCode listID="0101">'.$comprobante['tipodoc'].'</cbc:InvoiceTypeCode>
-               <cbc:Note languageLocaleID="1000"><![CDATA['.$comprobante['total_texto'].']]></cbc:Note>
-               <cbc:DocumentCurrencyCode>'.$comprobante['moneda'].'</cbc:DocumentCurrencyCode>
+               <cbc:DueDate>' . $comprobante['fecha_emision'] . '</cbc:DueDate>
+               <cbc:InvoiceTypeCode listID="0101">' . $comprobante['tipodoc'] . '</cbc:InvoiceTypeCode>
+               <cbc:Note languageLocaleID="1000"><![CDATA[' . $comprobante['total_texto'] . ']]></cbc:Note>
+               <cbc:DocumentCurrencyCode>' . $comprobante['moneda'] . '</cbc:DocumentCurrencyCode>
                <cac:Signature>
-                  <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
-                  <cbc:Note><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Note>
+                  <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
+                  <cbc:Note><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Note>
                   <cac:SignatoryParty>
                      <cac:PartyIdentification>
-                        <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
+                        <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
                      </cac:PartyIdentification>
                      <cac:PartyName>
-                        <cbc:Name><![CDATA['.$emisor['razon_social'].']]></cbc:Name>
+                        <cbc:Name><![CDATA[' . $emisor['razon_social'] . ']]></cbc:Name>
                      </cac:PartyName>
                   </cac:SignatoryParty>
                   <cac:DigitalSignatureAttachment>
@@ -1863,25 +1820,25 @@ class ControladorFacturacion{
                <cac:AccountingSupplierParty>
                   <cac:Party>
                      <cac:PartyIdentification>
-                        <cbc:ID schemeID="'.$emisor['tipodoc'].'">'.$emisor['ruc'].'</cbc:ID>
+                        <cbc:ID schemeID="' . $emisor['tipodoc'] . '">' . $emisor['ruc'] . '</cbc:ID>
                      </cac:PartyIdentification>
                      <cac:PartyName>
-                        <cbc:Name><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Name>
+                        <cbc:Name><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Name>
                      </cac:PartyName>
                      <cac:PartyLegalEntity>
-                        <cbc:RegistrationName><![CDATA['.$emisor['razon_social'].']]></cbc:RegistrationName>
+                        <cbc:RegistrationName><![CDATA[' . $emisor['razon_social'] . ']]></cbc:RegistrationName>
                         <cac:RegistrationAddress>
-                           <cbc:ID>'.$emisor['ubigeo'].'</cbc:ID>
+                           <cbc:ID>' . $emisor['ubigeo'] . '</cbc:ID>
                            <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                            <cbc:CitySubdivisionName>NONE</cbc:CitySubdivisionName>
-                           <cbc:CityName>'.$emisor['provincia'].'</cbc:CityName>
-                           <cbc:CountrySubentity>'.$emisor['departamento'].'</cbc:CountrySubentity>
-                           <cbc:District>'.$emisor['distrito'].'</cbc:District>
+                           <cbc:CityName>' . $emisor['provincia'] . '</cbc:CityName>
+                           <cbc:CountrySubentity>' . $emisor['departamento'] . '</cbc:CountrySubentity>
+                           <cbc:District>' . $emisor['distrito'] . '</cbc:District>
                            <cac:AddressLine>
-                              <cbc:Line><![CDATA['.$emisor['direccion'].']]></cbc:Line>
+                              <cbc:Line><![CDATA[' . $emisor['direccion'] . ']]></cbc:Line>
                            </cac:AddressLine>
                            <cac:Country>
-                              <cbc:IdentificationCode>'.$emisor['pais'].'</cbc:IdentificationCode>
+                              <cbc:IdentificationCode>' . $emisor['pais'] . '</cbc:IdentificationCode>
                            </cac:Country>
                         </cac:RegistrationAddress>
                      </cac:PartyLegalEntity>
@@ -1890,16 +1847,16 @@ class ControladorFacturacion{
                <cac:AccountingCustomerParty>
                   <cac:Party>
                      <cac:PartyIdentification>
-                        <cbc:ID schemeID="'.$cliente['tipo'].'">'.$cliente['ruc'].'</cbc:ID>
+                        <cbc:ID schemeID="' . $cliente['tipo'] . '">' . $cliente['ruc'] . '</cbc:ID>
                      </cac:PartyIdentification>
                      <cac:PartyLegalEntity>
-                        <cbc:RegistrationName><![CDATA['.$cliente['razon_social'].']]></cbc:RegistrationName>
+                        <cbc:RegistrationName><![CDATA[' . $cliente['razon_social'] . ']]></cbc:RegistrationName>
                         <cac:RegistrationAddress>
                            <cac:AddressLine>
-                              <cbc:Line><![CDATA['.$cliente['direccion'].']]></cbc:Line>
+                              <cbc:Line><![CDATA[' . $cliente['direccion'] . ']]></cbc:Line>
                            </cac:AddressLine>
                            <cac:Country>
-                              <cbc:IdentificationCode>'.$cliente['pais'].'</cbc:IdentificationCode>
+                              <cbc:IdentificationCode>' . $cliente['pais'] . '</cbc:IdentificationCode>
                            </cac:Country>
                         </cac:RegistrationAddress>
                      </cac:PartyLegalEntity>
@@ -1910,23 +1867,23 @@ class ControladorFacturacion{
                   <cbc:ID>FormaPago</cbc:ID>
                   <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
                </cac:PaymentTerms>';
-                if($venta["dscto"] > 0){
-                    $valor_dscto= $comprobante["total_opgravadas"] - $venta["dscto"];
-                    $xml.='<cac:AllowanceCharge>
+            if ($venta["dscto"] > 0) {
+                $valor_dscto = $comprobante["total_opgravadas"] - $venta["dscto"];
+                $xml .= '<cac:AllowanceCharge>
                         <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
                         <cbc:AllowanceChargeReasonCode listAgencyName="PE:SUNAT" listName="Cargo/descuento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo53">02</cbc:AllowanceChargeReasonCode> 
-                        <cbc:Amount currencyID="PEN">'.$venta["dscto"].'</cbc:Amount>
+                        <cbc:Amount currencyID="PEN">' . $venta["dscto"] . '</cbc:Amount>
                     </cac:AllowanceCharge>';
-                }else{
-                    $valor_dscto= $comprobante["total_opgravadas"];
-                }
-               
-      
-               $xml.='<cac:TaxTotal>
-                  <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+            } else {
+                $valor_dscto = $comprobante["total_opgravadas"];
+            }
+
+
+            $xml .= '<cac:TaxTotal>
+                  <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                   <cac:TaxSubtotal>
-                     <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$valor_dscto.'</cbc:TaxableAmount>
-                     <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                     <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $valor_dscto . '</cbc:TaxableAmount>
+                     <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                      <cac:TaxCategory>
                         <cac:TaxScheme>
                            <cbc:ID>1000</cbc:ID>
@@ -1935,12 +1892,12 @@ class ControladorFacturacion{
                         </cac:TaxScheme>
                      </cac:TaxCategory>
                   </cac:TaxSubtotal>';
-      
-      
-                  if($comprobante['total_opexoneradas']>0){
-                     $xml.='<cac:TaxSubtotal>
-                        <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total_opexoneradas'].'</cbc:TaxableAmount>
-                        <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">0.00</cbc:TaxAmount>
+
+
+            if ($comprobante['total_opexoneradas'] > 0) {
+                $xml .= '<cac:TaxSubtotal>
+                        <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total_opexoneradas'] . '</cbc:TaxableAmount>
+                        <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">0.00</cbc:TaxAmount>
                         <cac:TaxCategory>
                            <cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">E</cbc:ID>
                            <cac:TaxScheme>
@@ -1950,12 +1907,12 @@ class ControladorFacturacion{
                            </cac:TaxScheme>
                         </cac:TaxCategory>
                      </cac:TaxSubtotal>';
-                  }
-      
-                  if($comprobante['total_opinafectas']>0){
-                     $xml.='<cac:TaxSubtotal>
-                        <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total_opinafectas'].'</cbc:TaxableAmount>
-                        <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">0.00</cbc:TaxAmount>
+            }
+
+            if ($comprobante['total_opinafectas'] > 0) {
+                $xml .= '<cac:TaxSubtotal>
+                        <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total_opinafectas'] . '</cbc:TaxableAmount>
+                        <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">0.00</cbc:TaxAmount>
                         <cac:TaxCategory>
                            <cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">E</cbc:ID>
                            <cac:TaxScheme>
@@ -1965,39 +1922,39 @@ class ControladorFacturacion{
                            </cac:TaxScheme>
                         </cac:TaxCategory>
                      </cac:TaxSubtotal>';
-                  }
-      
-                  $total_antes_de_impuestos = $comprobante['total_opgravadas']+$comprobante['total_opexoneradas']+$comprobante['total_opinafectas'];
-      
-               $xml.='</cac:TaxTotal>
-               <cac:LegalMonetaryTotal>
-                  <cbc:LineExtensionAmount currencyID="'.$comprobante['moneda'].'">'.$valor_dscto.'</cbc:LineExtensionAmount>
-                  <cbc:TaxInclusiveAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total'].'</cbc:TaxInclusiveAmount>
-                  <cbc:PayableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total'].'</cbc:PayableAmount>
-               </cac:LegalMonetaryTotal>';
-               
-               foreach($modelos as $k=>$v){
-                 
-                  $igv = 0.18 * $v["total"];
-                  $totalIGV = $v["total"]+$igv;
-                  $precioIGV  = $totalIGV/$v["cantidad"];
+            }
 
-                  $xml.='<cac:InvoiceLine>
-                     <cbc:ID>'.($k+1).'</cbc:ID>
-                     <cbc:InvoicedQuantity unitCode="'.$v['unidad'].'">'.number_format($v["cantidad"],3,".","").'</cbc:InvoicedQuantity>
-                     <cbc:LineExtensionAmount currencyID="'.$comprobante['moneda'].'">'.$v['total'].'</cbc:LineExtensionAmount>
+            $total_antes_de_impuestos = $comprobante['total_opgravadas'] + $comprobante['total_opexoneradas'] + $comprobante['total_opinafectas'];
+
+            $xml .= '</cac:TaxTotal>
+               <cac:LegalMonetaryTotal>
+                  <cbc:LineExtensionAmount currencyID="' . $comprobante['moneda'] . '">' . $valor_dscto . '</cbc:LineExtensionAmount>
+                  <cbc:TaxInclusiveAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total'] . '</cbc:TaxInclusiveAmount>
+                  <cbc:PayableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total'] . '</cbc:PayableAmount>
+               </cac:LegalMonetaryTotal>';
+
+            foreach ($modelos as $k => $v) {
+
+                $igv = 0.18 * $v["total"];
+                $totalIGV = $v["total"] + $igv;
+                $precioIGV  = $totalIGV / $v["cantidad"];
+
+                $xml .= '<cac:InvoiceLine>
+                     <cbc:ID>' . ($k + 1) . '</cbc:ID>
+                     <cbc:InvoicedQuantity unitCode="' . $v['unidad'] . '">' . number_format($v["cantidad"], 3, ".", "") . '</cbc:InvoicedQuantity>
+                     <cbc:LineExtensionAmount currencyID="' . $comprobante['moneda'] . '">' . $v['total'] . '</cbc:LineExtensionAmount>
                      
                      <cac:PricingReference>
                         <cac:AlternativeConditionPrice>
-                           <cbc:PriceAmount currencyID="'.$comprobante['moneda'].'">'.number_format($precioIGV,2,".","").'</cbc:PriceAmount>
+                           <cbc:PriceAmount currencyID="' . $comprobante['moneda'] . '">' . number_format($precioIGV, 2, ".", "") . '</cbc:PriceAmount>
                            <cbc:PriceTypeCode>01</cbc:PriceTypeCode>
                         </cac:AlternativeConditionPrice>
                      </cac:PricingReference>
                      <cac:TaxTotal>
-                        <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.number_format($igv,2,".","").'</cbc:TaxAmount>
+                        <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . number_format($igv, 2, ".", "") . '</cbc:TaxAmount>
                         <cac:TaxSubtotal>
-                           <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$v['total'].'</cbc:TaxableAmount>
-                           <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.number_format($igv,2,".","").'</cbc:TaxAmount>
+                           <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $v['total'] . '</cbc:TaxableAmount>
+                           <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . number_format($igv, 2, ".", "") . '</cbc:TaxAmount>
                            <cac:TaxCategory>
                               <cbc:Percent>18</cbc:Percent>
                               <cbc:TaxExemptionReasonCode>10</cbc:TaxExemptionReasonCode>
@@ -2010,77 +1967,77 @@ class ControladorFacturacion{
                         </cac:TaxSubtotal>
                      </cac:TaxTotal>
                      <cac:Item>
-                        <cbc:Description><![CDATA['.$v['nombre'].']]></cbc:Description>
+                        <cbc:Description><![CDATA[' . $v['nombre'] . ']]></cbc:Description>
                         <cac:SellersItemIdentification>
-                           <cbc:ID>'.$v['modelo'].'</cbc:ID>
+                           <cbc:ID>' . $v['modelo'] . '</cbc:ID>
                         </cac:SellersItemIdentification>
                      </cac:Item>
                      <cac:Price>
-                        <cbc:PriceAmount currencyID="'.$comprobante['moneda'].'">'.$v['precio'].'</cbc:PriceAmount>
+                        <cbc:PriceAmount currencyID="' . $comprobante['moneda'] . '">' . $v['precio'] . '</cbc:PriceAmount>
                      </cac:Price>
-                  </cac:InvoiceLine>';  	
-                 }
-      
-                 $xml.="</Invoice>";
+                  </cac:InvoiceLine>';
+            }
 
-        
+            $xml .= "</Invoice>";
 
-	    $doc->loadXML($xml);
-	    $doc->save($ruta.'.XML');
-        
 
-        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
 
-        // CREAR XML FIRMA
-        require_once('/../vistas/generar_xml/ApiFacturacion.php');
+            $doc->loadXML($xml);
+            $doc->save($ruta . '.XML');
 
-        //LIBRERIA PHPMAILER
-        require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
 
-        $objApi = new ApiFacturacion();
-        $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
-        // $envio = "1";
+            $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1, "ERROR", $tipo, $documento);
 
-        if($envio == "1"){
-            echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
-            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
+            // CREAR XML FIRMA
+            require_once('/../vistas/generar_xml/ApiFacturacion.php');
 
-            $validarCorreo = strpos($venta["email"],"@");
+            //LIBRERIA PHPMAILER
+            require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
 
-            if($validarCorreo !== false ){
+            $objApi = new ApiFacturacion();
+            $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
+            // $envio = "1";
 
-                //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
-                $mail = new PHPMailer;
+            if ($envio == "1") {
+                echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
+                $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2, "ENVIADO", $tipo, $documento);
 
-                $mail->CharSet = 'UTF-8';
+                $validarCorreo = strpos($venta["email"], "@");
 
-                $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
-                $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
-                $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
-                $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
-                $mail->Password = "notificaciones123";		// Tu contraseña de gmail
-                $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
-                $mail->Port = 587;
-                $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
-                $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
-                $mail->Subject = "EMISION DE FACTURA ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+                if ($validarCorreo !== false) {
 
-                $mail->addAddress($venta["email"]);
+                    //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
+                    $mail = new PHPMailer;
 
-                $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
+                    $mail->CharSet = 'UTF-8';
+
+                    $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
+                    $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
+                    $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
+                    $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
+                    $mail->Password = "notificaciones123";        // Tu contraseña de gmail
+                    $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
+                    $mail->Port = 587;
+                    $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda"); //Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
+                    $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda"); //Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
+                    $mail->Subject = "EMISION DE FACTURA ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+
+                    $mail->addAddress($venta["email"]);
+
+                    $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
                     
                         <div style="background-color:#e46c89;color:#1e282c;padding:20px 0px">
                         <img style=" width:25%;margin:0px;" src="vistas/img/plantilla/jackyform_letras.png">
 
                         <span style="margin-left:80px" >FACTURACIÓN ELECTRONICA ROSALINDA</span>
                         </div>
-                        <p style="text-align:left;color:black">Hola,<br>Te ha llegado a traves de nuestro sistema una <span style="color:#e46c89">'.$nomcomprobante.'</span> de <span style="color:#e46c89">Rosalinda</span>.</p>
+                        <p style="text-align:left;color:black">Hola,<br>Te ha llegado a traves de nuestro sistema una <span style="color:#e46c89">' . $nomcomprobante . '</span> de <span style="color:#e46c89">Rosalinda</span>.</p>
 
                         <table style="color:#e46c89;border: 1px solid black;padding:20px 100px" width="100%">
                             <tr>
-                                <td width="150px">N° '.$nomcomprobante.'</td>
+                                <td width="150px">N° ' . $nomcomprobante . '</td>
                                 <td width="20px">:</td>
-                                <td width="150px">'.$comprobante["serie"]."-".$comprobante["correlativo"].'</td>
+                                <td width="150px">' . $comprobante["serie"] . "-" . $comprobante["correlativo"] . '</td>
                             </tr>
                             <tr>
                                 <td width = "150px">VENCIMIENTO</td>
@@ -2090,7 +2047,7 @@ class ControladorFacturacion{
                             <tr>
                                 <td width = "150px">MONTO TOTAL</td>
                                 <td width = "20px">:</td>
-                                <td  width="150px">PEN '.$venta["total"].'</td>
+                                <td  width="150px">PEN ' . $venta["total"] . '</td>
                             </tr>
                             
                         
@@ -2111,47 +2068,42 @@ class ControladorFacturacion{
                 </div>');
 
 
-                $mail->AddAttachment($ruta.".XML", $nombrexml.".XML");
+                    $mail->AddAttachment($ruta . ".XML", $nombrexml . ".XML");
 
 
-                $ruta_cdr = "vistas/generar_xml/cdr/R-".$nombrexml;
+                    $ruta_cdr = "vistas/generar_xml/cdr/R-" . $nombrexml;
 
-                $mail->AddAttachment($ruta_cdr.".XML", "R-".$nombrexml.".XML");
+                    $mail->AddAttachment($ruta_cdr . ".XML", "R-" . $nombrexml . ".XML");
 
 
 
-                $ruta_pdf = "vistas/generar_xml/documentos_pdf/".$nombrexml;
+                    $ruta_pdf = "vistas/generar_xml/documentos_pdf/" . $nombrexml;
 
-                $mail->AddAttachment($ruta_pdf.".pdf", $nombrexml.".pdf");
-                
+                    $mail->AddAttachment($ruta_pdf . ".pdf", $nombrexml . ".pdf");
 
-                $envio = $mail->Send();
 
-                if($envio){
-                    echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
-                }else{
+                    $envio = $mail->Send();
+
+                    if ($envio) {
+                        echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
+                    } else {
+                        echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                    }
+                } else {
                     echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
                 }
+            } else {
 
-            }else{
-                echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                unlink($ruta . '.XML');
+                unlink($ruta . '.ZIP');
             }
-
-            
-
-        }else{
-
-            unlink($ruta.'.XML');
-            unlink($ruta.'.ZIP');
-        }          
-
         }
-
     }
 
-    static public function ctrCrearNotaCreditoXML(){
+    static public function ctrCrearNotaCreditoXML()
+    {
 
-        if(isset($_GET["tipoNotaCred"]) && isset($_GET["documentoNotaCred"])){
+        if (isset($_GET["tipoNotaCred"]) && isset($_GET["documentoNotaCred"])) {
 
             $doc = new DOMDocument();
             $doc->formatOutput = FALSE;
@@ -2164,66 +2116,66 @@ class ControladorFacturacion{
             $tipo = $_GET["tipoNotaCred"];
 
             $documento = $_GET["documentoNotaCred"];
-            $venta = ControladorFacturacion::ctrMostrarVentaImpresion($documento,$tipo);
+            $venta = ControladorFacturacion::ctrMostrarVentaImpresion($documento, $tipo);
 
-            
-     
+
+
             //prueba para mandar a sunat 
-            $inicialOrigen = substr($venta["doc_origen"],0,1);
+            $inicialOrigen = substr($venta["doc_origen"], 0, 1);
 
-            if($inicialOrigen == 'B'){
+            if ($inicialOrigen == 'B') {
                 $tipoOrigen = '03';
-            }else{
+            } else {
                 $tipoOrigen = '01';
             }
 
-            
-            $emisor = 	array(
-                'tipodoc'		=> '6',
-                'ruc' 			=> '10094806777', 
-                'razon_social'	=> 'JOSE ADOLFO VASQUEZ CORTEZ', 
-                'nombre_comercial'	=> 'ROSALINDA', 
-                'direccion'		=> 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA', 
-                'pais'			=> 'PE', 
-                'departamento'  => 'LIMA',//LIMA 
-                'provincia'		=> 'LIMA',//LIMA 
-                'distrito'		=> 'LOS OLIVOS', //CARABAYLLO
-                'ubigeo'		=> '150117', //CARABAYLLO
-                'usuario_sol'	=> 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-                'clave_sol'		=> 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
-                );
-    
-    
+
+            $emisor =     array(
+                'tipodoc'        => '6',
+                'ruc'             => '10094806777',
+                'razon_social'    => 'JOSE ADOLFO VASQUEZ CORTEZ',
+                'nombre_comercial'    => 'ROSALINDA',
+                'direccion'        => 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA',
+                'pais'            => 'PE',
+                'departamento'  => 'LIMA', //LIMA 
+                'provincia'        => 'LIMA', //LIMA 
+                'distrito'        => 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'        => '150117', //CARABAYLLO
+                'usuario_sol'    => 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'        => 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+            );
+
+
 
             $cliente = array(
-                        'ruc'			=> $venta["dni"], 
-                        'razon_social'  => $venta["nombre"], 
-                        'cliente'       => $venta["cliente"],
-                        'direccion'		=> $venta["direccion"],
-                        'pais'			=> 'PE'
-                        );	
+                'ruc'            => $venta["dni"],
+                'razon_social'  => $venta["nombre"],
+                'cliente'       => $venta["cliente"],
+                'direccion'        => $venta["direccion"],
+                'pais'            => 'PE'
+            );
 
             $vendedor = array(
-                        "codigo"		=> $venta["vendedor"],
-                        "nombre"		=> $venta["nom_vendedor"]
-                        );
+                "codigo"        => $venta["vendedor"],
+                "nombre"        => $venta["nom_vendedor"]
+            );
 
-            $comprobante =	array(
-                        'tipodoc'		=> '07', //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
-                        'serie'			=> substr($venta["documento"],0,4),
-                        'correlativo'	=> substr($venta["documento"],4,12),
-                        'fecha_emision' => $venta["fecha_emision"],
-                        'tipodoc_ref'   => $tipoOrigen,
-                        'serie_ref'     => substr($venta["doc_origen"],0,4),
-                        "correlativo_ref"=>substr($venta["doc_origen"],4,12),
-                        'moneda'		=> 'PEN', //PEN->SOLES; USD->DOLARES
-                        'total_opgravadas'=> 0, //OP. GRAVADAS
-                        'total_opexoneradas'=>0,
-                        'total_opinafectas'=>0,
-                        'igv'			=> 0,
-                        'total'			=> 0,
-                        'total_texto'	=> ''
-                    );
+            $comprobante =    array(
+                'tipodoc'        => '07', //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
+                'serie'            => substr($venta["documento"], 0, 4),
+                'correlativo'    => substr($venta["documento"], 4, 12),
+                'fecha_emision' => $venta["fecha_emision"],
+                'tipodoc_ref'   => $tipoOrigen,
+                'serie_ref'     => substr($venta["doc_origen"], 0, 4),
+                "correlativo_ref" => substr($venta["doc_origen"], 4, 12),
+                'moneda'        => 'PEN', //PEN->SOLES; USD->DOLARES
+                'total_opgravadas' => 0, //OP. GRAVADAS
+                'total_opexoneradas' => 0,
+                'total_opinafectas' => 0,
+                'igv'            => 0,
+                'total'            => 0,
+                'total_texto'    => ''
+            );
 
 
 
@@ -2231,74 +2183,64 @@ class ControladorFacturacion{
             $op_inafectas = 0;
             $op_exoneradas = 0;
 
-            $comprobante['total_opgravadas'] = ($venta["neto"]*-1);
+            $comprobante['total_opgravadas'] = ($venta["neto"] * -1);
             $comprobante['total_opexoneradas'] = $op_exoneradas;
             $comprobante['total_opinafectas'] = $op_inafectas;
-            $comprobante['igv'] = ($venta["igv"]*-1);
-            $comprobante['total'] = ($venta["total"]*-1);
-            $comprobante['total_texto'] = CantidadEnLetra(($venta["total"]*-1));
-            $totalSinIGV= ($venta["total"]*-1) - ($venta["igv"]*-1);
+            $comprobante['igv'] = ($venta["igv"] * -1);
+            $comprobante['total'] = ($venta["total"] * -1);
+            $comprobante['total_texto'] = CantidadEnLetra(($venta["total"] * -1));
+            $totalSinIGV = ($venta["total"] * -1) - ($venta["igv"] * -1);
 
             //RUC DEL EMISOR - TIPO DE COMPROBANTE - SERIE DEL DOCUMENTO - CORRELATIVO
             //01-> FACTURA, 03-> BOLETA, 07-> NOTA DE CREDITO, 08-> NOTA DE DEBITO, 09->GUIA DE REMISION
-            $nombrexml = $emisor['ruc'].'-'.$comprobante['tipodoc'].'-'.$comprobante['serie'].'-'.$comprobante['correlativo'];
+            $nombrexml = $emisor['ruc'] . '-' . $comprobante['tipodoc'] . '-' . $comprobante['serie'] . '-' . $comprobante['correlativo'];
 
-            $ruta = "vistas/generar_xml/archivos_xml/".$nombrexml;
+            $ruta = "vistas/generar_xml/archivos_xml/" . $nombrexml;
 
             $tipoCliente = $cliente["ruc"];
 
             //TIPO DE DOCUMENTO SI ES RUC O DNI
-            if(strlen($tipoCliente) == 8){
-                $tipodoc='1';
-            }else{
-                $tipodoc='6';
+            if (strlen($tipoCliente) == 8) {
+                $tipodoc = '1';
+            } else {
+                $tipodoc = '6';
             }
 
 
             //TIPO DE MOTIVO SEGUN SUNAT
-            if($venta["motivo"] == "C1"){
+            if ($venta["motivo"] == "C1") {
 
                 $tipoMotivo = "01";
-
-            }else if($venta["motivo"] == "C2"){
+            } else if ($venta["motivo"] == "C2") {
 
                 $tipoMotivo = "02";
-
-            }else if($venta["motivo"] == "C3"){
+            } else if ($venta["motivo"] == "C3") {
 
                 $tipoMotivo = "03";
-
-            }else if($venta["motivo"] == "C4"){
+            } else if ($venta["motivo"] == "C4") {
 
                 $tipoMotivo = "04";
-
-            }else if($venta["motivo"] == "C5"){
+            } else if ($venta["motivo"] == "C5") {
 
                 $tipoMotivo = "05";
-
-            }else if($venta["motivo"] == "C6"){
+            } else if ($venta["motivo"] == "C6") {
 
                 $tipoMotivo = "06";
-
-            }else if($venta["motivo"] == "C7"){
+            } else if ($venta["motivo"] == "C7") {
 
                 $tipoMotivo = "07";
-
-            }else if($venta["motivo"] == "C8"){
+            } else if ($venta["motivo"] == "C8") {
 
                 $tipoMotivo = "08";
-
-            }else if($venta["motivo"] == "C9"){
+            } else if ($venta["motivo"] == "C9") {
 
                 $tipoMotivo = "09";
-
-            }else{
+            } else {
 
                 $tipoMotivo = "10";
-
             }
 
-            if($comprobante["serie"] =="F002" || $comprobante["serie"] == "B002"){
+            if ($comprobante["serie"] == "F002" || $comprobante["serie"] == "B002") {
 
                 $xml = '<?xml version="1.0" encoding="UTF-8"?>
                 <CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
@@ -2309,31 +2251,31 @@ class ControladorFacturacion{
                     </ext:UBLExtensions>
                     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
                     <cbc:CustomizationID>2.0</cbc:CustomizationID>
-                    <cbc:ID>'.$comprobante['serie'].'-'.$comprobante['correlativo'].'</cbc:ID>
-                    <cbc:IssueDate>'.$comprobante['fecha_emision'].'</cbc:IssueDate>
+                    <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
+                    <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
                     <cbc:IssueTime>00:00:01</cbc:IssueTime>
-                    <cbc:Note languageLocaleID="1000"><![CDATA['.$comprobante['total_texto'].']]></cbc:Note>
-                    <cbc:DocumentCurrencyCode>'.$comprobante['moneda'].'</cbc:DocumentCurrencyCode>
+                    <cbc:Note languageLocaleID="1000"><![CDATA[' . $comprobante['total_texto'] . ']]></cbc:Note>
+                    <cbc:DocumentCurrencyCode>' . $comprobante['moneda'] . '</cbc:DocumentCurrencyCode>
                     <cac:DiscrepancyResponse>
-                        <cbc:ReferenceID>'.$comprobante['serie_ref'].'-'.$comprobante['correlativo_ref'].'</cbc:ReferenceID>
-                        <cbc:ResponseCode>'.$tipoMotivo.'</cbc:ResponseCode>
-                        <cbc:Description>'.ucfirst(strtolower($venta['nom_motivo'])).'</cbc:Description>
+                        <cbc:ReferenceID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ReferenceID>
+                        <cbc:ResponseCode>' . $tipoMotivo . '</cbc:ResponseCode>
+                        <cbc:Description>' . ucfirst(strtolower($venta['nom_motivo'])) . '</cbc:Description>
                     </cac:DiscrepancyResponse>
                     <cac:BillingReference>
                         <cac:InvoiceDocumentReference>
-                        <cbc:ID>'.$comprobante['serie_ref'].'-'.$comprobante['correlativo_ref'].'</cbc:ID>
-                        <cbc:DocumentTypeCode>'.$comprobante['tipodoc_ref'].'</cbc:DocumentTypeCode>
+                        <cbc:ID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ID>
+                        <cbc:DocumentTypeCode>' . $comprobante['tipodoc_ref'] . '</cbc:DocumentTypeCode>
                         </cac:InvoiceDocumentReference>
                     </cac:BillingReference>
                     <cac:Signature>
-                        <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
-                        <cbc:Note><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Note>
+                        <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
+                        <cbc:Note><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Note>
                         <cac:SignatoryParty>
                         <cac:PartyIdentification>
-                            <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
+                            <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
                         </cac:PartyIdentification>
                         <cac:PartyName>
-                            <cbc:Name><![CDATA['.$emisor['razon_social'].']]></cbc:Name>
+                            <cbc:Name><![CDATA[' . $emisor['razon_social'] . ']]></cbc:Name>
                         </cac:PartyName>
                         </cac:SignatoryParty>
                         <cac:DigitalSignatureAttachment>
@@ -2345,25 +2287,25 @@ class ControladorFacturacion{
                     <cac:AccountingSupplierParty>
                         <cac:Party>
                         <cac:PartyIdentification>
-                            <cbc:ID schemeID="'.$emisor['tipodoc'].'">'.$emisor['ruc'].'</cbc:ID>
+                            <cbc:ID schemeID="' . $emisor['tipodoc'] . '">' . $emisor['ruc'] . '</cbc:ID>
                         </cac:PartyIdentification>
                         <cac:PartyName>
-                            <cbc:Name><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Name>
+                            <cbc:Name><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Name>
                         </cac:PartyName>
                         <cac:PartyLegalEntity>
-                            <cbc:RegistrationName><![CDATA['.$emisor['razon_social'].']]></cbc:RegistrationName>
+                            <cbc:RegistrationName><![CDATA[' . $emisor['razon_social'] . ']]></cbc:RegistrationName>
                             <cac:RegistrationAddress>
-                                <cbc:ID>'.$emisor['ubigeo'].'</cbc:ID>
+                                <cbc:ID>' . $emisor['ubigeo'] . '</cbc:ID>
                                 <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                                 <cbc:CitySubdivisionName>NONE</cbc:CitySubdivisionName>
-                                <cbc:CityName>'.$emisor['provincia'].'</cbc:CityName>
-                                <cbc:CountrySubentity>'.$emisor['departamento'].'</cbc:CountrySubentity>
-                                <cbc:District>'.$emisor['distrito'].'</cbc:District>
+                                <cbc:CityName>' . $emisor['provincia'] . '</cbc:CityName>
+                                <cbc:CountrySubentity>' . $emisor['departamento'] . '</cbc:CountrySubentity>
+                                <cbc:District>' . $emisor['distrito'] . '</cbc:District>
                                 <cac:AddressLine>
-                                    <cbc:Line><![CDATA['.$emisor['direccion'].']]></cbc:Line>
+                                    <cbc:Line><![CDATA[' . $emisor['direccion'] . ']]></cbc:Line>
                                 </cac:AddressLine>
                                 <cac:Country>
-                                    <cbc:IdentificationCode>'.$emisor['pais'].'</cbc:IdentificationCode>
+                                    <cbc:IdentificationCode>' . $emisor['pais'] . '</cbc:IdentificationCode>
                                 </cac:Country>
                             </cac:RegistrationAddress>
                         </cac:PartyLegalEntity>
@@ -2372,26 +2314,26 @@ class ControladorFacturacion{
                     <cac:AccountingCustomerParty>
                         <cac:Party>
                         <cac:PartyIdentification>
-                            <cbc:ID schemeID="'.$tipodoc.'">'.$cliente['ruc'].'</cbc:ID>
+                            <cbc:ID schemeID="' . $tipodoc . '">' . $cliente['ruc'] . '</cbc:ID>
                         </cac:PartyIdentification>
                         <cac:PartyLegalEntity>
-                            <cbc:RegistrationName><![CDATA['.$cliente['razon_social'].']]></cbc:RegistrationName>
+                            <cbc:RegistrationName><![CDATA[' . $cliente['razon_social'] . ']]></cbc:RegistrationName>
                             <cac:RegistrationAddress>
                                 <cac:AddressLine>
-                                    <cbc:Line><![CDATA['.$cliente['direccion'].']]></cbc:Line>
+                                    <cbc:Line><![CDATA[' . $cliente['direccion'] . ']]></cbc:Line>
                                 </cac:AddressLine>
                                 <cac:Country>
-                                    <cbc:IdentificationCode>'.$cliente['pais'].'</cbc:IdentificationCode>
+                                    <cbc:IdentificationCode>' . $cliente['pais'] . '</cbc:IdentificationCode>
                                 </cac:Country>
                             </cac:RegistrationAddress>
                         </cac:PartyLegalEntity>
                         </cac:Party>
                     </cac:AccountingCustomerParty>
                     <cac:TaxTotal>
-                        <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                        <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                         <cac:TaxSubtotal>
-                        <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante["total_opgravadas"].'</cbc:TaxableAmount>
-                        <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                        <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante["total_opgravadas"] . '</cbc:TaxableAmount>
+                        <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                         <cac:TaxCategory>
                             <cac:TaxScheme>
                                 <cbc:ID>1000</cbc:ID>
@@ -2402,29 +2344,29 @@ class ControladorFacturacion{
                         </cac:TaxSubtotal>
                     </cac:TaxTotal>
                     <cac:LegalMonetaryTotal>
-                        <cbc:PayableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total'].'</cbc:PayableAmount>
+                        <cbc:PayableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total'] . '</cbc:PayableAmount>
                     </cac:LegalMonetaryTotal>
                     <cac:CreditNoteLine>
                         <cbc:ID>1</cbc:ID>
                         <cbc:Note>ZZ</cbc:Note>
                         <cbc:CreditedQuantity unitCode="ZZ" unitCodeListAgencyName="United Nations Economic Commission for Europe" unitCodeListID="UN/ECE rec 20">1</cbc:CreditedQuantity>
-                        <cbc:LineExtensionAmount currencyID="PEN">'.$comprobante["total_opgravadas"].'</cbc:LineExtensionAmount>
+                        <cbc:LineExtensionAmount currencyID="PEN">' . $comprobante["total_opgravadas"] . '</cbc:LineExtensionAmount>
                         <cac:BillingReference>
                             <cac:BillingReferenceLine>
-                                <cbc:ID schemeID="AF">'.$comprobante["total"].'</cbc:ID>
+                                <cbc:ID schemeID="AF">' . $comprobante["total"] . '</cbc:ID>
                             </cac:BillingReferenceLine>
                         </cac:BillingReference>
                         <cac:PricingReference>
                             <cac:AlternativeConditionPrice>
-                                <cbc:PriceAmount currencyID="PEN">'.$comprobante["total"].'</cbc:PriceAmount>
+                                <cbc:PriceAmount currencyID="PEN">' . $comprobante["total"] . '</cbc:PriceAmount>
                                 <cbc:PriceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Precio" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo16">01</cbc:PriceTypeCode>
                             </cac:AlternativeConditionPrice>
                         </cac:PricingReference>
                         <cac:TaxTotal>
-                            <cbc:TaxAmount currencyID="PEN">'.$comprobante["igv"].'</cbc:TaxAmount>
+                            <cbc:TaxAmount currencyID="PEN">' . $comprobante["igv"] . '</cbc:TaxAmount>
                             <cac:TaxSubtotal>
-                            <cbc:TaxableAmount currencyID="PEN">'.$comprobante["total_opgravadas"].'</cbc:TaxableAmount>
-                            <cbc:TaxAmount currencyID="PEN">'.$comprobante["igv"].'</cbc:TaxAmount>
+                            <cbc:TaxableAmount currencyID="PEN">' . $comprobante["total_opgravadas"] . '</cbc:TaxableAmount>
+                            <cbc:TaxAmount currencyID="PEN">' . $comprobante["igv"] . '</cbc:TaxAmount>
                             <cac:TaxCategory>
                                 <cbc:Percent>18.00</cbc:Percent>
                                 <cbc:TaxExemptionReasonCode listAgencyName="PE:SUNAT" listName="Afectacion del IGV" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07">10</cbc:TaxExemptionReasonCode>
@@ -2437,18 +2379,17 @@ class ControladorFacturacion{
                             </cac:TaxSubtotal>
                         </cac:TaxTotal>
                         <cac:Item>
-                            <cbc:Description>'.$venta["observacion"].'</cbc:Description>
+                            <cbc:Description>' . $venta["observacion"] . '</cbc:Description>
                         </cac:Item>
                         <cac:Price>
-                            <cbc:PriceAmount currencyID="PEN">'.$comprobante["total_opgravadas"].'</cbc:PriceAmount>
+                            <cbc:PriceAmount currencyID="PEN">' . $comprobante["total_opgravadas"] . '</cbc:PriceAmount>
                         </cac:Price>
                     </cac:CreditNoteLine>
                 </CreditNote>';
+            } else {
+                $modelos = ControladorFacturacion::ctrMostrarModeloImpresion($documento, $tipo);
 
-            }else{
-                $modelos = ControladorFacturacion::ctrMostrarModeloImpresion($documento,$tipo);
-
-                $unidad= ControladorFacturacion::ctrMostrarUnidadesImpresion($documento,$tipo);
+                $unidad = ControladorFacturacion::ctrMostrarUnidadesImpresion($documento, $tipo);
 
                 $xml = '<?xml version="1.0" encoding="UTF-8"?>
                     <CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
@@ -2459,31 +2400,31 @@ class ControladorFacturacion{
                         </ext:UBLExtensions>
                         <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
                         <cbc:CustomizationID>2.0</cbc:CustomizationID>
-                        <cbc:ID>'.$comprobante['serie'].'-'.$comprobante['correlativo'].'</cbc:ID>
-                        <cbc:IssueDate>'.$comprobante['fecha_emision'].'</cbc:IssueDate>
+                        <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
+                        <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
                         <cbc:IssueTime>00:00:01</cbc:IssueTime>
-                        <cbc:Note languageLocaleID="1000"><![CDATA['.$comprobante['total_texto'].']]></cbc:Note>
-                        <cbc:DocumentCurrencyCode>'.$comprobante['moneda'].'</cbc:DocumentCurrencyCode>
+                        <cbc:Note languageLocaleID="1000"><![CDATA[' . $comprobante['total_texto'] . ']]></cbc:Note>
+                        <cbc:DocumentCurrencyCode>' . $comprobante['moneda'] . '</cbc:DocumentCurrencyCode>
                         <cac:DiscrepancyResponse>
-                            <cbc:ReferenceID>'.$comprobante['serie_ref'].'-'.$comprobante['correlativo_ref'].'</cbc:ReferenceID>
-                            <cbc:ResponseCode>'.$tipoMotivo.'</cbc:ResponseCode>
-                            <cbc:Description>'.ucfirst(strtolower($venta['nom_motivo'])).'</cbc:Description>
+                            <cbc:ReferenceID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ReferenceID>
+                            <cbc:ResponseCode>' . $tipoMotivo . '</cbc:ResponseCode>
+                            <cbc:Description>' . ucfirst(strtolower($venta['nom_motivo'])) . '</cbc:Description>
                         </cac:DiscrepancyResponse>
                         <cac:BillingReference>
                             <cac:InvoiceDocumentReference>
-                            <cbc:ID>'.$comprobante['serie_ref'].'-'.$comprobante['correlativo_ref'].'</cbc:ID>
-                            <cbc:DocumentTypeCode>'.$comprobante['tipodoc_ref'].'</cbc:DocumentTypeCode>
+                            <cbc:ID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ID>
+                            <cbc:DocumentTypeCode>' . $comprobante['tipodoc_ref'] . '</cbc:DocumentTypeCode>
                             </cac:InvoiceDocumentReference>
                         </cac:BillingReference>
                         <cac:Signature>
-                            <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
-                            <cbc:Note><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Note>
+                            <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
+                            <cbc:Note><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Note>
                             <cac:SignatoryParty>
                             <cac:PartyIdentification>
-                                <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
+                                <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
                             </cac:PartyIdentification>
                             <cac:PartyName>
-                                <cbc:Name><![CDATA['.$emisor['razon_social'].']]></cbc:Name>
+                                <cbc:Name><![CDATA[' . $emisor['razon_social'] . ']]></cbc:Name>
                             </cac:PartyName>
                             </cac:SignatoryParty>
                             <cac:DigitalSignatureAttachment>
@@ -2495,25 +2436,25 @@ class ControladorFacturacion{
                         <cac:AccountingSupplierParty>
                             <cac:Party>
                             <cac:PartyIdentification>
-                                <cbc:ID schemeID="'.$emisor['tipodoc'].'">'.$emisor['ruc'].'</cbc:ID>
+                                <cbc:ID schemeID="' . $emisor['tipodoc'] . '">' . $emisor['ruc'] . '</cbc:ID>
                             </cac:PartyIdentification>
                             <cac:PartyName>
-                                <cbc:Name><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Name>
+                                <cbc:Name><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Name>
                             </cac:PartyName>
                             <cac:PartyLegalEntity>
-                                <cbc:RegistrationName><![CDATA['.$emisor['razon_social'].']]></cbc:RegistrationName>
+                                <cbc:RegistrationName><![CDATA[' . $emisor['razon_social'] . ']]></cbc:RegistrationName>
                                 <cac:RegistrationAddress>
-                                    <cbc:ID>'.$emisor['ubigeo'].'</cbc:ID>
+                                    <cbc:ID>' . $emisor['ubigeo'] . '</cbc:ID>
                                     <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                                     <cbc:CitySubdivisionName>NONE</cbc:CitySubdivisionName>
-                                    <cbc:CityName>'.$emisor['provincia'].'</cbc:CityName>
-                                    <cbc:CountrySubentity>'.$emisor['departamento'].'</cbc:CountrySubentity>
-                                    <cbc:District>'.$emisor['distrito'].'</cbc:District>
+                                    <cbc:CityName>' . $emisor['provincia'] . '</cbc:CityName>
+                                    <cbc:CountrySubentity>' . $emisor['departamento'] . '</cbc:CountrySubentity>
+                                    <cbc:District>' . $emisor['distrito'] . '</cbc:District>
                                     <cac:AddressLine>
-                                        <cbc:Line><![CDATA['.$emisor['direccion'].']]></cbc:Line>
+                                        <cbc:Line><![CDATA[' . $emisor['direccion'] . ']]></cbc:Line>
                                     </cac:AddressLine>
                                     <cac:Country>
-                                        <cbc:IdentificationCode>'.$emisor['pais'].'</cbc:IdentificationCode>
+                                        <cbc:IdentificationCode>' . $emisor['pais'] . '</cbc:IdentificationCode>
                                     </cac:Country>
                                 </cac:RegistrationAddress>
                             </cac:PartyLegalEntity>
@@ -2522,37 +2463,37 @@ class ControladorFacturacion{
                         <cac:AccountingCustomerParty>
                             <cac:Party>
                             <cac:PartyIdentification>
-                                <cbc:ID schemeID="'.$tipodoc.'">'.$cliente['ruc'].'</cbc:ID>
+                                <cbc:ID schemeID="' . $tipodoc . '">' . $cliente['ruc'] . '</cbc:ID>
                             </cac:PartyIdentification>
                             <cac:PartyLegalEntity>
-                                <cbc:RegistrationName><![CDATA['.$cliente['razon_social'].']]></cbc:RegistrationName>
+                                <cbc:RegistrationName><![CDATA[' . $cliente['razon_social'] . ']]></cbc:RegistrationName>
                                 <cac:RegistrationAddress>
                                     <cac:AddressLine>
-                                        <cbc:Line><![CDATA['.$cliente['direccion'].']]></cbc:Line>
+                                        <cbc:Line><![CDATA[' . $cliente['direccion'] . ']]></cbc:Line>
                                     </cac:AddressLine>
                                     <cac:Country>
-                                        <cbc:IdentificationCode>'.$cliente['pais'].'</cbc:IdentificationCode>
+                                        <cbc:IdentificationCode>' . $cliente['pais'] . '</cbc:IdentificationCode>
                                     </cac:Country>
                                 </cac:RegistrationAddress>
                             </cac:PartyLegalEntity>
                             </cac:Party>
                         </cac:AccountingCustomerParty>';
-                        if($venta["dscto"] < 0){
-                            $valor_dscto= $comprobante["total_opgravadas"] - ($venta["dscto"]*-1);
-                            $xml.='<cac:AllowanceCharge>
+                if ($venta["dscto"] < 0) {
+                    $valor_dscto = $comprobante["total_opgravadas"] - ($venta["dscto"] * -1);
+                    $xml .= '<cac:AllowanceCharge>
                                 <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
                                 <cbc:AllowanceChargeReasonCode listAgencyName="PE:SUNAT" listName="Cargo/descuento" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo53">02</cbc:AllowanceChargeReasonCode> 
-                                <cbc:Amount currencyID="PEN">'.($venta["dscto"]*-1).'</cbc:Amount>
+                                <cbc:Amount currencyID="PEN">' . ($venta["dscto"] * -1) . '</cbc:Amount>
                             </cac:AllowanceCharge>';
-                        }else{
-                            $valor_dscto= $comprobante["total_opgravadas"];
-                        }
-                    
-                        $xml.='<cac:TaxTotal>
-                            <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                } else {
+                    $valor_dscto = $comprobante["total_opgravadas"];
+                }
+
+                $xml .= '<cac:TaxTotal>
+                            <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                             <cac:TaxSubtotal>
-                            <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$valor_dscto.'</cbc:TaxableAmount>
-                            <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                            <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $valor_dscto . '</cbc:TaxableAmount>
+                            <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                             <cac:TaxCategory>
                                 <cac:TaxScheme>
                                     <cbc:ID>1000</cbc:ID>
@@ -2562,10 +2503,10 @@ class ControladorFacturacion{
                             </cac:TaxCategory>
                             </cac:TaxSubtotal>';
 
-                            if($comprobante['total_opexoneradas']>0){
-                            $xml.='<cac:TaxSubtotal>
-                                <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total_opexoneradas'].'</cbc:TaxableAmount>
-                                <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">0.00</cbc:TaxAmount>
+                if ($comprobante['total_opexoneradas'] > 0) {
+                    $xml .= '<cac:TaxSubtotal>
+                                <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total_opexoneradas'] . '</cbc:TaxableAmount>
+                                <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">0.00</cbc:TaxAmount>
                                 <cac:TaxCategory>
                                     <cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">E</cbc:ID>
                                     <cac:TaxScheme>
@@ -2575,12 +2516,12 @@ class ControladorFacturacion{
                                     </cac:TaxScheme>
                                 </cac:TaxCategory>
                             </cac:TaxSubtotal>';
-                            }
+                }
 
-                            if($comprobante['total_opinafectas']>0){
-                            $xml.='<cac:TaxSubtotal>
-                                <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total_opinafectas'].'</cbc:TaxableAmount>
-                                <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">0.00</cbc:TaxAmount>
+                if ($comprobante['total_opinafectas'] > 0) {
+                    $xml .= '<cac:TaxSubtotal>
+                                <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total_opinafectas'] . '</cbc:TaxableAmount>
+                                <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">0.00</cbc:TaxAmount>
                                 <cac:TaxCategory>
                                     <cbc:ID schemeID="UN/ECE 5305" schemeName="Tax Category Identifier" schemeAgencyName="United Nations Economic Commission for Europe">E</cbc:ID>
                                     <cac:TaxScheme>
@@ -2590,33 +2531,33 @@ class ControladorFacturacion{
                                     </cac:TaxScheme>
                                 </cac:TaxCategory>
                             </cac:TaxSubtotal>';
-                            }
+                }
 
-                        $xml.='</cac:TaxTotal>
+                $xml .= '</cac:TaxTotal>
                         <cac:LegalMonetaryTotal>
-                            <cbc:PayableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total'].'</cbc:PayableAmount>
+                            <cbc:PayableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total'] . '</cbc:PayableAmount>
                         </cac:LegalMonetaryTotal>';
-                        
-                        foreach($modelos as $k=>$v){
-                            $igv = 0.18 * ($v["total"]*-1);
-                            $totalIGV = ($v["total"]*-1)+$igv;
-                            $precioIGV  = $totalIGV/($v["cantidad"]*-1);
 
-                            $xml.='<cac:CreditNoteLine>
-                            <cbc:ID>'.($k+1).'</cbc:ID>
-                            <cbc:CreditedQuantity unitCode="'.$v['unidad'].'">'.number_format(($v['cantidad']*-1),3,".","").'</cbc:CreditedQuantity>
-                            <cbc:LineExtensionAmount currencyID="'.$comprobante['moneda'].'">'.($v['total']*-1).'</cbc:LineExtensionAmount>
+                foreach ($modelos as $k => $v) {
+                    $igv = 0.18 * ($v["total"] * -1);
+                    $totalIGV = ($v["total"] * -1) + $igv;
+                    $precioIGV  = $totalIGV / ($v["cantidad"] * -1);
+
+                    $xml .= '<cac:CreditNoteLine>
+                            <cbc:ID>' . ($k + 1) . '</cbc:ID>
+                            <cbc:CreditedQuantity unitCode="' . $v['unidad'] . '">' . number_format(($v['cantidad'] * -1), 3, ".", "") . '</cbc:CreditedQuantity>
+                            <cbc:LineExtensionAmount currencyID="' . $comprobante['moneda'] . '">' . ($v['total'] * -1) . '</cbc:LineExtensionAmount>
                             <cac:PricingReference>
                                 <cac:AlternativeConditionPrice>
-                                    <cbc:PriceAmount currencyID="'.$comprobante['moneda'].'">'.number_format($precioIGV,2,".","").'</cbc:PriceAmount>
+                                    <cbc:PriceAmount currencyID="' . $comprobante['moneda'] . '">' . number_format($precioIGV, 2, ".", "") . '</cbc:PriceAmount>
                                     <cbc:PriceTypeCode>01</cbc:PriceTypeCode>
                                 </cac:AlternativeConditionPrice>
                             </cac:PricingReference>
                             <cac:TaxTotal>
-                                <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.number_format($igv,2,".","").'</cbc:TaxAmount>
+                                <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . number_format($igv, 2, ".", "") . '</cbc:TaxAmount>
                                 <cac:TaxSubtotal>
-                                    <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.($v['total']*-1).'</cbc:TaxableAmount>
-                                    <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.number_format($igv,2,".","").'</cbc:TaxAmount>
+                                    <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . ($v['total'] * -1) . '</cbc:TaxableAmount>
+                                    <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . number_format($igv, 2, ".", "") . '</cbc:TaxAmount>
                                     <cac:TaxCategory>
                                         <cbc:Percent>18</cbc:Percent>
                                         <cbc:TaxExemptionReasonCode>10</cbc:TaxExemptionReasonCode>
@@ -2629,65 +2570,65 @@ class ControladorFacturacion{
                                 </cac:TaxSubtotal>
                             </cac:TaxTotal>
                             <cac:Item>
-                                <cbc:Description><![CDATA['.$v['nombre'].']]></cbc:Description>
+                                <cbc:Description><![CDATA[' . $v['nombre'] . ']]></cbc:Description>
                                 <cac:SellersItemIdentification>
-                                    <cbc:ID>'.$v['modelo'].'</cbc:ID>
+                                    <cbc:ID>' . $v['modelo'] . '</cbc:ID>
                                 </cac:SellersItemIdentification>
                             </cac:Item>
                             <cac:Price>
-                                <cbc:PriceAmount currencyID="'.$comprobante['moneda'].'">'.$v['precio'].'</cbc:PriceAmount>
+                                <cbc:PriceAmount currencyID="' . $comprobante['moneda'] . '">' . $v['precio'] . '</cbc:PriceAmount>
                             </cac:Price>
                             </cac:CreditNoteLine>';
-                        }
-                        $xml.='</CreditNote>';
-            } 
+                }
+                $xml .= '</CreditNote>';
+            }
 
-            
 
-        
 
-	    $doc->loadXML($xml);
-	    $doc->save($ruta.'.XML');
-        
 
-        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
 
-        //LIBRERIA PHPMAILER
-        require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
-        
-        //CREAR XML FIRMA
-        require_once('/../vistas/generar_xml/ApiFacturacion.php');
+            $doc->loadXML($xml);
+            $doc->save($ruta . '.XML');
 
-        $objApi = new ApiFacturacion();
-        $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
 
-        if($envio == "1"){
-            echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
-            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
+            $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1, "ERROR", $tipo, $documento);
 
-            $validarCorreo = strpos($venta["email"],"@");
+            //LIBRERIA PHPMAILER
+            require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
 
-            if($validarCorreo !== false ){
+            //CREAR XML FIRMA
+            require_once('/../vistas/generar_xml/ApiFacturacion.php');
 
-                //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
-                $mail = new PHPMailer;
+            $objApi = new ApiFacturacion();
+            $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
 
-                $mail->CharSet = 'UTF-8';
+            if ($envio == "1") {
+                echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
+                $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2, "ENVIADO", $tipo, $documento);
 
-                $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
-                $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
-                $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
-                $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
-                $mail->Password = "notificaciones123";		// Tu contraseña de gmail
-                $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
-                $mail->Port = 587;
-                $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
-                $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
-                $mail->Subject = "EMISION DE NOTA DE CREDITO ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+                $validarCorreo = strpos($venta["email"], "@");
 
-                $mail->addAddress($venta["email"]);
+                if ($validarCorreo !== false) {
 
-                $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
+                    //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
+                    $mail = new PHPMailer;
+
+                    $mail->CharSet = 'UTF-8';
+
+                    $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
+                    $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
+                    $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
+                    $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
+                    $mail->Password = "notificaciones123";        // Tu contraseña de gmail
+                    $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
+                    $mail->Port = 587;
+                    $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda"); //Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
+                    $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda"); //Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
+                    $mail->Subject = "EMISION DE NOTA DE CREDITO ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+
+                    $mail->addAddress($venta["email"]);
+
+                    $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
                     
                         <div style="background-color:#e46c89;color:#1e282c;padding:20px 0px">
                         <img style=" width:25%;margin:0px;" src="vistas/img/plantilla/jackyform_letras.png">
@@ -2700,7 +2641,7 @@ class ControladorFacturacion{
                             <tr>
                                 <td width="190px">N° NOTA DE CREDITO</td>
                                 <td width="20px">:</td>
-                                <td width="150px">'.$comprobante["serie"]."-".$comprobante["correlativo"].'</td>
+                                <td width="150px">' . $comprobante["serie"] . "-" . $comprobante["correlativo"] . '</td>
                             </tr>
                             <tr>
                                 <td width = "190px">VENCIMIENTO</td>
@@ -2710,7 +2651,7 @@ class ControladorFacturacion{
                             <tr>
                                 <td width = "190px">MONTO TOTAL</td>
                                 <td width = "20px">:</td>
-                                <td  width="150px">PEN '.$venta["total"].'</td>
+                                <td  width="150px">PEN ' . $venta["total"] . '</td>
                             </tr>
                             
                         
@@ -2731,45 +2672,42 @@ class ControladorFacturacion{
                 </div>');
 
 
-                $mail->AddAttachment($ruta.".XML", $nombrexml.".XML");
+                    $mail->AddAttachment($ruta . ".XML", $nombrexml . ".XML");
 
 
-                $ruta_cdr = "vistas/generar_xml/cdr/R-".$nombrexml;
+                    $ruta_cdr = "vistas/generar_xml/cdr/R-" . $nombrexml;
 
-                $mail->AddAttachment($ruta_cdr.".XML", "R-".$nombrexml.".XML");
+                    $mail->AddAttachment($ruta_cdr . ".XML", "R-" . $nombrexml . ".XML");
 
 
 
-                $ruta_pdf = "vistas/generar_xml/documentos_pdf/".$nombrexml;
+                    $ruta_pdf = "vistas/generar_xml/documentos_pdf/" . $nombrexml;
 
-                $mail->AddAttachment($ruta_pdf.".pdf", $nombrexml.".pdf");
-                
+                    $mail->AddAttachment($ruta_pdf . ".pdf", $nombrexml . ".pdf");
 
-                $envio = $mail->Send();
 
-                if($envio){
-                    echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
-                }else{
+                    $envio = $mail->Send();
+
+                    if ($envio) {
+                        echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
+                    } else {
+                        echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                    }
+                } else {
                     echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
                 }
+            } else {
 
-            }else{
-                echo "<script>  Command: toastr['success']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                unlink($ruta . '.XML');
+                unlink($ruta . '.ZIP');
             }
-
-        }else{
-
-            unlink($ruta.'.XML');
-            unlink($ruta.'.ZIP');
-        }          
-
         }
-
     }
 
-    static public function ctrCrearNotaDebitoXML(){
+    static public function ctrCrearNotaDebitoXML()
+    {
 
-        if(isset($_GET["tipoNotaDeb"]) && isset($_GET["documentoNotaDeb"])){
+        if (isset($_GET["tipoNotaDeb"]) && isset($_GET["documentoNotaDeb"])) {
 
             $doc = new DOMDocument();
             $doc->formatOutput = FALSE;
@@ -2782,66 +2720,66 @@ class ControladorFacturacion{
             $tipo = $_GET["tipoNotaDeb"];
 
             $documento = $_GET["documentoNotaDeb"];
-            $venta = ControladorFacturacion::ctrMostrarDebitoImpresion($documento,$tipo);
+            $venta = ControladorFacturacion::ctrMostrarDebitoImpresion($documento, $tipo);
 
-            
-     
+
+
             //prueba para mandar a sunat 
-            $inicialOrigen = substr($venta["doc_origen"],0,1);
+            $inicialOrigen = substr($venta["doc_origen"], 0, 1);
 
-            if($inicialOrigen == 'B'){
+            if ($inicialOrigen == 'B') {
                 $tipoOrigen = '03';
-            }else{
+            } else {
                 $tipoOrigen = '01';
             }
 
-            
-            $emisor = 	array(
-                'tipodoc'		=> '6',
-                'ruc' 			=> '10094806777', 
-                'razon_social'	=> 'JOSE ADOLFO VASQUEZ CORTEZ', 
-                'nombre_comercial'	=> 'ROSALINDA', 
-                'direccion'		=> 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA', 
-                'pais'			=> 'PE', 
-                'departamento'  => 'LIMA',//LIMA 
-                'provincia'		=> 'LIMA',//LIMA 
-                'distrito'		=> 'LOS OLIVOS', //CARABAYLLO
-                'ubigeo'		=> '150117', //CARABAYLLO
-                'usuario_sol'	=> 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
-                'clave_sol'		=> 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
-                );
-    
-    
+
+            $emisor =     array(
+                'tipodoc'        => '6',
+                'ruc'             => '10094806777',
+                'razon_social'    => 'JOSE ADOLFO VASQUEZ CORTEZ',
+                'nombre_comercial'    => 'ROSALINDA',
+                'direccion'        => 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA',
+                'pais'            => 'PE',
+                'departamento'  => 'LIMA', //LIMA 
+                'provincia'        => 'LIMA', //LIMA 
+                'distrito'        => 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'        => '150117', //CARABAYLLO
+                'usuario_sol'    => 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'        => 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+            );
+
+
 
             $cliente = array(
-                        'ruc'			=> $venta["dni"], 
-                        'razon_social'  => $venta["nombre"], 
-                        'cliente'       => $venta["cliente"],
-                        'direccion'		=> $venta["direccion"],
-                        'pais'			=> 'PE'
-                        );	
+                'ruc'            => $venta["dni"],
+                'razon_social'  => $venta["nombre"],
+                'cliente'       => $venta["cliente"],
+                'direccion'        => $venta["direccion"],
+                'pais'            => 'PE'
+            );
 
             $vendedor = array(
-                        "codigo"		=> $venta["vendedor"],
-                        "nombre"		=> $venta["nom_vendedor"]
-                        );
+                "codigo"        => $venta["vendedor"],
+                "nombre"        => $venta["nom_vendedor"]
+            );
 
-            $comprobante =	array(
-                        'tipodoc'		=> '08', //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
-                        'serie'			=> substr($venta["documento"],0,4),
-                        'correlativo'	=> substr($venta["documento"],4,12),
-                        'fecha_emision' => $venta["fecha_emision"],
-                        'tipodoc_ref'   => $tipoOrigen,
-                        'serie_ref'     => substr($venta["doc_origen"],0,4),
-                        "correlativo_ref"=>substr($venta["doc_origen"],4,12),
-                        'moneda'		=> 'PEN', //PEN->SOLES; USD->DOLARES
-                        'total_opgravadas'=> 0, //OP. GRAVADAS
-                        'total_opexoneradas'=>0,
-                        'total_opinafectas'=>0,
-                        'igv'			=> 0,
-                        'total'			=> 0,
-                        'total_texto'	=> ''
-                    );
+            $comprobante =    array(
+                'tipodoc'        => '08', //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
+                'serie'            => substr($venta["documento"], 0, 4),
+                'correlativo'    => substr($venta["documento"], 4, 12),
+                'fecha_emision' => $venta["fecha_emision"],
+                'tipodoc_ref'   => $tipoOrigen,
+                'serie_ref'     => substr($venta["doc_origen"], 0, 4),
+                "correlativo_ref" => substr($venta["doc_origen"], 4, 12),
+                'moneda'        => 'PEN', //PEN->SOLES; USD->DOLARES
+                'total_opgravadas' => 0, //OP. GRAVADAS
+                'total_opexoneradas' => 0,
+                'total_opinafectas' => 0,
+                'igv'            => 0,
+                'total'            => 0,
+                'total_texto'    => ''
+            );
 
 
 
@@ -2855,37 +2793,34 @@ class ControladorFacturacion{
             $comprobante['igv'] = $venta["igv"];
             $comprobante['total'] = $venta["total"];
             $comprobante['total_texto'] = CantidadEnLetra($venta["total"]);
-            $totalSinIGV= $venta["total"] - $venta["igv"];
+            $totalSinIGV = $venta["total"] - $venta["igv"];
 
             //RUC DEL EMISOR - TIPO DE COMPROBANTE - SERIE DEL DOCUMENTO - CORRELATIVO
             //01-> FACTURA, 03-> BOLETA, 07-> NOTA DE CREDITO, 08-> NOTA DE DEBITO, 09->GUIA DE REMISION
-            $nombrexml = $emisor['ruc'].'-'.$comprobante['tipodoc'].'-'.$comprobante['serie'].'-'.$comprobante['correlativo'];
+            $nombrexml = $emisor['ruc'] . '-' . $comprobante['tipodoc'] . '-' . $comprobante['serie'] . '-' . $comprobante['correlativo'];
 
-            $ruta = "vistas/generar_xml/archivos_xml/".$nombrexml;
+            $ruta = "vistas/generar_xml/archivos_xml/" . $nombrexml;
 
             $tipoCliente = $cliente["ruc"];
 
             //TIPO DE DOCUMENTO SI ES RUC O DNI
-            if(strlen($tipoCliente) == 8){
-                $tipodoc='1';
-            }else{
-                $tipodoc='6';
+            if (strlen($tipoCliente) == 8) {
+                $tipodoc = '1';
+            } else {
+                $tipodoc = '6';
             }
 
 
             //TIPO DE MOTIVO SEGUN SUNAT
-            if($venta["motivo"] == "D1"){
+            if ($venta["motivo"] == "D1") {
 
                 $tipoMotivo = "01";
-
-            }else if($venta["motivo"] == "D2"){
+            } else if ($venta["motivo"] == "D2") {
 
                 $tipoMotivo = "02";
-
-            }else{
+            } else {
 
                 $tipoMotivo = "03";
-
             }
 
 
@@ -2898,31 +2833,31 @@ class ControladorFacturacion{
                 </ext:UBLExtensions>
                 <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
                 <cbc:CustomizationID>2.0</cbc:CustomizationID>
-                <cbc:ID>'.$comprobante['serie'].'-'.$comprobante['correlativo'].'</cbc:ID>
-                <cbc:IssueDate>'.$comprobante['fecha_emision'].'</cbc:IssueDate>
+                <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
+                <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
                 <cbc:IssueTime>00:00:01</cbc:IssueTime>
-                <cbc:Note languageLocaleID="1000"><![CDATA['.$comprobante['total_texto'].']]></cbc:Note>
-                <cbc:DocumentCurrencyCode>'.$comprobante['moneda'].'</cbc:DocumentCurrencyCode>
+                <cbc:Note languageLocaleID="1000"><![CDATA[' . $comprobante['total_texto'] . ']]></cbc:Note>
+                <cbc:DocumentCurrencyCode>' . $comprobante['moneda'] . '</cbc:DocumentCurrencyCode>
                 <cac:DiscrepancyResponse>
-                    <cbc:ReferenceID>'.$comprobante['serie_ref'].'-'.$comprobante['correlativo_ref'].'</cbc:ReferenceID>
-                    <cbc:ResponseCode>'.$tipoMotivo.'</cbc:ResponseCode>
-                    <cbc:Description>'.ucfirst(strtolower($venta['nom_motivo'])).'</cbc:Description>
+                    <cbc:ReferenceID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ReferenceID>
+                    <cbc:ResponseCode>' . $tipoMotivo . '</cbc:ResponseCode>
+                    <cbc:Description>' . ucfirst(strtolower($venta['nom_motivo'])) . '</cbc:Description>
                 </cac:DiscrepancyResponse>
                 <cac:BillingReference>
                     <cac:InvoiceDocumentReference>
-                    <cbc:ID>'.$comprobante['serie_ref'].'-'.$comprobante['correlativo_ref'].'</cbc:ID>
-                    <cbc:DocumentTypeCode>'.$comprobante['tipodoc_ref'].'</cbc:DocumentTypeCode>
+                    <cbc:ID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ID>
+                    <cbc:DocumentTypeCode>' . $comprobante['tipodoc_ref'] . '</cbc:DocumentTypeCode>
                     </cac:InvoiceDocumentReference>
                 </cac:BillingReference>
                 <cac:Signature>
-                    <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
-                    <cbc:Note><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Note>
+                    <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
+                    <cbc:Note><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Note>
                     <cac:SignatoryParty>
                     <cac:PartyIdentification>
-                        <cbc:ID>'.$emisor['ruc'].'</cbc:ID>
+                        <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
                     </cac:PartyIdentification>
                     <cac:PartyName>
-                        <cbc:Name><![CDATA['.$emisor['razon_social'].']]></cbc:Name>
+                        <cbc:Name><![CDATA[' . $emisor['razon_social'] . ']]></cbc:Name>
                     </cac:PartyName>
                     </cac:SignatoryParty>
                     <cac:DigitalSignatureAttachment>
@@ -2934,25 +2869,25 @@ class ControladorFacturacion{
                 <cac:AccountingSupplierParty>
                     <cac:Party>
                     <cac:PartyIdentification>
-                        <cbc:ID schemeID="'.$emisor['tipodoc'].'">'.$emisor['ruc'].'</cbc:ID>
+                        <cbc:ID schemeID="' . $emisor['tipodoc'] . '">' . $emisor['ruc'] . '</cbc:ID>
                     </cac:PartyIdentification>
                     <cac:PartyName>
-                        <cbc:Name><![CDATA['.$emisor['nombre_comercial'].']]></cbc:Name>
+                        <cbc:Name><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Name>
                     </cac:PartyName>
                     <cac:PartyLegalEntity>
-                        <cbc:RegistrationName><![CDATA['.$emisor['razon_social'].']]></cbc:RegistrationName>
+                        <cbc:RegistrationName><![CDATA[' . $emisor['razon_social'] . ']]></cbc:RegistrationName>
                         <cac:RegistrationAddress>
-                            <cbc:ID>'.$emisor['ubigeo'].'</cbc:ID>
+                            <cbc:ID>' . $emisor['ubigeo'] . '</cbc:ID>
                             <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
                             <cbc:CitySubdivisionName>NONE</cbc:CitySubdivisionName>
-                            <cbc:CityName>'.$emisor['provincia'].'</cbc:CityName>
-                            <cbc:CountrySubentity>'.$emisor['departamento'].'</cbc:CountrySubentity>
-                            <cbc:District>'.$emisor['distrito'].'</cbc:District>
+                            <cbc:CityName>' . $emisor['provincia'] . '</cbc:CityName>
+                            <cbc:CountrySubentity>' . $emisor['departamento'] . '</cbc:CountrySubentity>
+                            <cbc:District>' . $emisor['distrito'] . '</cbc:District>
                             <cac:AddressLine>
-                                <cbc:Line><![CDATA['.$emisor['direccion'].']]></cbc:Line>
+                                <cbc:Line><![CDATA[' . $emisor['direccion'] . ']]></cbc:Line>
                             </cac:AddressLine>
                             <cac:Country>
-                                <cbc:IdentificationCode>'.$emisor['pais'].'</cbc:IdentificationCode>
+                                <cbc:IdentificationCode>' . $emisor['pais'] . '</cbc:IdentificationCode>
                             </cac:Country>
                         </cac:RegistrationAddress>
                     </cac:PartyLegalEntity>
@@ -2961,26 +2896,26 @@ class ControladorFacturacion{
                 <cac:AccountingCustomerParty>
                     <cac:Party>
                     <cac:PartyIdentification>
-                        <cbc:ID schemeID="'.$tipodoc.'">'.$cliente['ruc'].'</cbc:ID>
+                        <cbc:ID schemeID="' . $tipodoc . '">' . $cliente['ruc'] . '</cbc:ID>
                     </cac:PartyIdentification>
                     <cac:PartyLegalEntity>
-                        <cbc:RegistrationName><![CDATA['.$cliente['razon_social'].']]></cbc:RegistrationName>
+                        <cbc:RegistrationName><![CDATA[' . $cliente['razon_social'] . ']]></cbc:RegistrationName>
                         <cac:RegistrationAddress>
                             <cac:AddressLine>
-                                <cbc:Line><![CDATA['.$cliente['direccion'].']]></cbc:Line>
+                                <cbc:Line><![CDATA[' . $cliente['direccion'] . ']]></cbc:Line>
                             </cac:AddressLine>
                             <cac:Country>
-                                <cbc:IdentificationCode>'.$cliente['pais'].'</cbc:IdentificationCode>
+                                <cbc:IdentificationCode>' . $cliente['pais'] . '</cbc:IdentificationCode>
                             </cac:Country>
                         </cac:RegistrationAddress>
                     </cac:PartyLegalEntity>
                     </cac:Party>
                 </cac:AccountingCustomerParty>
                 <cac:TaxTotal>
-                    <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                    <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                     <cac:TaxSubtotal>
-                    <cbc:TaxableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante["total_opgravadas"].'</cbc:TaxableAmount>
-                    <cbc:TaxAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['igv'].'</cbc:TaxAmount>
+                    <cbc:TaxableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante["total_opgravadas"] . '</cbc:TaxableAmount>
+                    <cbc:TaxAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['igv'] . '</cbc:TaxAmount>
                     <cac:TaxCategory>
                         <cac:TaxScheme>
                             <cbc:ID>1000</cbc:ID>
@@ -2991,29 +2926,29 @@ class ControladorFacturacion{
                     </cac:TaxSubtotal>
                 </cac:TaxTotal>
                 <cac:RequestedMonetaryTotal>
-                    <cbc:PayableAmount currencyID="'.$comprobante['moneda'].'">'.$comprobante['total'].'</cbc:PayableAmount>
+                    <cbc:PayableAmount currencyID="' . $comprobante['moneda'] . '">' . $comprobante['total'] . '</cbc:PayableAmount>
                 </cac:RequestedMonetaryTotal>
                 <cac:DebitNoteLine>
                     <cbc:ID>1</cbc:ID>
                     <cbc:Note>ZZ</cbc:Note>
                     <cbc:DebitedQuantity unitCode="ZZ" unitCodeListAgencyName="United Nations Economic Commission for Europe" unitCodeListID="UN/ECE rec 20">1</cbc:DebitedQuantity>
-                    <cbc:LineExtensionAmount currencyID="PEN">'.$comprobante["total_opgravadas"].'</cbc:LineExtensionAmount>
+                    <cbc:LineExtensionAmount currencyID="PEN">' . $comprobante["total_opgravadas"] . '</cbc:LineExtensionAmount>
                     <cac:BillingReference>
                         <cac:BillingReferenceLine>
-                            <cbc:ID schemeID="AF">'.$comprobante["total"].'</cbc:ID>
+                            <cbc:ID schemeID="AF">' . $comprobante["total"] . '</cbc:ID>
                         </cac:BillingReferenceLine>
                     </cac:BillingReference>
                     <cac:PricingReference>
                         <cac:AlternativeConditionPrice>
-                            <cbc:PriceAmount currencyID="PEN">'.$comprobante["total"].'</cbc:PriceAmount>
+                            <cbc:PriceAmount currencyID="PEN">' . $comprobante["total"] . '</cbc:PriceAmount>
                             <cbc:PriceTypeCode listAgencyName="PE:SUNAT" listName="Tipo de Precio" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo16">01</cbc:PriceTypeCode>
                         </cac:AlternativeConditionPrice>
                     </cac:PricingReference>
                     <cac:TaxTotal>
-                        <cbc:TaxAmount currencyID="PEN">'.$comprobante["igv"].'</cbc:TaxAmount>
+                        <cbc:TaxAmount currencyID="PEN">' . $comprobante["igv"] . '</cbc:TaxAmount>
                         <cac:TaxSubtotal>
-                        <cbc:TaxableAmount currencyID="PEN">'.$comprobante["total_opgravadas"].'</cbc:TaxableAmount>
-                        <cbc:TaxAmount currencyID="PEN">'.$comprobante["igv"].'</cbc:TaxAmount>
+                        <cbc:TaxableAmount currencyID="PEN">' . $comprobante["total_opgravadas"] . '</cbc:TaxableAmount>
+                        <cbc:TaxAmount currencyID="PEN">' . $comprobante["igv"] . '</cbc:TaxAmount>
                         <cac:TaxCategory>
                             <cbc:Percent>18.00</cbc:Percent>
                             <cbc:TaxExemptionReasonCode listAgencyName="PE:SUNAT" listName="Afectacion del IGV" listURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07">10</cbc:TaxExemptionReasonCode>
@@ -3026,57 +2961,57 @@ class ControladorFacturacion{
                         </cac:TaxSubtotal>
                     </cac:TaxTotal>
                     <cac:Item>
-                        <cbc:Description>'.$venta["observacion"].'</cbc:Description>
+                        <cbc:Description>' . $venta["observacion"] . '</cbc:Description>
                     </cac:Item>
                     <cac:Price>
-                        <cbc:PriceAmount currencyID="PEN">'.$comprobante["total_opgravadas"].'</cbc:PriceAmount>
+                        <cbc:PriceAmount currencyID="PEN">' . $comprobante["total_opgravadas"] . '</cbc:PriceAmount>
                     </cac:Price>
                 </cac:DebitNoteLine>
             </DebitNote>';
 
-            
-	    $doc->loadXML($xml);
-	    $doc->save($ruta.'.XML');
-        
 
-        $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1,"ERROR",$tipo,$documento);
+            $doc->loadXML($xml);
+            $doc->save($ruta . '.XML');
 
-        //LIBRERIA PHPMAILER
-        require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
 
-        //CREAR XML FIRMA
-        require_once('/../vistas/generar_xml/ApiFacturacion.php');
+            $actualizadoCreado = ModeloFacturacion::mdlActualizarProcesoFacturacion(1, "ERROR", $tipo, $documento);
 
-        $objApi = new ApiFacturacion();
-        $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
+            //LIBRERIA PHPMAILER
+            require_once "/../extensiones/PHPMailer/PHPMailerAutoload.php";
 
-        if($envio == "1"){
-            echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
-            $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2,"ENVIADO",$tipo,$documento);
+            //CREAR XML FIRMA
+            require_once('/../vistas/generar_xml/ApiFacturacion.php');
 
-            $validarCorreo = strpos($venta["email"],"@");
+            $objApi = new ApiFacturacion();
+            $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
 
-            if($validarCorreo !== false ){
+            if ($envio == "1") {
+                echo "<script>  Command: toastr['success']('El XML FUE GENERADO EXITOSAMENTE')</script>";
+                $actualizadoEnvio = ModeloFacturacion::mdlActualizarProcesoFacturacion(2, "ENVIADO", $tipo, $documento);
 
-                //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
-                $mail = new PHPMailer;
+                $validarCorreo = strpos($venta["email"], "@");
 
-                $mail->CharSet = 'UTF-8';
+                if ($validarCorreo !== false) {
 
-                $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
-                $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
-                $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
-                $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
-                $mail->Password = "notificaciones123";		// Tu contraseña de gmail
-                $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
-                $mail->Port = 587;
-                $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
-                $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda");//Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
-                $mail->Subject = "EMISION DE NOTA DE DEBITO ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+                    //ENVIO DE CORREO ELECTRONICO CON LA LIBRERIA PHP MAILER
+                    $mail = new PHPMailer;
 
-                $mail->addAddress($venta["email"]);
+                    $mail->CharSet = 'UTF-8';
 
-                $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
+                    $mail->isSMTP();                            // Establecer el correo electrónico para utilizar SMTP
+                    $mail->Host = 'smtp.gmail.com';             // Especificar el servidor de correo a utilizar 
+                    $mail->SMTPAuth = true;                     // Habilitar la autenticacion con SMTP
+                    $mail->Username = "notificacionesrosalinda@gmail.com";          // Correo electronico saliente ejemplo: tucorreo@gmail.com
+                    $mail->Password = "notificaciones123";        // Tu contraseña de gmail
+                    $mail->SMTPSecure = 'tls';                  // Habilitar encriptacion, `ssl` es aceptada
+                    $mail->Port = 587;
+                    $mail->setFrom("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda"); //Introduzca la dirección de la que debe aparecer el correo electrónico. Puede utilizar cualquier dirección que el servidor SMTP acepte como válida. El segundo parámetro opcional para esta función es el nombre que se mostrará como el remitente en lugar de la dirección de correo electrónico en sí.
+                    $mail->addReplyTo("notificacionesrosalinda@gmail.com", "Notificaciones Rosalinda"); //Introduzca la dirección de la que debe responder. El segundo parámetro opcional para esta función es el nombre que se mostrará para responder
+                    $mail->Subject = "EMISION DE NOTA DE DEBITO ELECTRONICA CON EL SISTEMA DE ROSALINDA";
+
+                    $mail->addAddress($venta["email"]);
+
+                    $mail->msgHTML('<div style="width:40%; position:relative; font-family:sans-serif; padding-bottom:40px;font-size:16px;">
                     
                         <div style="background-color:#e46c89;color:#1e282c;padding:20px 0px">
                         <img style=" width:25%;margin:0px;" src="vistas/img/plantilla/jackyform_letras.png">
@@ -3089,7 +3024,7 @@ class ControladorFacturacion{
                             <tr>
                                 <td width="190px">N° NOTA DE DEBITO</td>
                                 <td width="20px">:</td>
-                                <td width="150px">'.$comprobante["serie"]."-".$comprobante["correlativo"].'</td>
+                                <td width="150px">' . $comprobante["serie"] . "-" . $comprobante["correlativo"] . '</td>
                             </tr>
                             <tr>
                                 <td width = "190px">VENCIMIENTO</td>
@@ -3099,7 +3034,7 @@ class ControladorFacturacion{
                             <tr>
                                 <td width = "190px">MONTO TOTAL</td>
                                 <td width = "20px">:</td>
-                                <td  width="150px">PEN '.$venta["total"].'</td>
+                                <td  width="150px">PEN ' . $venta["total"] . '</td>
                             </tr>
                             
                         
@@ -3120,48 +3055,261 @@ class ControladorFacturacion{
                 </div>');
 
 
-                $mail->AddAttachment($ruta.".XML", $nombrexml.".XML");
+                    $mail->AddAttachment($ruta . ".XML", $nombrexml . ".XML");
 
 
-                $ruta_cdr = "vistas/generar_xml/cdr/R-".$nombrexml;
+                    $ruta_cdr = "vistas/generar_xml/cdr/R-" . $nombrexml;
 
-                $mail->AddAttachment($ruta_cdr.".XML", "R-".$nombrexml.".XML");
+                    $mail->AddAttachment($ruta_cdr . ".XML", "R-" . $nombrexml . ".XML");
 
 
 
-                $ruta_pdf = "vistas/generar_xml/documentos_pdf/".$nombrexml;
+                    $ruta_pdf = "vistas/generar_xml/documentos_pdf/" . $nombrexml;
 
-                $mail->AddAttachment($ruta_pdf.".pdf", $nombrexml.".pdf");
-                
+                    $mail->AddAttachment($ruta_pdf . ".pdf", $nombrexml . ".pdf");
 
-                $envio = $mail->Send();
 
-                if($envio){
-                    echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
-                }else{
+                    $envio = $mail->Send();
+
+                    if ($envio) {
+                        echo "<script>  Command: toastr['success']('El CORREO FUE ENVIADO EXITOSAMENTE')</script>";
+                    } else {
+                        echo "<script>  Command: toastr['error']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                    }
+                } else {
                     echo "<script>  Command: toastr['error']('NO SE LOGRO ENVIAR EL CORREO')</script>";
                 }
+            } else {
 
-            }else{
-                echo "<script>  Command: toastr['error']('NO SE LOGRO ENVIAR EL CORREO')</script>";
+                unlink($ruta . '.XML');
+                unlink($ruta . '.ZIP');
+            }
+        }
+    }
+
+    static public function ctrCrearGuiaRemision()
+    {
+        if (isset($_GET["tipoGuia"]) && isset($_GET["documentoGuia"])) {
+            $doc = new DOMDocument();
+            $doc->formatOutput = FALSE;
+            $doc->preserveWhiteSpace = TRUE;
+            $doc->encoding = 'utf-8';
+
+            require_once("/../extensiones/cantidad_en_letras.php");
+            // require_once("/../vistas/generar_xml/signature.php"); // permite firmar xml
+
+            $tipo = $_GET["tipoGuia"];
+
+            $documento = $_GET["documentoGuia"];
+            $venta = ControladorFacturacion::ctrMostrarVentaImpresion($documento, $tipo);
+
+            $modelos = ControladorFacturacion::ctrMostrarModeloImpresion($documento, $tipo);
+
+            $unidad = ControladorFacturacion::ctrMostrarUnidadesImpresion($documento, $tipo);
+
+            $tipcomprobante = '09';
+
+            $nomcomprobante = "GUIA DE REMISION";
+
+            $emisor =     array(
+                'tipodoc'        => '6',
+                'ruc'             => '10094806777',
+                'razon_social'    => 'JOSE ADOLFO VASQUEZ CORTEZ',
+                'nombre_comercial'    => 'ROSALINDA',
+                'direccion'        => 'CALLE 2 MZ. O LT.10 - SAN ELIAS - LOS OLIVOS - LIMA',
+                'pais'            => 'PE',
+                'departamento'  => 'LIMA', //LIMA 
+                'provincia'        => 'LIMA', //LIMA 
+                'distrito'        => 'LOS OLIVOS', //CARABAYLLO
+                'ubigeo'        => '150117', //CARABAYLLO
+                'usuario_sol'    => 'JUDITHCO', //USUARIO SECUNDARIO EMISOR ELECTRONICO
+                'clave_sol'        => 'rosalinDA21' //CLAVE DE USUARIO SECUNDARIO EMISOR ELECTRONICO
+            );
+
+
+            $cliente = array(
+                'tipo'          => $venta["tip_doc_cli"],
+                'ruc'            => $venta["dni"],
+                'razon_social'  => $venta["nombre"],
+                'cliente'       => $venta["cliente"],
+                'direccion'        => $venta["direccion"],
+                'pais'            => 'PE'
+            );
+
+            $vendedor = array(
+                "codigo"        => $venta["vendedor"],
+                "nombre"        => $venta["nom_vendedor"]
+            );
+
+            $comprobante =    array(
+                'tipodoc'        => $tipcomprobante, //01->FACTURA, 03->BOLETA, 07->NC, 08->ND
+                'serie'            => substr($venta["documento"], 0, 4),
+                'correlativo'    => substr($venta["documento"], 4, 12),
+                'fecha_emision' => $venta["fecha_emision"],
+                'moneda'        => 'PEN', //PEN->SOLES; USD->DOLARES
+                'total_opgravadas' => 0, //OP. GRAVADAS
+                'total_opexoneradas' => 0,
+                'total_opinafectas' => 0,
+                'igv'            => 0,
+                'total'            => 0,
+                'total_texto'    => ''
+            );
+
+            //RUC DEL EMISOR - TIPO DE COMPROBANTE - SERIE DEL DOCUMENTO - CORRELATIVO
+            //01-> FACTURA, 03-> BOLETA, 07-> NOTA DE CREDITO, 08-> NOTA DE DEBITO, 09->GUIA DE REMISION
+            $nombrexml = $emisor['ruc'] . '-' . $comprobante['tipodoc'] . '-' . $comprobante['serie'] . '-' . $comprobante['correlativo'];
+
+            $ruta = "vistas/generar_xml/archivos_xml/" . $nombrexml;
+
+            $tipoCliente = $cliente["ruc"];
+
+            if (strlen($tipoCliente) == 8) {
+                $tipodoc = '1';
+            } else {
+                $tipodoc = '6';
             }
 
-        }else{
+            $xml = '<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+            <DespatchAdvice
+                xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
+                xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+                xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+                xmlns:ccts="urn:un:unece:uncefact:documentation:2"
+                xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+                xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
 
-            unlink($ruta.'.XML');
-            unlink($ruta.'.ZIP');
-        }          
 
+                <ext:UBLExtensions>
+                    <ext:UBLExtension>
+                        <ext:ExtensionContent />
+                    </ext:UBLExtension>
+               </ext:UBLExtensions>
+
+                <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+                <cbc:CustomizationID>1.0</cbc:CustomizationID>
+                <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
+                <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
+                <cbc:IssueTime>00:00:01</cbc:IssueTime>
+                <cbc:DespatchAdviceTypeCode>' . $tipcomprobante . '</cbc:DespatchAdviceTypeCode>
+                
+                <cac:Signature>
+                    <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
+                    <cbc:Note><![CDATA[' . $emisor['nombre_comercial'] . ']]></cbc:Note>
+                    <cac:SignatoryParty>
+                        <cac:PartyIdentification>
+                            <cbc:ID>' . $emisor['ruc'] . '</cbc:ID>
+                        </cac:PartyIdentification>
+                        <cac:PartyName>
+                            <cbc:Name><![CDATA[' . $emisor['razon_social'] . ']]></cbc:Name>
+                        </cac:PartyName>
+                    </cac:SignatoryParty>
+                    <cac:DigitalSignatureAttachment>
+                        <cac:ExternalReference>
+                            <cbc:URI>#SIGN-EMPRESA</cbc:URI>
+                        </cac:ExternalReference>
+                    </cac:DigitalSignatureAttachment>
+                </cac:Signature>
+
+                <cac:DespatchSupplierParty>
+                    <cbc:CustomerAssignedAccountID schemeID="' . $emisor['tipodoc'] . '">' . $emisor['ruc'] . '</cbc:CustomerAssignedAccountID>
+                    <cac:Party>
+                        <cac:PostalAddress>
+                            <cbc:ID/>
+                            <cbc:StreetName>AV. MILITAR NRO. 1630 (ALTURA CUADRA 16 AV. AREQUIPA)</cbc:StreetName>
+                            <cbc:CitySubdivisionName/>
+                            <cbc:CityName/>
+                            <cbc:CountrySubentity>LIMA</cbc:CountrySubentity>
+                            <cbc:District/>
+                            <cac:Country>
+                                <cbc:IdentificationCode>PE</cbc:IdentificationCode>
+                            </cac:Country>
+                        </cac:PostalAddress>
+                        <cac:PartyLegalEntity>
+                            <cbc:RegistrationName>KUKULISS</cbc:RegistrationName>
+                        </cac:PartyLegalEntity>
+                    </cac:Party>
+                </cac:DespatchSupplierParty>
+                <cac:DeliveryCustomerParty>
+                    <cbc:CustomerAssignedAccountID schemeID="6">20601465648</cbc:CustomerAssignedAccountID>
+                    <cac:Party>
+                        <cac:PhysicalLocation>
+                            <cbc:Description>PRO. PACHITEA NRO. 248 JUNIN - HUANCAYO - HUANCAYO</cbc:Description>
+                        </cac:PhysicalLocation>
+                        <cac:PartyLegalEntity>
+                            <cbc:RegistrationName>FERRETERIA E INVERSIONES GRUPO TORRES S.R.L.</cbc:RegistrationName>
+                        </cac:PartyLegalEntity>
+                    </cac:Party>
+                </cac:DeliveryCustomerParty>
+                <cac:Shipment>
+                    <cbc:ID>1</cbc:ID>
+                    <cbc:HandlingCode>01</cbc:HandlingCode>
+                    <cbc:Information/>
+                    <cbc:GrossWeightMeasure unitCode="KGM">1000</cbc:GrossWeightMeasure>
+                    <cbc:SplitConsignmentIndicator>false</cbc:SplitConsignmentIndicator>
+                    <cac:ShipmentStage>
+                        <cbc:TransportModeCode>01</cbc:TransportModeCode>
+                        <cac:TransitPeriod>
+                            <cbc:StartDate>2022-11-12</cbc:StartDate>
+                        </cac:TransitPeriod>
+                        <cac:CarrierParty>
+                            <cac:PartyIdentification>
+                                <cbc:ID schemeID="6">20557222422</cbc:ID>
+                            </cac:PartyIdentification>
+                            <cac:PartyName>
+                                <cbc:Name>KUKULISS</cbc:Name>
+                            </cac:PartyName>
+                        </cac:CarrierParty>
+                    </cac:ShipmentStage>
+                    <cac:Delivery>
+                        <cac:DeliveryAddress>
+                            <cbc:ID>120101</cbc:ID>
+                            <cbc:StreetName>PRO. PACHITEA NRO. 248 JUNIN - HUANCAYO - HUANCAYO</cbc:StreetName>
+                        </cac:DeliveryAddress>
+                    </cac:Delivery>
+                    <cac:OriginAddress>
+                        <cbc:ID>150116</cbc:ID>
+                        <cbc:StreetName>AV. MILITAR NRO. 1630 (ALTURA CUADRA 16 AV. AREQUIPA)</cbc:StreetName>
+                    </cac:OriginAddress>
+                </cac:Shipment>
+                <cac:DespatchLine>
+                    <cbc:ID>1</cbc:ID>
+                    <cbc:DeliveredQuantity unitCode="NIU">2</cbc:DeliveredQuantity>
+                    <cac:OrderLineReference>
+                        <cbc:LineID>1</cbc:LineID>
+                    </cac:OrderLineReference>
+                    <cac:Item>
+                        <cbc:Name>PRODUCTO DEMO</cbc:Name>
+                        <cac:SellersItemIdentification>
+                            <cbc:ID>P001</cbc:ID>
+                        </cac:SellersItemIdentification>
+                    </cac:Item>
+                </cac:DespatchLine>
+            </DespatchAdvice>';
+
+            $doc->loadXML($xml);
+            $doc->save($ruta . '.XML');
+
+            // CREAR XML FIRMA
+            require_once('/../vistas/generar_xml/ApiFacturacion.php');
+
+            $objApi = new ApiFacturacion();
+            $envio = $objApi->EnviarComprobanteElectronico($emisor, $nombrexml);
+            // $envio = "1";
+
+            echo '<pre>';
+            print_r($envio);
+            echo '</pre>';
         }
-
     }
-    
-    static public function ctrAnularDocumento(){
 
-        if(isset($_GET["documento"])){
 
-            $documento=$_GET["documento"];
-            $tipo=$_GET["tipo"];
+    static public function ctrAnularDocumento()
+    {
+
+        if (isset($_GET["documento"])) {
+
+            $documento = $_GET["documento"];
+            $tipo = $_GET["tipo"];
             #var_dump($documento,$tipo);
 
             #regresar stock al almacén
@@ -3176,43 +3324,38 @@ class ControladorFacturacion{
             $pcreg = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
             #anular cabecera
-            $cabecera = ModeloFacturacion::mdlAnularCabecera($tipo, $documento,$_SESSION["id"], $usureg, $pcreg);
+            $cabecera = ModeloFacturacion::mdlAnularCabecera($tipo, $documento, $_SESSION["id"], $usureg, $pcreg);
             #var_dump($cabecera); 
 
             #eliminar cta cte
-            if($tipo == "S03"){
+            if ($tipo == "S03") {
 
                 $tip = "01";
                 $pagina = "facturas";
-
-            }else if($tipo == "S02"){
+            } else if ($tipo == "S02") {
 
                 $tip = "03";
                 $pagina = "boletas";
-
-            }else if($tipo == "E05"){
+            } else if ($tipo == "E05") {
 
                 $tip = "07";
                 $pagina = "ver-nota-credito";
-
-            }else if($tipo = "S70"){
+            } else if ($tipo = "S70") {
 
                 $tip = "09";
                 $pagina = "proformas";
-
-            }else if($tipo = "S01"){
+            } else if ($tipo = "S01") {
 
                 $tip = "AA";
                 $pagina = "guias-remision";
-
             }
 
             $cta = ModeloFacturacion::mdlEliminarCta($tip, $documento);
             #var_dump($cta); 
 
-            if($cabecera == "ok"){
+            if ($cabecera == "ok") {
 
-                echo'<script>
+                echo '<script>
 
                 swal({
                     type: "success",
@@ -3223,34 +3366,32 @@ class ControladorFacturacion{
                     }).then(function(result){
                         if (result.value) {
 
-                        window.location = "'.$pagina.'";
+                        window.location = "' . $pagina . '";
 
                         }
                     })
     
                 </script>';
-
             }
-
         }
-    
-    }    
+    }
 
-    static public function ctrEliminarDocumento(){
+    static public function ctrEliminarDocumento()
+    {
 
-        if(isset($_GET["documentoE"])){
+        if (isset($_GET["documentoE"])) {
 
-            $documento=$_GET["documentoE"];
-            $tipo=$_GET["tipo"];
-            $pagina=$_GET["pagina"];
+            $documento = $_GET["documentoE"];
+            $tipo = $_GET["tipo"];
+            $pagina = $_GET["pagina"];
             var_dump($documento, $tipo, $pagina);
 
             $respuesta = ModeloFacturacion::mdlEliminarDocumento($tipo, $documento);
             var_dump($respuesta);
 
-            if($respuesta == "ok"){
+            if ($respuesta == "ok") {
 
-                echo'<script>
+                echo '<script>
 
                 swal({
                     type: "success",
@@ -3261,56 +3402,51 @@ class ControladorFacturacion{
                     }).then(function(result){
                         if (result.value) {
 
-                        window.location = "'.$pagina.'";
+                        window.location = "' . $pagina . '";
 
                         }
                     })
     
                 </script>';
-
-            }            
-
+            }
         }
-
-    }    
+    }
 
     //* mostrar cabecera del documento
-	static public function ctrMostrarCabeceraDoc($tipo, $documento){
+    static public function ctrMostrarCabeceraDoc($tipo, $documento)
+    {
 
-		$respuesta = ModeloFacturacion::mdlMostrarCabeceraDoc($tipo, $documento);
+        $respuesta = ModeloFacturacion::mdlMostrarCabeceraDoc($tipo, $documento);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
     //* mostrar detalle del documento
-	static public function ctrMostrarDetalleDoc($tipo, $documento){
+    static public function ctrMostrarDetalleDoc($tipo, $documento)
+    {
 
-		$respuesta = ModeloFacturacion::mdlMostrarDetalleDoc($tipo, $documento);
+        $respuesta = ModeloFacturacion::mdlMostrarDetalleDoc($tipo, $documento);
 
-		return $respuesta;
-
-    }    
+        return $respuesta;
+    }
 
     /*
     * MOSTRAR REPORTE DE VENTA POR RESUMEN
     */
-	static public function ctrMostrarVentaResumen($optipo, $opdocumento, $impuesto , $vend, $inicio, $fin){
-		$respuesta = ModeloFacturacion::mdlMostrarVentaResumen( $optipo, $opdocumento, $impuesto, $vend, $inicio, $fin);
+    static public function ctrMostrarVentaResumen($optipo, $opdocumento, $impuesto, $vend, $inicio, $fin)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarVentaResumen($optipo, $opdocumento, $impuesto, $vend, $inicio, $fin);
 
-		return $respuesta;
-
+        return $respuesta;
     }
 
     /*
     * MOSTRAR REPORTE DE VENTA DETALLADO
     */
-	static public function ctrMostrarVentaDetalle($optipo, $opdocumento, $impuesto , $vend, $inicio, $fin){
-		$respuesta = ModeloFacturacion::mdlMostrarVentaDetalle( $optipo, $opdocumento, $impuesto, $vend, $inicio, $fin);
+    static public function ctrMostrarVentaDetalle($optipo, $opdocumento, $impuesto, $vend, $inicio, $fin)
+    {
+        $respuesta = ModeloFacturacion::mdlMostrarVentaDetalle($optipo, $opdocumento, $impuesto, $vend, $inicio, $fin);
 
-		return $respuesta;
-
-    }    
-
+        return $respuesta;
+    }
 }
-

@@ -99,7 +99,7 @@
                             <tr>
                         
                                 <th style="width:10%;text-align:left;"></th>
-                                <th style="width:50%" colspan="10">Cta Recaudadora - BCP: 191-1553564-0-64</th>
+                                <th style="width:50%" colspan="10">Cta Ahorros - BCP: 191-99334889-0-69</th>
 
                             </tr>                            
 

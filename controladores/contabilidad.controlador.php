@@ -200,7 +200,7 @@ class ControladorContabilidad{
 
             fclose($archivo); 
 
-            $origen = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/ventas/V'.$nomar.'.txt';
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/ventas/V'.$nomar.'.txt';
                 
             #$destino = '//Sistemas-2/d/contabilidad/ventas/V'.$nomar.'.txt';   
             $destino = '//Yudy-pc/datasmart/LINDA2022/V'.$nomar.'.txt';        
@@ -216,7 +216,7 @@ class ControladorContabilidad{
             fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." V".$nomar.".txt".PHP_EOL);
             fclose($archivoBat); 
             
-            $origen2 = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/ventas/VB'.$nomar.'.bat';
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/ventas/VB'.$nomar.'.bat';
             //$destino2 = '//Sistemas-2/d/contabilidad/ventas/VB'.$nomar.'.bat';
             $destino2 = '//Yudy-pc/datasmart/LINDA2022/VB'.$nomar.'.bat';  
             copy($origen2, $destino2);
@@ -516,7 +516,7 @@ class ControladorContabilidad{
             
             fclose($archivo); 
 
-            $origen = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/letras/L'.$nomar.'.txt';
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/letras/L'.$nomar.'.txt';
                 
             #$destino = '//Sistemas-2/d/contabilidad/letras/L'.$nomar.'.txt';   
             $destino = '//Yudy-pc/datasmart/LINDA2022/L'.$nomar.'.txt';        
@@ -531,7 +531,7 @@ class ControladorContabilidad{
             fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." L".$nomar.".txt".PHP_EOL);
             fclose($archivoBat); 
             
-            $origen2 = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/letras/LB'.$nomar.'.bat';
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/letras/LB'.$nomar.'.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/letras/LB'.$nomar.'.bat';
             $destino2 = '//Yudy-pc/datasmart/LINDA2022/LB'.$nomar.'.bat';  
             copy($origen2, $destino2);
@@ -841,7 +841,7 @@ class ControladorContabilidad{
 
             fclose($archivo); 
 
-            $origen = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/cancelaciones/C'.$nomar.'.txt';
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/cancelaciones/C'.$nomar.'.txt';
                 
             #$destino = '//Sistemas-2/d/contabilidad/cancelaciones/C'.$nomar.'.txt';   
             $destino = '//Yudy-pc/datasmart/LINDA2022/C'.$nomar.'.txt';        
@@ -856,7 +856,7 @@ class ControladorContabilidad{
             fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." C".$nomar.".txt".PHP_EOL);
             fclose($archivoBat); 
             
-            $origen2 = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/cancelaciones/CB'.$nomar.'.bat';
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/cancelaciones/CB'.$nomar.'.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/cancelaciones/CB'.$nomar.'.bat';
             $destino2 = '//Yudy-pc/datasmart/LINDA2022/CB'.$nomar.'.bat';  
             copy($origen2, $destino2);
@@ -1023,7 +1023,7 @@ class ControladorContabilidad{
 
             fclose($archivo); 
 
-            $origen = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/clientes/CL'.$nomar.'.txt';
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/clientes/CL'.$nomar.'.txt';
                     
             #$destino = '//Sistemas-2/d/contabilidad/clientes/V'.$nomar.'.txt';   
             $destino = '//Yudy-pc/datasmart/LINDA2022/CL'.$nomar.'.txt';        
@@ -1038,7 +1038,7 @@ class ControladorContabilidad{
             fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." CL".$nomar.".txt".PHP_EOL);
             fclose($archivoBat); 
             
-            $origen2 = 'c:/xampp/htdocs/rosalinda/vistas/contabilidad/clientes/CLB'.$nomar.'.bat';
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/clientes/CLB'.$nomar.'.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/clientes/VB'.$nomar.'.bat';
             $destino2 = '//Yudy-pc/datasmart/LINDA2022/CLB'.$nomar.'.bat';  
             copy($origen2, $destino2);

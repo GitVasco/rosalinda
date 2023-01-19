@@ -31,24 +31,36 @@ class AjaxMovimientos{
 
 		$fecha=$this->fecha;
 
-		$ws = file_get_contents("https://api.apis.net.pe/v1/tipo-cambio-sunat?fecha=$fecha");
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://api.apis.net.pe/v1/tipo-cambio-sunat?fecha=' . $fecha,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_SSL_VERIFYPEER => false
+		));
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		curl_close($curl);
+		if ($err) {
+			echo "cURL Error #:" . $err;
+		} else {
 
-		$tipoCambio = json_decode($ws, true);
+			$tipoCambioSunat = json_decode($response, true);	
+			
+			if($tipoCambioSunat["venta"] == "Fuera de plazo permitido"){
 
-		if($tipoCambio["venta"] == "Fuera de plazo permitido"){
-
-			$respuesta = "no";
-
-		}else{
-
-			$respuesta = ModeloMovimientos::mdlActualizarTipoCambio($tipoCambio["compra"], $tipoCambio["venta"], $fecha);
-
+				$respuesta = "no";
+	
+			}else{
+	
+				$respuesta = ModeloMovimientos::mdlActualizarTipoCambio($tipoCambioSunat["compra"], $tipoCambioSunat["venta"], $fecha);
+	
+			}	
+	
+			
+			echo $respuesta;	
 		}
 
-		
-
-		
-		echo $respuesta;
 
 	}
 
