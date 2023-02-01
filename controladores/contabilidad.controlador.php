@@ -1,51 +1,58 @@
 <?php
 
-class ControladorContabilidad{
+class ControladorContabilidad
+{
 
-    static public function eliminar_tildes($cadena){
+    static public function eliminar_tildes($cadena)
+    {
 
         //Codificamos la cadena en formato utf8 en caso de que nos de errores
         #$cadena = utf8_decode($cadena);
-    
+
         //Ahora reemplazamos las letras
         $cadena = str_replace(
             array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
             array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
             $cadena
         );
-    
+
         $cadena = str_replace(
             array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
             array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
-            $cadena );
-    
+            $cadena
+        );
+
         $cadena = str_replace(
             array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
             array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
-            $cadena );
-    
+            $cadena
+        );
+
         $cadena = str_replace(
             array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
             array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
-            $cadena );
-    
+            $cadena
+        );
+
         $cadena = str_replace(
             array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
             array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
-            $cadena );
-    
+            $cadena
+        );
+
         $cadena = str_replace(
             array('ñ', 'Ñ', 'ç', 'Ç'),
             array('n', 'N', 'c', 'C'),
             $cadena
         );
-    
-        return $cadena;
-    } 
 
-    static public function ctrGenerarVentasSiscont(){
-        
-        if(isset($_POST["inicioSiscont"])){
+        return $cadena;
+    }
+
+    static public function ctrGenerarVentasSiscont()
+    {
+
+        if (isset($_POST["inicioSiscont"])) {
 
             #var_dump($_POST["inicioSiscont"]);
 
@@ -55,10 +62,10 @@ class ControladorContabilidad{
             $añoI = date("Y", strtotime($fechaInicio));
             $mesI = date("m", strtotime($fechaInicio));
 
-            $fi = str_replace("-", "",$fechaInicio);
-            $ff = str_replace("-", "",$fechaFin);
+            $fi = str_replace("-", "", $fechaInicio);
+            $ff = str_replace("-", "", $fechaFin);
 
-            $nomar = $fi.$ff;
+            $nomar = $fi . $ff;
             #var_dump($nomar);
 
             $ruta = "vistas/contabilidad/ventas/V$fi$ff.txt";
@@ -73,16 +80,14 @@ class ControladorContabilidad{
 
             $corr = $voucher["correlativo"];
 
-            for ($i=0; $i < count($ventas) ; $i++) { 
-                
-                if($ventas[$i]["documento"] == $ventas[$i-1]["documento"]){
+            for ($i = 0; $i < count($ventas); $i++) {
+
+                if ($ventas[$i]["documento"] == $ventas[$i - 1]["documento"]) {
 
                     $corr;
-
-                }else{
+                } else {
 
                     $corr++;
-
                 }
 
                 /* $nom_cliente = ControladorContabilidad::eliminar_tildes($ventas[$i]["nom_cliente"]);
@@ -90,16 +95,16 @@ class ControladorContabilidad{
                 $ape_materno = ControladorContabilidad::eliminar_tildes($ventas[$i]["ape_materno"]);
                 $nombres = ControladorContabilidad::eliminar_tildes($ventas[$i]["nombres"]);
 
-                $nombre1 = explode(" ", $nombres);   */ 
-                
+                $nombre1 = explode(" ", $nombres);   */
+
                 $origen     = str_pad($ventas[$i]["t"], 2);
-                $voucher    = str_pad($corr, 5 , '0', STR_PAD_LEFT);
+                $voucher    = str_pad($corr, 5, '0', STR_PAD_LEFT);
                 $fecha      = str_pad($ventas[$i]["fecha"], 8);
-                $cuenta     = str_pad($ventas[$i]["cuenta"],10);
-                $debe       = str_pad($ventas[$i]["debe"], 12 , '0', STR_PAD_LEFT);
-                $haber      = str_pad($ventas[$i]["haber"], 12 , '0', STR_PAD_LEFT);
+                $cuenta     = str_pad($ventas[$i]["cuenta"], 10);
+                $debe       = str_pad($ventas[$i]["debe"], 12, '0', STR_PAD_LEFT);
+                $haber      = str_pad($ventas[$i]["haber"], 12, '0', STR_PAD_LEFT);
                 $moneda     = str_pad($ventas[$i]["moneda"], 1);
-                $tc         = str_pad($ventas[$i]["tc"], 10 , '0', STR_PAD_LEFT);
+                $tc         = str_pad($ventas[$i]["tc"], 10, '0', STR_PAD_LEFT);
                 $doc        = str_pad($ventas[$i]["doc"], 2);
                 $numero     = str_pad($ventas[$i]["numero"], 40);
                 $fechad     = str_pad($ventas[$i]["fechad"], 8);
@@ -107,7 +112,7 @@ class ControladorContabilidad{
                 $codigo     = str_pad($ventas[$i]["codigo"], 15);
                 $cc         = str_pad(" ", 10);
                 $fe         = str_pad(" ", 4);
-                $pre        = str_pad(" ", 10); 
+                $pre        = str_pad(" ", 10);
                 $mpago      = str_pad($ventas[$i]["mpago"], 3);
                 $glosa      = str_pad($ventas[$i]["glosa"], 60);
                 $rnumero    = str_pad($ventas[$i]["rnumero"], 40);
@@ -116,11 +121,11 @@ class ControladorContabilidad{
                 $snumero    = str_pad(" ", 40);
                 $sfecha     = str_pad(" ", 8);
                 $tl         = str_pad("V", 1);
-                $neto       = str_pad($ventas[$i]["neto"], 12 , '0', STR_PAD_LEFT);
+                $neto       = str_pad($ventas[$i]["neto"], 12, '0', STR_PAD_LEFT);
                 $neto2      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto3      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto4      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
-                $igv        = str_pad($ventas[$i]["igv"], 12 , '0', STR_PAD_LEFT);
+                $igv        = str_pad($ventas[$i]["igv"], 12, '0', STR_PAD_LEFT);
                 $neto5      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto6      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto7      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
@@ -148,77 +153,76 @@ class ControladorContabilidad{
                 $tbien      = str_pad(" ", 1);
 
 
-            fwrite($archivo,    $origen.
-                                $voucher.
-                                $fecha.
-                                $cuenta.
-                                $debe.
-                                $haber.
-                                $moneda.
-                                $tc.
-                                $doc.
-                                $numero.
-                                $fechad.
-                                $fechav.
-                                $codigo.
-                                $cc.
-                                $fe.
-                                $pre.
-                                $mpago.
-                                $glosa.
-                                $rnumero.
-                                $rtdoc.
-                                $rfecha.
-                                $snumero.
-                                $sfecha.
-                                $tl.
-                                $neto.
-                                $neto2.
-                                $neto3.
-                                $neto4.
-                                $igv.
-                                $neto5.
-                                $neto6.
-                                $neto7.
-                                $neto8.
-                                $ruc.
-                                $tipo.
-                                $r5.
-                                $ape1.
-                                $ape2.
-                                $nombre.
-                                $tdoi.
-                                $rnumdes.
-                                $rcodtasa.
-                                $rindret.
-                                $rmonto.
-                                $rigv.
-                                $tbien.
-                                PHP_EOL);                
-
+                fwrite($archivo,    $origen .
+                    $voucher .
+                    $fecha .
+                    $cuenta .
+                    $debe .
+                    $haber .
+                    $moneda .
+                    $tc .
+                    $doc .
+                    $numero .
+                    $fechad .
+                    $fechav .
+                    $codigo .
+                    $cc .
+                    $fe .
+                    $pre .
+                    $mpago .
+                    $glosa .
+                    $rnumero .
+                    $rtdoc .
+                    $rfecha .
+                    $snumero .
+                    $sfecha .
+                    $tl .
+                    $neto .
+                    $neto2 .
+                    $neto3 .
+                    $neto4 .
+                    $igv .
+                    $neto5 .
+                    $neto6 .
+                    $neto7 .
+                    $neto8 .
+                    $ruc .
+                    $tipo .
+                    $r5 .
+                    $ape1 .
+                    $ape2 .
+                    $nombre .
+                    $tdoi .
+                    $rnumdes .
+                    $rcodtasa .
+                    $rindret .
+                    $rmonto .
+                    $rigv .
+                    $tbien .
+                    PHP_EOL);
             }
 
-            fclose($archivo); 
+            fclose($archivo);
 
-            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/ventas/V'.$nomar.'.txt';
-                
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/ventas/V' . $nomar . '.txt';
+
             #$destino = '//Sistemas-2/d/contabilidad/ventas/V'.$nomar.'.txt';   
-            $destino = '//Yudy-pc/datasmart/LINDA2022/V'.$nomar.'.txt';        
-            
+            $destino = '//Yudy-pc/datasmart/LINDA2023/V' . $nomar . '.txt';
+
             copy($origen, $destino);
             #rename($origen, $destino);
 
             $rutaBat = "vistas/contabilidad/ventas/VB$fi$ff.bat";
             $archivoBat = fopen($rutaBat, "w");
 
-            $nombreEmpresa = "LINDA2022";
+            $nombreEmpresa = "LINDA2023";
 
-            fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." V".$nomar.".txt".PHP_EOL);
-            fclose($archivoBat); 
-            
-            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/ventas/VB'.$nomar.'.bat';
+            fwrite($archivoBat, "MSISCONT.EXE " . $nombreEmpresa . " V" . $nomar . ".txt" . PHP_EOL);
+            fclose($archivoBat);
+
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/ventas/VB' . $nomar . '.bat';
             //$destino2 = '//Sistemas-2/d/contabilidad/ventas/VB'.$nomar.'.bat';
-            $destino2 = '//Yudy-pc/datasmart/LINDA2022/VB'.$nomar.'.bat';  
+            $destino2 = '//Yudy-pc/datasmart/LINDA2023/VB' . $nomar . '.bat';
             copy($origen2, $destino2);
             #rename($origen, $destino);
 
@@ -227,9 +231,9 @@ class ControladorContabilidad{
             $correlativo = ModeloContabilidad::mdlActualizarCorrelativo($añoI, $mesI, $corr, "valor_1");
             #var_dump($correlativo);
 
-            if($correlativo == "ok"){
+            if ($correlativo == "ok") {
 
-                echo'<script>
+                echo '<script>
 
                 swal({
                     type: "success",
@@ -245,17 +249,15 @@ class ControladorContabilidad{
                         }
                     })
     
-                </script>';                
-
+                </script>';
             }
-            
         }
-
     }
 
-    static public function ctrGenerarCanjeSiscont(){
-        
-        if(isset($_POST["inicioSiscontL"])){
+    static public function ctrGenerarCanjeSiscont()
+    {
+
+        if (isset($_POST["inicioSiscontL"])) {
 
             #var_dump($_POST["inicioSiscontL"]);
 
@@ -265,10 +267,10 @@ class ControladorContabilidad{
             $añoI = date("Y", strtotime($fechaInicio));
             $mesI = date("m", strtotime($fechaInicio));
 
-            $fi = str_replace("-", "",$fechaInicio);
-            $ff = str_replace("-", "",$fechaFin);
+            $fi = str_replace("-", "", $fechaInicio);
+            $ff = str_replace("-", "", $fechaFin);
 
-            $nomar = $fi.$ff;
+            $nomar = $fi . $ff;
             #var_dump($nomar);
 
             $ruta = "vistas/contabilidad/letras/L$fi$ff.txt";
@@ -283,24 +285,24 @@ class ControladorContabilidad{
             $corr = $voucher["correlativoL"];
             #var_dump($corr);
 
-            foreach($letras as $key => $value){
+            foreach ($letras as $key => $value) {
 
                 $corr++;
 
-                $documento = ModeloContabilidad::mdlLetrasSiscont($value["doc_origen"]);                
+                $documento = ModeloContabilidad::mdlLetrasSiscont($value["doc_origen"]);
 
-                foreach($documento as $key => $value2){
+                foreach ($documento as $key => $value2) {
 
                     #var_dump($value2["debe"]);
 
                     $origen     = str_pad($value2["t"], 2);
-                    $voucher    = str_pad($corr, 5 , '0', STR_PAD_LEFT);
+                    $voucher    = str_pad($corr, 5, '0', STR_PAD_LEFT);
                     $fecha      = str_pad($value2["fecha"], 8);
-                    $cuenta     = str_pad($value2["cuenta"],10);
-                    $debe       = str_pad($value2["debe"], 12 , '0', STR_PAD_LEFT);
-                    $haber      = str_pad($value2["haber"], 12 , '0', STR_PAD_LEFT);
+                    $cuenta     = str_pad($value2["cuenta"], 10);
+                    $debe       = str_pad($value2["debe"], 12, '0', STR_PAD_LEFT);
+                    $haber      = str_pad($value2["haber"], 12, '0', STR_PAD_LEFT);
                     $moneda     = str_pad($value2["moneda"], 1);
-                    $tc         = str_pad($value2["tc"], 10 , '0', STR_PAD_LEFT);
+                    $tc         = str_pad($value2["tc"], 10, '0', STR_PAD_LEFT);
                     $doc        = str_pad($value2["doc"], 2);
                     $numero     = str_pad($value2["numero"], 40);
                     $fechad     = str_pad($value2["fechad"], 8);
@@ -308,7 +310,7 @@ class ControladorContabilidad{
                     $codigo     = str_pad($value2["codigo"], 15);
                     $cc         = str_pad(" ", 10);
                     $fe         = str_pad(" ", 4);
-                    $pre        = str_pad(" ", 10); 
+                    $pre        = str_pad(" ", 10);
                     $mpago      = str_pad(" ", 3);
                     $glosa      = str_pad($value2["glosa"], 60);
                     $rnumero    = str_pad(" ", 40);
@@ -341,56 +343,54 @@ class ControladorContabilidad{
                     $rigv       = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                     $tbien      = str_pad(" ", 1);
 
-                    fwrite($archivo,    $origen.
-                                        $voucher.
-                                        $fecha.
-                                        $cuenta.
-                                        $debe.
-                                        $haber.
-                                        $moneda.
-                                        $tc.
-                                        $doc.
-                                        $numero.
-                                        $fechad.
-                                        $fechav.
-                                        $codigo.
-                                        $cc.
-                                        $fe.
-                                        $pre.
-                                        $mpago.
-                                        $glosa.
-                                        $rnumero.
-                                        $rtdoc.
-                                        $rfecha.
-                                        $snumero.
-                                        $sfecha.
-                                        $tl.
-                                        $neto.
-                                        $neto2.
-                                        $neto3.
-                                        $neto4.
-                                        $igv.
-                                        $neto5.
-                                        $neto6.
-                                        $neto7.
-                                        $neto8.
-                                        $ruc.
-                                        $tipo.
-                                        $r5.
-                                        $ape1.
-                                        $ape2.
-                                        $nombre.
-                                        $tdoi.
-                                        $rnumdes.
-                                        $rcodtasa.
-                                        $rindret.
-                                        $rmonto.
-                                        $rigv.
-                                        $tbien.
-                                        PHP_EOL);
-
+                    fwrite($archivo,    $origen .
+                        $voucher .
+                        $fecha .
+                        $cuenta .
+                        $debe .
+                        $haber .
+                        $moneda .
+                        $tc .
+                        $doc .
+                        $numero .
+                        $fechad .
+                        $fechav .
+                        $codigo .
+                        $cc .
+                        $fe .
+                        $pre .
+                        $mpago .
+                        $glosa .
+                        $rnumero .
+                        $rtdoc .
+                        $rfecha .
+                        $snumero .
+                        $sfecha .
+                        $tl .
+                        $neto .
+                        $neto2 .
+                        $neto3 .
+                        $neto4 .
+                        $igv .
+                        $neto5 .
+                        $neto6 .
+                        $neto7 .
+                        $neto8 .
+                        $ruc .
+                        $tipo .
+                        $r5 .
+                        $ape1 .
+                        $ape2 .
+                        $nombre .
+                        $tdoi .
+                        $rnumdes .
+                        $rcodtasa .
+                        $rindret .
+                        $rmonto .
+                        $rigv .
+                        $tbien .
+                        PHP_EOL);
                 }
-
             }
 
             $correlativo = ModeloContabilidad::mdlActualizarCorrelativo($añoI, $mesI, $corr, "valor_2");
@@ -401,25 +401,25 @@ class ControladorContabilidad{
 
             $corrB = $voucherB["correlativoL"];
             #var_dump("inicio", $corr);       
-            
-            foreach($letrasB as $key => $value){
+
+            foreach ($letrasB as $key => $value) {
 
                 $corrB++;
 
-                $documento = ModeloContabilidad::mdlLetrasSiscontB($value["cliente"], $fechaInicio, $fechaFin); 
+                $documento = ModeloContabilidad::mdlLetrasSiscontB($value["cliente"], $fechaInicio, $fechaFin);
 
                 #var_dump($value["cliente"], $fechaInicio, $fechaFin);
 
-                foreach($documento as $key => $value2){
+                foreach ($documento as $key => $value2) {
 
                     $origen     = str_pad($value2["t"], 2);
-                    $voucher    = str_pad($corrB, 5 , '0', STR_PAD_LEFT);
+                    $voucher    = str_pad($corrB, 5, '0', STR_PAD_LEFT);
                     $fecha      = str_pad($value2["fecha"], 8);
-                    $cuenta     = str_pad($value2["cuenta"],10);
-                    $debe       = str_pad($value2["debe"], 12 , '0', STR_PAD_LEFT);
-                    $haber      = str_pad($value2["haber"], 12 , '0', STR_PAD_LEFT);
+                    $cuenta     = str_pad($value2["cuenta"], 10);
+                    $debe       = str_pad($value2["debe"], 12, '0', STR_PAD_LEFT);
+                    $haber      = str_pad($value2["haber"], 12, '0', STR_PAD_LEFT);
                     $moneda     = str_pad($value2["moneda"], 1);
-                    $tc         = str_pad($value2["tc"], 10 , '0', STR_PAD_LEFT);
+                    $tc         = str_pad($value2["tc"], 10, '0', STR_PAD_LEFT);
                     $doc        = str_pad($value2["doc"], 2);
                     $numero     = str_pad($value2["numero"], 40);
                     $fechad     = str_pad($value2["fechad"], 8);
@@ -427,7 +427,7 @@ class ControladorContabilidad{
                     $codigo     = str_pad($value2["codigo"], 15);
                     $cc         = str_pad(" ", 10);
                     $fe         = str_pad(" ", 4);
-                    $pre        = str_pad(" ", 10); 
+                    $pre        = str_pad(" ", 10);
                     $mpago      = str_pad(" ", 3);
                     $glosa      = str_pad($value2["glosa"], 60);
                     $rnumero    = str_pad(" ", 40);
@@ -460,80 +460,79 @@ class ControladorContabilidad{
                     $rigv       = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                     $tbien      = str_pad(" ", 1);
 
-                    fwrite($archivo,    $origen.
-                                        $voucher.
-                                        $fecha.
-                                        $cuenta.
-                                        $debe.
-                                        $haber.
-                                        $moneda.
-                                        $tc.
-                                        $doc.
-                                        $numero.
-                                        $fechad.
-                                        $fechav.
-                                        $codigo.
-                                        $cc.
-                                        $fe.
-                                        $pre.
-                                        $mpago.
-                                        $glosa.
-                                        $rnumero.
-                                        $rtdoc.
-                                        $rfecha.
-                                        $snumero.
-                                        $sfecha.
-                                        $tl.
-                                        $neto.
-                                        $neto2.
-                                        $neto3.
-                                        $neto4.
-                                        $igv.
-                                        $neto5.
-                                        $neto6.
-                                        $neto7.
-                                        $neto8.
-                                        $ruc.
-                                        $tipo.
-                                        $r5.
-                                        $ape1.
-                                        $ape2.
-                                        $nombre.
-                                        $tdoi.
-                                        $rnumdes.
-                                        $rcodtasa.
-                                        $rindret.
-                                        $rmonto.
-                                        $rigv.
-                                        $tbien.
-                                        PHP_EOL);
-
+                    fwrite($archivo,    $origen .
+                        $voucher .
+                        $fecha .
+                        $cuenta .
+                        $debe .
+                        $haber .
+                        $moneda .
+                        $tc .
+                        $doc .
+                        $numero .
+                        $fechad .
+                        $fechav .
+                        $codigo .
+                        $cc .
+                        $fe .
+                        $pre .
+                        $mpago .
+                        $glosa .
+                        $rnumero .
+                        $rtdoc .
+                        $rfecha .
+                        $snumero .
+                        $sfecha .
+                        $tl .
+                        $neto .
+                        $neto2 .
+                        $neto3 .
+                        $neto4 .
+                        $igv .
+                        $neto5 .
+                        $neto6 .
+                        $neto7 .
+                        $neto8 .
+                        $ruc .
+                        $tipo .
+                        $r5 .
+                        $ape1 .
+                        $ape2 .
+                        $nombre .
+                        $tdoi .
+                        $rnumdes .
+                        $rcodtasa .
+                        $rindret .
+                        $rmonto .
+                        $rigv .
+                        $tbien .
+                        PHP_EOL);
                 }
 
                 #var_dump($corrB);
 
             }
-            
-            fclose($archivo); 
 
-            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/letras/L'.$nomar.'.txt';
-                
+            fclose($archivo);
+
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/letras/L' . $nomar . '.txt';
+
             #$destino = '//Sistemas-2/d/contabilidad/letras/L'.$nomar.'.txt';   
-            $destino = '//Yudy-pc/datasmart/LINDA2022/L'.$nomar.'.txt';        
-            
+            $destino = '//Yudy-pc/datasmart/LINDA2023/L' . $nomar . '.txt';
+
             copy($origen, $destino);
 
             $rutaBat = "vistas/contabilidad/letras/LB$fi$ff.bat";
             $archivoBat = fopen($rutaBat, "w");
 
-            $nombreEmpresa = "LINDA2022";
+            $nombreEmpresa = "LINDA2023";
 
-            fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." L".$nomar.".txt".PHP_EOL);
-            fclose($archivoBat); 
-            
-            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/letras/LB'.$nomar.'.bat';
+            fwrite($archivoBat, "MSISCONT.EXE " . $nombreEmpresa . " L" . $nomar . ".txt" . PHP_EOL);
+            fclose($archivoBat);
+
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/letras/LB' . $nomar . '.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/letras/LB'.$nomar.'.bat';
-            $destino2 = '//Yudy-pc/datasmart/LINDA2022/LB'.$nomar.'.bat';  
+            $destino2 = '//Yudy-pc/datasmart/LINDA2023/LB' . $nomar . '.bat';
             copy($origen2, $destino2);
 
             #var_dump($corr);
@@ -541,8 +540,8 @@ class ControladorContabilidad{
             $correlativo = ModeloContabilidad::mdlActualizarCorrelativo($añoI, $mesI, $corrB, "valor_2");
             #var_dump($correlativo);
 
-            if($correlativo == "ok"){
-                echo'<script>
+            if ($correlativo == "ok") {
+                echo '<script>
                     swal({
                         type: "success",
                         title: "Se genero el archivo correctamente",
@@ -557,17 +556,15 @@ class ControladorContabilidad{
                             }
                         })
         
-                    </script>';   
-
-            }            
-
+                    </script>';
+            }
         }
-
     }
 
-    static public function ctrGenerarCancelacionesSiscont(){
-        
-        if(isset($_POST["inicioSiscontC"])){
+    static public function ctrGenerarCancelacionesSiscont()
+    {
+
+        if (isset($_POST["inicioSiscontC"])) {
 
             #var_dump($_POST["inicioSiscontC"]);
 
@@ -577,10 +574,10 @@ class ControladorContabilidad{
             $añoI = date("Y", strtotime($fechaInicio));
             $mesI = date("m", strtotime($fechaInicio));
 
-            $fi = str_replace("-", "",$fechaInicio);
-            $ff = str_replace("-", "",$fechaFin);
+            $fi = str_replace("-", "", $fechaInicio);
+            $ff = str_replace("-", "", $fechaFin);
 
-            $nomar = $fi.$ff;
+            $nomar = $fi . $ff;
             #var_dump($nomar);
 
             $ruta = "vistas/contabilidad/cancelaciones/C$fi$ff.txt";
@@ -596,39 +593,35 @@ class ControladorContabilidad{
             $corr04 = $voucher["correlativo04"];
             $corr08 = $voucher["correlativo08"];
 
-            for($i = 0; $i < count($cancelaciones04); $i++){
+            for ($i = 0; $i < count($cancelaciones04); $i++) {
 
-                if($cancelaciones04[$i]["num_cta"] == $cancelaciones04[$i-1]["num_cta"]){
+                if ($cancelaciones04[$i]["num_cta"] == $cancelaciones04[$i - 1]["num_cta"]) {
 
                     $corr04;
-
-                }else{
+                } else {
 
                     $corr04++;
-
                 }
 
-                if($cancelaciones04[$i]["doc"] == 'LE'){
+                if ($cancelaciones04[$i]["doc"] == 'LE') {
 
                     $docFormato = $cancelaciones04[$i]["numero"];
-    
-                }else{
+                } else {
 
 
-                    $docFormato = substr($cancelaciones04[$i]["numero"],0,4).'-'.substr($cancelaciones04[$i]["numero"],4,8);
-
+                    $docFormato = substr($cancelaciones04[$i]["numero"], 0, 4) . '-' . substr($cancelaciones04[$i]["numero"], 4, 8);
                 }
 
 
 
                 $origen     = str_pad('04', 2);
-                $voucher    = str_pad($corr04, 5 , '0', STR_PAD_LEFT);
+                $voucher    = str_pad($corr04, 5, '0', STR_PAD_LEFT);
                 $fecha      = str_pad($cancelaciones04[$i]["fecha"], 8);
-                $cuenta     = str_pad($cancelaciones04[$i]["cuenta"],10);
-                $debe       = str_pad($cancelaciones04[$i]["debe"], 12 , '0', STR_PAD_LEFT);
-                $haber      = str_pad($cancelaciones04[$i]["haber"], 12 , '0', STR_PAD_LEFT);
+                $cuenta     = str_pad($cancelaciones04[$i]["cuenta"], 10);
+                $debe       = str_pad($cancelaciones04[$i]["debe"], 12, '0', STR_PAD_LEFT);
+                $haber      = str_pad($cancelaciones04[$i]["haber"], 12, '0', STR_PAD_LEFT);
                 $moneda     = str_pad($cancelaciones04[$i]["moneda"], 1);
-                $tc         = str_pad($cancelaciones04[$i]["tc"], 10 , '0', STR_PAD_LEFT);
+                $tc         = str_pad($cancelaciones04[$i]["tc"], 10, '0', STR_PAD_LEFT);
                 $doc        = str_pad($cancelaciones04[$i]["doc"], 2);
                 $numero     = str_pad($docFormato, 40);
                 $fechad     = str_pad($cancelaciones04[$i]["fechad"], 8);
@@ -636,7 +629,7 @@ class ControladorContabilidad{
                 $codigo     = str_pad($cancelaciones04[$i]["codigo"], 15);
                 $cc         = str_pad(" ", 10);
                 $fe         = str_pad(" ", 4);
-                $pre        = str_pad(" ", 10); 
+                $pre        = str_pad(" ", 10);
                 $mpago      = str_pad(" ", 3);
                 $glosa      = str_pad($cancelaciones04[$i]["glosa"], 60);
                 $rnumero    = str_pad(" ", 40);
@@ -666,89 +659,84 @@ class ControladorContabilidad{
                 $rindret    = str_pad(" ", 1);
                 $rmonto     = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $rigv       = str_pad("0.00", 12, '0', STR_PAD_LEFT);
-                $tbien      = str_pad(" ", 1);                
+                $tbien      = str_pad(" ", 1);
 
-                fwrite($archivo,    $origen.
-                                    $voucher.
-                                    $fecha.
-                                    $cuenta.
-                                    $debe.
-                                    $haber.
-                                    $moneda.
-                                    $tc.
-                                    $doc.
-                                    $numero.
-                                    $fechad.
-                                    $fechav.
-                                    $codigo.
-                                    $cc.
-                                    $fe.
-                                    $pre.
-                                    $mpago.
-                                    $glosa.
-                                    $rnumero.
-                                    $rtdoc.
-                                    $rfecha.
-                                    $snumero.
-                                    $sfecha.
-                                    $tl.
-                                    $neto.
-                                    $neto2.
-                                    $neto3.
-                                    $neto4.
-                                    $igv.
-                                    $neto5.
-                                    $neto6.
-                                    $neto7.
-                                    $neto8.
-                                    $ruc.
-                                    $tipo.
-                                    $r5.
-                                    $ape1.
-                                    $ape2.
-                                    $nombre.
-                                    $tdoi.
-                                    $rnumdes.
-                                    $rcodtasa.
-                                    $rindret.
-                                    $rmonto.
-                                    $rigv.
-                                    $tbien.
-                                    PHP_EOL);
-
+                fwrite($archivo,    $origen .
+                    $voucher .
+                    $fecha .
+                    $cuenta .
+                    $debe .
+                    $haber .
+                    $moneda .
+                    $tc .
+                    $doc .
+                    $numero .
+                    $fechad .
+                    $fechav .
+                    $codigo .
+                    $cc .
+                    $fe .
+                    $pre .
+                    $mpago .
+                    $glosa .
+                    $rnumero .
+                    $rtdoc .
+                    $rfecha .
+                    $snumero .
+                    $sfecha .
+                    $tl .
+                    $neto .
+                    $neto2 .
+                    $neto3 .
+                    $neto4 .
+                    $igv .
+                    $neto5 .
+                    $neto6 .
+                    $neto7 .
+                    $neto8 .
+                    $ruc .
+                    $tipo .
+                    $r5 .
+                    $ape1 .
+                    $ape2 .
+                    $nombre .
+                    $tdoi .
+                    $rnumdes .
+                    $rcodtasa .
+                    $rindret .
+                    $rmonto .
+                    $rigv .
+                    $tbien .
+                    PHP_EOL);
             }
 
-            for($i = 0; $i < count($cancelaciones08); $i++){
+            for ($i = 0; $i < count($cancelaciones08); $i++) {
 
-                if($cancelaciones08[$i]["num_cta"] == $cancelaciones08[$i-1]["num_cta"]){
+                if ($cancelaciones08[$i]["num_cta"] == $cancelaciones08[$i - 1]["num_cta"]) {
 
                     $corr08;
-
-                }else{
+                } else {
 
                     $corr08++;
-
                 }
 
-                if($cancelaciones08[$i]["doc"] == 'LE'){
+                if ($cancelaciones08[$i]["doc"] == 'LE') {
 
                     $docFormato08 = $cancelaciones08[$i]["numero"];
-    
-                }else{
+                } else {
 
 
-                    $docFormato08 = substr($cancelaciones08[$i]["numero"],0,4).'-'.substr($cancelaciones08[$i]["numero"],4,8);
-
+                    $docFormato08 = substr($cancelaciones08[$i]["numero"], 0, 4) . '-' . substr($cancelaciones08[$i]["numero"], 4, 8);
                 }
 
                 $origen     = str_pad('08', 2);
-                $voucher    = str_pad($corr08, 5 , '0', STR_PAD_LEFT);
+                $voucher    = str_pad($corr08, 5, '0', STR_PAD_LEFT);
                 $fecha      = str_pad($cancelaciones08[$i]["fecha"], 8);
-                $cuenta     = str_pad($cancelaciones08[$i]["cuenta"],10);
-                $debe       = str_pad($cancelaciones08[$i]["debe"], 12 , '0', STR_PAD_LEFT);
-                $haber      = str_pad($cancelaciones08[$i]["haber"], 12 , '0', STR_PAD_LEFT);
+                $cuenta     = str_pad($cancelaciones08[$i]["cuenta"], 10);
+                $debe       = str_pad($cancelaciones08[$i]["debe"], 12, '0', STR_PAD_LEFT);
+                $haber      = str_pad($cancelaciones08[$i]["haber"], 12, '0', STR_PAD_LEFT);
                 $moneda     = str_pad($cancelaciones08[$i]["moneda"], 1);
-                $tc         = str_pad($cancelaciones08[$i]["tc"], 10 , '0', STR_PAD_LEFT);
+                $tc         = str_pad($cancelaciones08[$i]["tc"], 10, '0', STR_PAD_LEFT);
                 $doc        = str_pad($cancelaciones08[$i]["doc"], 2);
                 $numero     = str_pad($docFormato08, 40);
                 $fechad     = str_pad($cancelaciones08[$i]["fechad"], 8);
@@ -756,7 +744,7 @@ class ControladorContabilidad{
                 $codigo     = str_pad($cancelaciones08[$i]["codigo"], 15);
                 $cc         = str_pad(" ", 10);
                 $fe         = str_pad(" ", 4);
-                $pre        = str_pad(" ", 10); 
+                $pre        = str_pad(" ", 10);
                 $mpago      = str_pad(" ", 3);
                 $glosa      = str_pad($cancelaciones08[$i]["glosa"], 60);
                 $rnumero    = str_pad(" ", 40);
@@ -787,85 +775,84 @@ class ControladorContabilidad{
                 $rindret    = str_pad(" ", 1);
                 $rmonto     = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $rigv       = str_pad("0.00", 12, '0', STR_PAD_LEFT);
-                $tbien      = str_pad(" ", 1);                
+                $tbien      = str_pad(" ", 1);
 
-                fwrite($archivo,    $origen.
-                                    $voucher.
-                                    $fecha.
-                                    $cuenta.
-                                    $debe.
-                                    $haber.
-                                    $moneda.
-                                    $tc.
-                                    $doc.
-                                    $numero.
-                                    $fechad.
-                                    $fechav.
-                                    $codigo.
-                                    $cc.
-                                    $fe.
-                                    $pre.
-                                    $mpago.
-                                    $glosa.
-                                    $rnumero.
-                                    $rtdoc.
-                                    $rfecha.
-                                    $snumero.
-                                    $sfecha.
-                                    $tl.
-                                    $neto.
-                                    $neto2.
-                                    $neto3.
-                                    $neto4.
-                                    $igv.
-                                    $neto5.
-                                    $neto6.
-                                    $neto7.
-                                    $neto8.
-                                    $ruc.
-                                    $tipo.
-                                    $r5.
-                                    $ape1.
-                                    $ape2.
-                                    $nombre.
-                                    $tdoi.
-                                    $rnumdes.
-                                    $rcodtasa.
-                                    $rindret.
-                                    $rmonto.
-                                    $rigv.
-                                    $tbien.
-                                    PHP_EOL);
-
+                fwrite($archivo,    $origen .
+                    $voucher .
+                    $fecha .
+                    $cuenta .
+                    $debe .
+                    $haber .
+                    $moneda .
+                    $tc .
+                    $doc .
+                    $numero .
+                    $fechad .
+                    $fechav .
+                    $codigo .
+                    $cc .
+                    $fe .
+                    $pre .
+                    $mpago .
+                    $glosa .
+                    $rnumero .
+                    $rtdoc .
+                    $rfecha .
+                    $snumero .
+                    $sfecha .
+                    $tl .
+                    $neto .
+                    $neto2 .
+                    $neto3 .
+                    $neto4 .
+                    $igv .
+                    $neto5 .
+                    $neto6 .
+                    $neto7 .
+                    $neto8 .
+                    $ruc .
+                    $tipo .
+                    $r5 .
+                    $ape1 .
+                    $ape2 .
+                    $nombre .
+                    $tdoi .
+                    $rnumdes .
+                    $rcodtasa .
+                    $rindret .
+                    $rmonto .
+                    $rigv .
+                    $tbien .
+                    PHP_EOL);
             }
 
-            fclose($archivo); 
+            fclose($archivo);
 
-            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/cancelaciones/C'.$nomar.'.txt';
-                
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/cancelaciones/C' . $nomar . '.txt';
+
             #$destino = '//Sistemas-2/d/contabilidad/cancelaciones/C'.$nomar.'.txt';   
-            $destino = '//Yudy-pc/datasmart/LINDA2022/C'.$nomar.'.txt';        
-            
+            $destino = '//Yudy-pc/datasmart/LINDA2023/C' . $nomar . '.txt';
+
             copy($origen, $destino);
 
             $rutaBat = "vistas/contabilidad/cancelaciones/CB$fi$ff.bat";
             $archivoBat = fopen($rutaBat, "w");
 
-            $nombreEmpresa = "LINDA2022";
+            $nombreEmpresa = "LINDA2023";
 
-            fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." C".$nomar.".txt".PHP_EOL);
-            fclose($archivoBat); 
-            
-            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/cancelaciones/CB'.$nomar.'.bat';
+            fwrite($archivoBat, "MSISCONT.EXE " . $nombreEmpresa . " C" . $nomar . ".txt" . PHP_EOL);
+            fclose($archivoBat);
+
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/cancelaciones/CB' . $nomar . '.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/cancelaciones/CB'.$nomar.'.bat';
-            $destino2 = '//Yudy-pc/datasmart/LINDA2022/CB'.$nomar.'.bat';  
+            $destino2 = '//Yudy-pc/datasmart/LINDA2023/CB' . $nomar . '.bat';
             copy($origen2, $destino2);
 
             $correlativo = ModeloContabilidad::mdlActualizarCorrelativo($añoI, $mesI, $corr04, "valor_3");
             $correlativo = ModeloContabilidad::mdlActualizarCorrelativo($añoI, $mesI, $corr08, "valor_4");
             #var_dump($correlativo);
 
-            echo'<script>
+            echo '<script>
 
             swal({
                 type: "success",
@@ -882,14 +869,13 @@ class ControladorContabilidad{
                 })
 
             </script>';
-            
         }
-
     }
 
-    static public function ctrGenerarClientesSiscont(){
-        
-        if(isset($_POST["inicioSiscontCli"])){
+    static public function ctrGenerarClientesSiscont()
+    {
+
+        if (isset($_POST["inicioSiscontCli"])) {
 
             #var_dump($_POST["inicioSiscontCli"]);
 
@@ -899,10 +885,10 @@ class ControladorContabilidad{
             $añoI = date("Y", strtotime($fechaInicio));
             $mesI = date("m", strtotime($fechaInicio));
 
-            $fi = str_replace("-", "",$fechaInicio);
-            $ff = str_replace("-", "",$fechaFin);
+            $fi = str_replace("-", "", $fechaInicio);
+            $ff = str_replace("-", "", $fechaFin);
 
-            $nomar = $fi.$ff;
+            $nomar = $fi . $ff;
             #var_dump($nomar);
 
             $ruta = "vistas/contabilidad/clientes/CL$fi$ff.txt";
@@ -913,7 +899,7 @@ class ControladorContabilidad{
             #var_dump($clientes);
 
             foreach ($clientes as $key => $value) {
-                
+
                 $rs = ControladorContabilidad::eliminar_tildes($value["rs"]);
                 $ape1 = ControladorContabilidad::eliminar_tildes($value["ape1"]);
                 $ape2 = ControladorContabilidad::eliminar_tildes($value["ape2"]);
@@ -925,10 +911,10 @@ class ControladorContabilidad{
                 $voucher    = str_pad(" ", 5);
                 $fecha      = str_pad(" ", 8);
                 $cuenta     = str_pad(" ", 10);
-                $debe       = str_pad(" ", 12 , '0', STR_PAD_LEFT);
-                $haber      = str_pad(" ", 12 , '0', STR_PAD_LEFT);
+                $debe       = str_pad(" ", 12, '0', STR_PAD_LEFT);
+                $haber      = str_pad(" ", 12, '0', STR_PAD_LEFT);
                 $moneda     = str_pad(" ", 1);
-                $tc         = str_pad(" ", 10 , '0', STR_PAD_LEFT);
+                $tc         = str_pad(" ", 10, '0', STR_PAD_LEFT);
                 $doc        = str_pad(" ", 2);
                 $numero     = str_pad(" ", 40);
                 $fechad     = str_pad(" ", 8);
@@ -936,7 +922,7 @@ class ControladorContabilidad{
                 $codigo     = str_pad($value["ruc"], 15);
                 $cc         = str_pad(" ", 10);
                 $fe         = str_pad(" ", 4);
-                $pre        = str_pad(" ", 10); 
+                $pre        = str_pad(" ", 10);
                 $mpago      = str_pad(" ", 3);
                 $glosa      = str_pad(" ", 60);
                 $rnumero    = str_pad(" ", 40);
@@ -949,7 +935,7 @@ class ControladorContabilidad{
                 $neto2      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto3      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto4      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
-                $igv        = str_pad("0.00", 12 , '0', STR_PAD_LEFT);
+                $igv        = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto5      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto6      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $neto7      = str_pad("0.00", 12, '0', STR_PAD_LEFT);
@@ -968,82 +954,81 @@ class ControladorContabilidad{
                 $rmonto     = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $rigv       = str_pad("0.00", 12, '0', STR_PAD_LEFT);
                 $tbien      = str_pad(" ", 1);
-                                
-                fwrite($archivo,    $origen.
-                                    $voucher.
-                                    $fecha.
-                                    $cuenta.
-                                    $debe.
-                                    $haber.
-                                    $moneda.
-                                    $tc.
-                                    $doc.
-                                    $numero.
-                                    $fechad.
-                                    $fechav.
-                                    $codigo.
-                                    $cc.
-                                    $fe.
-                                    $pre.
-                                    $mpago.
-                                    $glosa.
-                                    $rnumero.
-                                    $rtdoc.
-                                    $rfecha.
-                                    $snumero.
-                                    $sfecha.
-                                    $tl.
-                                    $neto.
-                                    $neto2.
-                                    $neto3.
-                                    $neto4.
-                                    $igv.
-                                    $neto5.
-                                    $neto6.
-                                    $neto7.
-                                    $neto8.
-                                    $ruc.
-                                    $tipo.
-                                    $r5.
-                                    $ape1.
-                                    $ape2.
-                                    $nombre.
-                                    $tdoi.
-                                    $rnumdes.
-                                    $rcodtasa.
-                                    $rindret.
-                                    $rmonto.
-                                    $rigv.
-                                    $tbien.
-                                    PHP_EOL);
 
+                fwrite($archivo,    $origen .
+                    $voucher .
+                    $fecha .
+                    $cuenta .
+                    $debe .
+                    $haber .
+                    $moneda .
+                    $tc .
+                    $doc .
+                    $numero .
+                    $fechad .
+                    $fechav .
+                    $codigo .
+                    $cc .
+                    $fe .
+                    $pre .
+                    $mpago .
+                    $glosa .
+                    $rnumero .
+                    $rtdoc .
+                    $rfecha .
+                    $snumero .
+                    $sfecha .
+                    $tl .
+                    $neto .
+                    $neto2 .
+                    $neto3 .
+                    $neto4 .
+                    $igv .
+                    $neto5 .
+                    $neto6 .
+                    $neto7 .
+                    $neto8 .
+                    $ruc .
+                    $tipo .
+                    $r5 .
+                    $ape1 .
+                    $ape2 .
+                    $nombre .
+                    $tdoi .
+                    $rnumdes .
+                    $rcodtasa .
+                    $rindret .
+                    $rmonto .
+                    $rigv .
+                    $tbien .
+                    PHP_EOL);
             }
-            
-        
 
-            fclose($archivo); 
 
-            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/clientes/CL'.$nomar.'.txt';
-                    
+
+            fclose($archivo);
+
+            $origen = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/clientes/CL' . $nomar . '.txt';
+
             #$destino = '//Sistemas-2/d/contabilidad/clientes/V'.$nomar.'.txt';   
-            $destino = '//Yudy-pc/datasmart/LINDA2022/CL'.$nomar.'.txt';        
-            
+            $destino = '//Yudy-pc/datasmart/LINDA2023/CL' . $nomar . '.txt';
+
             copy($origen, $destino);
 
             $rutaBat = "vistas/contabilidad/clientes/CLB$fi$ff.bat";
             $archivoBat = fopen($rutaBat, "w");
 
-            $nombreEmpresa = "LINDA2022";
+            $nombreEmpresa = "LINDA2023";
 
-            fwrite($archivoBat, "MSISCONT.EXE ".$nombreEmpresa." CL".$nomar.".txt".PHP_EOL);
-            fclose($archivoBat); 
-            
-            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/clientes/CLB'.$nomar.'.bat';
+            fwrite($archivoBat, "MSISCONT.EXE " . $nombreEmpresa . " CL" . $nomar . ".txt" . PHP_EOL);
+            fclose($archivoBat);
+
+            $origen2 = 'c:/xampp2/htdocs/rosalinda/vistas/contabilidad/clientes/CLB' . $nomar . '.bat';
             #$destino2 = '//Sistemas-2/d/contabilidad/clientes/VB'.$nomar.'.bat';
-            $destino2 = '//Yudy-pc/datasmart/LINDA2022/CLB'.$nomar.'.bat';  
+            $destino2 = '//Yudy-pc/datasmart/LINDA2023/CLB' . $nomar . '.bat';
             copy($origen2, $destino2);
 
-            echo'<script>
+            echo '<script>
 
             swal({
                 type: "success",
@@ -1059,10 +1044,7 @@ class ControladorContabilidad{
                     }
                 })
 
-            </script>';                
-
+            </script>';
         }
-
-    }    
-
+    }
 }
