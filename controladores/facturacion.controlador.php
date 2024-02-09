@@ -157,7 +157,9 @@ class ControladorFacturacion
                         }).then(function(result){
                                         if (result.value) {
 
-                                        window.location = "pedidoscv";
+                                            window.open("vistas/reportes_ticket/guia_remision.php?codigo=' . $doc . '&tipo=S01","_blank");
+                
+                                            window.location = "pedidoscv";
 
                                         }
                                     })
@@ -375,7 +377,8 @@ class ControladorFacturacion
                             }).then(function(result){
                                             if (result.value) {
 
-                                            window.location = "pedidoscv";
+                                                window.open("extensiones/tcpdf/pdf/reporte_factura.php?tipo=S03&documento=' . $doc . '","_blank");
+                                                window.location = "pedidoscv";
 
                                             }
                                         })
@@ -595,7 +598,8 @@ class ControladorFacturacion
                             }).then(function(result){
                                             if (result.value) {
 
-                                            window.location = "pedidoscv";
+                                                window.open("extensiones/tcpdf/pdf/reporte_factura.php?tipo=S02&documento=' . $doc . '","_blank");
+                                                window.location = "pedidoscv";
 
                                             }
                                         })
@@ -813,6 +817,8 @@ class ControladorFacturacion
                                     confirmButtonText: "Cerrar"
                             }).then(function(result){
                                             if (result.value) {
+
+                                                window.open("extensiones/tcpdf/pdf/reporte_factura.php?tipo=S70&documento=' . $doc . '","_blank");
 
                                             window.location = "pedidoscv";
 
@@ -1315,6 +1321,9 @@ class ControladorFacturacion
                             }).then(function(result){
                                             if (result.value) {
 
+                                                window.open("vistas/reportes_ticket/impresion_bolfact.php?tipo=' . $tipo . '&documento=' . $docDestino . '","_blank"
+                                            );
+        
                                             window.location = "guias-remision";
 
                                             }
@@ -1477,7 +1486,8 @@ class ControladorFacturacion
                                 }).then(function(result){
                                                 if (result.value) {
 
-                                                window.location = "guias-remision";
+                                                    window.open("vistas/reportes_ticket/impresion_bolfact.php?tipo=' . $tipo . '&documento=' . $docDestino . '","_blank")
+                                                    window.location = "guias-remision";
 
                                                 }
                                             })
@@ -2188,7 +2198,10 @@ class ControladorFacturacion
             $comprobante['total_opinafectas'] = $op_inafectas;
             $comprobante['igv'] = ($venta["igv"] * -1);
             $comprobante['total'] = ($venta["total"] * -1);
-            $comprobante['total_texto'] = CantidadEnLetra(($venta["total"] * -1));
+            $comprobante['total_texto'] = trim(CantidadEnLetra(($venta["total"] * -1)));
+
+
+            //$comprobante['total_texto'] = "TEST";
             $totalSinIGV = ($venta["total"] * -1) - ($venta["igv"] * -1);
 
             //RUC DEL EMISOR - TIPO DE COMPROBANTE - SERIE DEL DOCUMENTO - CORRELATIVO
@@ -2254,7 +2267,7 @@ class ControladorFacturacion
                     <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
                     <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
                     <cbc:IssueTime>00:00:01</cbc:IssueTime>
-                    <cbc:Note languageLocaleID="1000"><![CDATA[' . $comprobante['total_texto'] . ']]></cbc:Note>
+                    <cbc:Note languageLocaleID="1000"><![CDATA[' . trim($comprobante['total_texto']) . ']]></cbc:Note>
                     <cbc:DocumentCurrencyCode>' . $comprobante['moneda'] . '</cbc:DocumentCurrencyCode>
                     <cac:DiscrepancyResponse>
                         <cbc:ReferenceID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ReferenceID>
@@ -2403,7 +2416,7 @@ class ControladorFacturacion
                         <cbc:ID>' . $comprobante['serie'] . '-' . $comprobante['correlativo'] . '</cbc:ID>
                         <cbc:IssueDate>' . $comprobante['fecha_emision'] . '</cbc:IssueDate>
                         <cbc:IssueTime>00:00:01</cbc:IssueTime>
-                        <cbc:Note languageLocaleID="1000"><![CDATA[' . $comprobante['total_texto'] . ']]></cbc:Note>
+                        <cbc:Note languageLocaleID="1000"><![CDATA[' . trim($comprobante['total_texto']) . ']]></cbc:Note>
                         <cbc:DocumentCurrencyCode>' . $comprobante['moneda'] . '</cbc:DocumentCurrencyCode>
                         <cac:DiscrepancyResponse>
                             <cbc:ReferenceID>' . $comprobante['serie_ref'] . '-' . $comprobante['correlativo_ref'] . '</cbc:ReferenceID>
@@ -2698,8 +2711,8 @@ class ControladorFacturacion
                 }
             } else {
 
-                unlink($ruta . '.XML');
-                unlink($ruta . '.ZIP');
+                /* unlink($ruta . '.XML');
+                unlink($ruta . '.ZIP'); */
             }
         }
     }

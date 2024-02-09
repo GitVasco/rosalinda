@@ -62,7 +62,7 @@ class EnLetras
 
         if($Frc != $this->Void) 
         { 
-           $s = $s . " CON " . $Frc. "/100"; 
+           $s = $s . "CON " . $Frc. "/100"; 
            //$s = $s . " " . $Frc . "/100"; 
         } 
         $letrass=$Signo . $s ." ".$Moneda; 
@@ -229,5 +229,3 @@ class EnLetras
     } 
 
 }
- 
-?>
